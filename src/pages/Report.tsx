@@ -89,6 +89,11 @@ const Report = () => {
         A summary you can share with your healthcare provider.
       </p>
 
+      {/* Days logged indicator */}
+      <p className="text-sm text-muted-foreground mb-3">
+        Based on <span className="font-semibold text-foreground">{totalDays} {totalDays === 1 ? "day" : "days"}</span> of logged data.
+      </p>
+
       {/* Symptom Table */}
       <Card className="border-none shadow-sm mb-6">
         <CardContent className="p-0">
