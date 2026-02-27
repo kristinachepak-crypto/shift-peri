@@ -16,10 +16,11 @@ export interface AppState {
 const STORAGE_KEY = "shift-app-data";
 
 export const SYMPTOM_CATEGORIES = {
-  "Mood & Mind": ["Anxiety", "Rage", "Brain fog", "Depression", "Irritability"],
-  Sleep: ["Insomnia", "Night sweats", "Waking at 2–3am"],
-  Body: ["Hot flashes", "Heart palpitations", "Joint pain", "Fatigue", "Headaches"],
-  Cycle: ["Irregular periods", "Heavy bleeding", "Spotting"],
+  "Mood & Mind": ["Anxiety", "Rage", "Brain fog", "Depression", "Irritability", "Mood swings"],
+  Sleep: ["Insomnia", "Night sweats", "Waking at 2–3am", "Restless sleep"],
+  Body: ["Hot flashes", "Heart palpitations", "Joint pain", "Fatigue", "Headaches", "Weight changes"],
+  Cycle: ["Irregular periods", "Heavy bleeding", "Spotting", "Missed periods"],
+  "Hair, Skin & Nails": ["Hair thinning", "Dry skin", "Brittle nails", "Hair texture changes", "Adult acne"],
 } as const;
 
 export function getAppState(): AppState {
