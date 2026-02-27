@@ -31,7 +31,7 @@ const Onboarding = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <div className="flex-1 overflow-y-auto px-6 pt-12 pb-32">
+      <div className="flex-1 overflow-y-auto px-6 pt-12 pb-44">
         <div className="flex items-center gap-2 mb-2">
           <Heart className="w-5 h-5 text-primary" />
           <span className="text-sm font-medium text-muted-foreground tracking-wide uppercase">Shift</span>
@@ -88,7 +88,7 @@ const Onboarding = () => {
       </div>
 
       {selected.length > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 p-6 bg-background/80 backdrop-blur-lg border-t border-border">
+        <div className="fixed bottom-16 left-0 right-0 p-6 bg-background/80 backdrop-blur-lg border-t border-border">
           <div className="max-w-[430px] mx-auto">
             <Button
               onClick={handleContinue}
