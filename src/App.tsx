@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { getAppState } from "@/lib/storage";
+import Welcome from "./pages/Welcome";
 import Onboarding from "./pages/Onboarding";
 import DailyLog from "./pages/DailyLog";
 import Insights from "./pages/Insights";
@@ -15,12 +16,13 @@ const queryClient = new QueryClient();
 
 const AppRoutes = () => {
   const state = getAppState();
-  const defaultRoute = state.onboardingComplete ? "/log" : "/onboarding";
+  const defaultRoute = state.onboardingComplete ? "/log" : "/welcome";
 
   return (
     <div className="max-w-[430px] mx-auto relative min-h-screen">
       <Routes>
         <Route path="/" element={<Navigate to={defaultRoute} replace />} />
+        <Route path="/welcome" element={<Welcome />} />
         <Route path="/onboarding" element={<Onboarding />} />
         <Route path="/log" element={<DailyLog />} />
         <Route path="/insights" element={<Insights />} />
