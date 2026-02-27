@@ -86,7 +86,7 @@ const Report = () => {
         <h1 className="text-2xl font-serif text-foreground">Doctor Report</h1>
       </div>
       <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
-        A summary you can share with your healthcare provider.
+        A pre-appointment export you can print or share — so your doctor sees the full picture, not just a snapshot.
       </p>
 
       {/* Days logged indicator */}

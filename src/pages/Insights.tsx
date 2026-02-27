@@ -6,17 +6,17 @@ const mockInsights = [
   {
     icon: Brain,
     title: "Mood & Sleep Connection",
-    text: "Your anxiety and sleep disruptions tend to spike in the same 3-day window. This is consistent with hormonal fluctuation patterns.",
+    text: "Your anxiety and sleep disruptions tend to spike in the same 3-day window. This pattern is consistent with hormonal fluctuation during perimenopause.",
   },
   {
     icon: Thermometer,
-    title: "Hot Flash Frequency",
-    text: "You've logged hot flashes 8 out of the last 14 days — most frequently in the evening. Tracking timing can help your doctor spot triggers.",
+    title: "Symptom Clustering",
+    text: "Hot flashes, night sweats, and fatigue are showing up together — this clustering is a common hormonal signature. Tracking this helps your doctor see the full picture.",
   },
   {
     icon: TrendingDown,
     title: "Pre-Cycle Mood Pattern",
-    text: "Your mood ratings are lowest in the week before your cycle. This pattern is very common in perimenopause and worth discussing with your doctor.",
+    text: "Your mood ratings drop in the days before your cycle. This is very common in perimenopause and worth discussing with your doctor.",
   },
 ];
 
@@ -36,8 +36,8 @@ const Insights = () => {
           <Info className="w-4 h-4 text-primary mt-0.5 shrink-0" />
           <p className="text-xs text-muted-foreground leading-relaxed">
             {hasEnoughData
-              ? "These insights are based on your logged data. They're observations — not diagnoses."
-              : `Insights become more meaningful after 7 days of logging. You've logged ${state.logs.length} day${state.logs.length !== 1 ? "s" : ""} so far — keep going!`}
+              ? "These insights are based on your logged data. They're observations — not diagnoses — and they're designed to help you have better conversations with your doctor."
+              : `Insights appear after 7–14 days of logging. You've logged ${state.logs.length} day${state.logs.length !== 1 ? "s" : ""} so far — keep going!`}
           </p>
         </CardContent>
       </Card>

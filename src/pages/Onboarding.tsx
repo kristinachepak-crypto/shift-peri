@@ -40,7 +40,7 @@ const Onboarding = () => {
           What have you been experiencing?
         </h1>
         <p className="text-muted-foreground mb-8 leading-relaxed">
-          Select everything that resonates. There are no wrong answers here.
+          Select everything that resonates — including things you may not have connected to hormones yet. There are no wrong answers here.
         </p>
 
         <div className="space-y-6">

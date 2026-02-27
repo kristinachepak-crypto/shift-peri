@@ -47,7 +47,10 @@ const DailyLog = () => {
         </span>
       </div>
 
-      <h1 className="text-2xl font-serif text-foreground mb-6">Daily Check-in</h1>
+      <h1 className="text-2xl font-serif text-foreground mb-1">Daily Check-in</h1>
+      <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
+        Under 2 minutes. Consistency matters more than detail.
+      </p>
 
       {logged && (
         <Card className="mb-6 bg-shift-lavender border-none">
