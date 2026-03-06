@@ -17,6 +17,7 @@ const Profile = () => {
   const [state, setState] = useState(getAppState());
   const [reassessing, setReassessing] = useState(false);
   const [selected, setSelected] = useState<string[]>([...state.selectedSymptoms]);
+  const [expandedAssessments, setExpandedAssessments] = useState<Set<number>>(new Set());
 
   const nextDate = getNextAssessmentDate(state);
   const assessmentDue = isAssessmentDue(state);
