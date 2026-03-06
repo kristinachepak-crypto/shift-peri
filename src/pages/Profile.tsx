@@ -402,6 +402,93 @@ const Profile = () => {
           </Button>
         </div>
       </section>
+
+      {/* Version number — tap 7 times to reveal dev panel */}
+      <div className="mt-12 text-center">
+        <button
+          onClick={handleVersionTap}
+          className="text-xs text-muted-foreground/40 cursor-default select-none"
+          aria-hidden="true"
+        >
+          Shift v{APP_VERSION}
+        </button>
+      </div>
+
+      {/* Developer Testing Panel */}
+      {IS_DEV && showDevPanel && (
+        <section className="mt-6 animate-fade-in" aria-label="Developer testing panel">
+          <Card className="border-2 border-dashed border-primary/30">
+            <CardContent className="p-5 space-y-5">
+              <div className="flex items-center gap-2 mb-1">
+                <Bug className="w-4 h-4 text-primary" aria-hidden="true" />
+                <h2 className="text-sm font-bold text-foreground">Developer Testing</h2>
+              </div>
+              <p className="text-xs text-destructive font-medium">
+                Not visible in production.
+              </p>
+
+              {/* Rolling Mean Display */}
+              <div className="space-y-1">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Rolling Means (7-day)</p>
+                <div className="grid grid-cols-2 gap-2">
+                  <Card className="border-border/50">
+                    <CardContent className="p-3 text-center">
+                      <p className="text-lg font-bold text-foreground">{physicalMean.toFixed(2)}</p>
+                      <p className="text-xs text-muted-foreground">Physical</p>
+                    </CardContent>
+                  </Card>
+                  <Card className="border-border/50">
+                    <CardContent className="p-3 text-center">
+                      <p className="text-lg font-bold text-foreground">{mentalMean.toFixed(2)}</p>
+                      <p className="text-xs text-muted-foreground">Mental</p>
+                    </CardContent>
+                  </Card>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Days logged: <strong>{state.logs.length}</strong> · Phase: <strong>{state.logs.length >= 7 ? "2" : "1"}</strong>
+                </p>
+              </div>
+
+              <Separator className="bg-border/50" />
+
+              {/* Days logged override + populate */}
+              <div className="space-y-3">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Mock Data</p>
+                <div className="flex items-center gap-3">
+                  <label htmlFor="mock-days" className="text-xs text-muted-foreground whitespace-nowrap">Days:</label>
+                  <Input
+                    id="mock-days"
+                    type="number"
+                    min={0}
+                    max={30}
+                    value={mockDays}
+                    onChange={(e) => setMockDays(Math.min(30, Math.max(0, parseInt(e.target.value) || 0)))}
+                    className="w-20 h-10 text-center rounded-xl"
+                  />
+                  <Button
+                    size="sm"
+                    onClick={handlePopulateMockData}
+                    className="rounded-xl min-h-[44px] flex-1 font-medium"
+                  >
+                    Populate mock data
+                  </Button>
+                </div>
+              </div>
+
+              <Separator className="bg-border/50" />
+
+              {/* Reset */}
+              <Button
+                variant="destructive"
+                onClick={handleResetToDay0}
+                className="w-full h-12 rounded-xl font-semibold"
+              >
+                Reset to Day 0
+              </Button>
+            </CardContent>
+          </Card>
+        </section>
+      )}
     </main>
   );
 };
