@@ -218,9 +218,19 @@ const DailyLog = () => {
       physicalSymptoms,
       emotionalSymptoms,
       sleepSymptoms,
+      newSymptomFlags,
       cycleStatus,
       notes,
       generatedSummary: summary,
+    });
+
+    // Track adhoc counts for new symptom flags
+    newSymptomFlags.forEach((s) => {
+      if (!current.selectedSymptoms.includes(s)) {
+        const counts = { ...current.adhocSymptomCounts };
+        counts[s] = (counts[s] || 0) + 1;
+        current.adhocSymptomCounts = counts;
+      }
     });
     current.rollingMeans = {
       physical: calculateRollingMean(current.logs, "mood"),
