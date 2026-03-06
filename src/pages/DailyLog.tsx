@@ -558,24 +558,22 @@ const DailyLog = () => {
         {/* Sleep */}
         <fieldset>
           <legend className="text-sm font-semibold text-foreground block mb-3">
-            Sleep quality
+            How did you sleep?
           </legend>
-          <div className="flex gap-2" role="radiogroup" aria-label="Sleep quality rating">
-            {[1, 2, 3, 4, 5].map((n) => (
-              <button
-                key={n}
-                onClick={() => setSleep(n)}
-                className="min-w-[44px] min-h-[44px] flex items-center justify-center transition-transform hover:scale-110"
-                role="radio"
-                aria-checked={n === sleep}
-                aria-label={`${n} out of 5 stars`}
-              >
-                <Star
-                  className={`w-8 h-8 ${n <= sleep ? "text-primary fill-primary" : "text-muted"}`}
-                  aria-hidden="true"
-                />
-              </button>
-            ))}
+          <Slider
+            value={[sleep]}
+            onValueChange={(v) => setSleep(v[0])}
+            onValueCommit={(v) => setCommittedSleep(v[0])}
+            min={1}
+            max={5}
+            step={1}
+            className="mb-2"
+            aria-label={`Sleep quality: ${sleep} out of 5, ${sleepLabels[sleep]}`}
+          />
+          <div className="flex justify-between text-xs text-muted-foreground" aria-hidden="true">
+            <span>Very poor</span>
+            <span className="font-medium text-foreground">{sleep} — {sleepLabels[sleep]}</span>
+            <span>Good</span>
           </div>
 
           {/* Conditional sleep symptom tags */}
