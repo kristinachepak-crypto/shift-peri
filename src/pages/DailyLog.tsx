@@ -11,6 +11,10 @@ const PHYSICAL_SYMPTOMS = [
 "Hot flashes", "Heart palpitations", "Joint pain", "Fatigue",
 "Headaches", "Weight changes", "Muscle tension", "Dizziness", "Nausea"];
 
+const EMOTIONAL_SYMPTOMS = [
+"Anxiety", "Irritability", "Mood swings", "Brain fog", "Depression",
+"Rage", "Tearfulness", "Low motivation", "Overwhelm"];
+
 
 const DailyLog = () => {
   const state = getAppState();
