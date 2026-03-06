@@ -7,11 +7,17 @@ import { getAppState, saveAppState, getStreak, getToday, todayAlreadyLogged } fr
 import { Flame, Star, Check } from "lucide-react";
 import { toast } from "sonner";
 
+const PHYSICAL_SYMPTOMS = [
+  "Hot flashes", "Heart palpitations", "Joint pain", "Fatigue",
+  "Headaches", "Weight changes", "Muscle tension", "Dizziness", "Nausea"
+];
+
 const DailyLog = () => {
   const state = getAppState();
   const [mood, setMood] = useState(5);
   const [sleep, setSleep] = useState(3);
   const [symptoms, setSymptoms] = useState<string[]>([]);
+  const [physicalSymptoms, setPhysicalSymptoms] = useState<string[]>([]);
   const [cycleStatus, setCycleStatus] = useState<"period" | "spotting" | "none">("none");
   const [notes, setNotes] = useState("");
   const [logged, setLogged] = useState(todayAlreadyLogged(state.logs));
