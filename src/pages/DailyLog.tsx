@@ -31,8 +31,6 @@ const DailyLog = () => {
   const togglePhysicalSymptom = (s: string) => {
     setPhysicalSymptoms((prev) => prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]);
   };
-    setSymptoms((prev) => prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]);
-  };
 
   const handleLog = () => {
     const current = getAppState();
