@@ -181,17 +181,38 @@ const Report = () => {
         </section>
       )}
 
+      {/* Language Toggle */}
+      <section aria-label="Summary language toggle" className="mb-4">
+        <Card className="border-border shadow-sm">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-foreground">Summary Language</p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  {clinical ? "Using clinical terminology for your provider" : "Using plain language — easy to read and understand"}
+                </p>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <span className={`text-xs font-medium ${!clinical ? "text-foreground" : "text-muted-foreground"}`}>Plain</span>
+                <Switch
+                  id="clinical-toggle"
+                  checked={clinical}
+                  onCheckedChange={setClinical}
+                  aria-label="Toggle between plain language and clinical terminology"
+                  className="min-h-[44px] min-w-[44px]"
+                />
+                <span className={`text-xs font-medium ${clinical ? "text-foreground" : "text-muted-foreground"}`}>Clinical</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </section>
+
       {/* Summary */}
       <section aria-label="Report summary">
         <Card className="border-none shadow-sm mb-6">
           <CardContent className="p-5">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="font-semibold text-sm text-foreground">Summary</h2>
-              <div className="flex items-center gap-2">
-                <label htmlFor="clinical-toggle" className="text-xs text-muted-foreground">Clinical</label>
-                <Switch id="clinical-toggle" checked={clinical} onCheckedChange={setClinical} aria-label="Toggle clinical language" />
-              </div>
-            </div>
+            <h2 className="font-semibold text-sm text-foreground mb-3">Summary</h2>
             <p className="text-sm text-muted-foreground leading-relaxed">
               {clinical ? clinicalSummary : plainSummary}
             </p>
