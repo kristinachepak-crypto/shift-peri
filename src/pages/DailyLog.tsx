@@ -441,15 +441,15 @@ const DailyLog = () => {
             onValueChange={(v) => setMood(v[0])}
             onValueCommit={(v) => setCommittedMood(v[0])}
             min={1}
-            max={10}
+            max={5}
             step={1}
             className="mb-2"
-            aria-label={`Physical feeling: ${mood} out of 10, ${moodLabels[mood]}`}
+            aria-label={`Physical feeling: ${mood} out of 5, ${moodLabels[mood]}`}
           />
           <div className="flex justify-between text-xs text-muted-foreground" aria-hidden="true">
-            <span>1</span>
+            <span>Very poor</span>
             <span className="font-medium text-foreground">{mood} — {moodLabels[mood]}</span>
-            <span>10</span>
+            <span>Great</span>
           </div>
 
           {/* Conditional physical symptom tags */}
