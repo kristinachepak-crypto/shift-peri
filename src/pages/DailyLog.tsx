@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Slider } from "@/components/ui/slider";
+import { Separator } from "@/components/ui/separator";
 import { getAppState, saveAppState, getStreak, getToday, todayAlreadyLogged } from "@/lib/storage";
 import { Flame, Star, Check } from "lucide-react";
 import { toast } from "sonner";
