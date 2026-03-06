@@ -229,6 +229,8 @@ const DailyLog = () => {
           </div>
         </div>
 
+        <Separator className="bg-border/50" />
+
         {/* Notes */}
         <div>
           <label className="text-sm font-semibold text-foreground block mb-3">
