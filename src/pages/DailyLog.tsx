@@ -502,15 +502,15 @@ const DailyLog = () => {
             onValueChange={(v) => setMentalMood(v[0])}
             onValueCommit={(v) => setCommittedMentalMood(v[0])}
             min={1}
-            max={10}
+            max={5}
             step={1}
             className="mb-2"
-            aria-label={`Mental feeling: ${mentalMood} out of 10, ${mentalMoodLabels[mentalMood]}`}
+            aria-label={`Mental feeling: ${mentalMood} out of 5, ${mentalMoodLabels[mentalMood]}`}
           />
           <div className="flex justify-between text-xs text-muted-foreground" aria-hidden="true">
-            <span>1</span>
+            <span>Very poor</span>
             <span className="font-medium text-foreground">{mentalMood} — {mentalMoodLabels[mentalMood]}</span>
-            <span>10</span>
+            <span>Great</span>
           </div>
 
           {/* Conditional emotional symptom tags */}
