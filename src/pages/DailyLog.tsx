@@ -127,7 +127,39 @@ const DailyLog = () => {
           </div>
         </div>
 
+        {/* Mental/Emotional */}
         <div>
+          <label className="text-sm font-semibold text-foreground block mb-3">Mentally & emotionally, how are you feeling?</label>
+          <Slider
+            value={[mentalMood]}
+            onValueChange={(v) => setMentalMood(v[0])}
+            min={1}
+            max={10}
+            step={1}
+            className="mb-2" />
+          <div className="flex justify-between text-xs text-muted-foreground">
+            <span>1</span>
+            <span className="font-medium text-foreground">{mentalMood} — {mentalMoodLabels[mentalMood]}</span>
+            <span>10</span>
+          </div>
+          <div className="mt-4">
+            <label className="text-sm font-semibold text-foreground block mb-3">Emotional symptoms</label>
+            <div className="flex flex-wrap gap-2">
+              {EMOTIONAL_SYMPTOMS.map((s) =>
+              <button
+                key={s}
+                onClick={() => toggleEmotionalSymptom(s)}
+                className={`px-3.5 py-2 rounded-full text-sm font-medium transition-all ${
+                emotionalSymptoms.includes(s) ?
+                "bg-primary text-primary-foreground shadow-md" :
+                "bg-secondary text-secondary-foreground"}`
+                }>
+                  {s}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
           <label className="text-sm font-semibold text-foreground block mb-3">
             Sleep quality
           </label>
