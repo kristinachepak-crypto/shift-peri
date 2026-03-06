@@ -1,16 +1,60 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Input } from "@/components/ui/input";
 import {
   getAppState, saveAppState, getToday,
   getNextAssessmentDate, isAssessmentDue,
-  SYMPTOM_CATEGORIES,
+  calculateRollingMean,
+  SYMPTOM_CATEGORIES, DailyLog,
 } from "@/lib/storage";
-import { Heart, CalendarClock, ClipboardCheck, Settings, Sparkles, AlertCircle } from "lucide-react";
+import { Heart, CalendarClock, ClipboardCheck, Settings, Sparkles, AlertCircle, Bug } from "lucide-react";
 import { toast } from "sonner";
 import { format, parseISO } from "date-fns";
+
+const APP_VERSION = "0.4.0";
+const IS_DEV = import.meta.env.DEV;
+
+const TEST_PROFILE_SYMPTOMS = ["Anxiety", "Brain fog", "Fatigue", "Night sweats", "Hot flashes", "Insomnia", "Irritability", "Joint pain"];
+
+function generateMockLogs(days: number): DailyLog[] {
+  const logs: DailyLog[] = [];
+  const today = new Date();
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(d.getDate() - i);
+    const dateStr = d.toISOString().split("T")[0];
+    const mood = Math.floor(Math.random() * 5) + 1;
+    const mentalMood = Math.floor(Math.random() * 5) + 1;
+    const sleepQuality = Math.floor(Math.random() * 5) + 1;
+
+    const pickRandom = (arr: string[], count: number) => {
+      const shuffled = [...arr].sort(() => Math.random() - 0.5);
+      return shuffled.slice(0, Math.min(count, arr.length));
+    };
+
+    const physicalSymptoms = mood <= 2 ? pickRandom(["Hot flashes", "Fatigue", "Joint pain", "Night sweats"], 2) : [];
+    const emotionalSymptoms = mentalMood <= 2 ? pickRandom(["Anxiety", "Brain fog", "Irritability"], 2) : [];
+    const sleepSymptoms = sleepQuality <= 2 ? pickRandom(["Trouble falling asleep", "Woke during the night", "Unrefreshing sleep"], 1) : [];
+
+    logs.push({
+      date: dateStr,
+      mood,
+      mentalMood,
+      sleepQuality,
+      symptoms: [],
+      physicalSymptoms,
+      emotionalSymptoms,
+      sleepSymptoms,
+      newSymptomFlags: [],
+      cycleStatus: Math.random() > 0.8 ? "period" : "none",
+      notes: "",
+    });
+  }
+  return logs;
+}
 
 const Profile = () => {
   const navigate = useNavigate();
