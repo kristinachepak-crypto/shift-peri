@@ -6,17 +6,17 @@ const mockInsights = [
   {
     icon: Brain,
     title: "Mood & Sleep Connection",
-    text: "Your anxiety and sleep disruptions tend to spike in the same 3-day window. This pattern is consistent with hormonal fluctuation during perimenopause.",
+    text: "Your anxiety and sleep disruptions seem to spike in a similar 3-day window. This kind of pattern can be consistent with hormonal shifts — it may be worth bringing up with your doctor to explore further.",
   },
   {
     icon: Thermometer,
     title: "Symptom Clustering",
-    text: "Hot flashes, night sweats, and fatigue are showing up together — this clustering is a common hormonal signature. Tracking this helps your doctor see the full picture.",
+    text: "Hot flashes, night sweats, and fatigue appear to be showing up together in your logs. Clustering like this is sometimes associated with hormonal changes — sharing this pattern with your doctor could help paint a clearer picture.",
   },
   {
     icon: TrendingDown,
     title: "Pre-Cycle Mood Pattern",
-    text: "Your mood ratings drop in the days before your cycle. This is very common in perimenopause and worth discussing with your doctor.",
+    text: "Your mood ratings appear to dip in the days before your cycle. This is a pattern some people notice during perimenopause — your doctor can help you understand what it might mean for you.",
   },
 ];
 
