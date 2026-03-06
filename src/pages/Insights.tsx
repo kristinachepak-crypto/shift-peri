@@ -47,7 +47,13 @@ function generateDataReflection(logs: DailyLog[]): string {
   // Check for recurring symptoms
   const symptomCounts: Record<string, number> = {};
   logs.forEach((log) => {
-    [...log.symptoms, ...log.physicalSymptoms, ...log.emotionalSymptoms, ...log.sleepSymptoms].forEach((s) => {
+    const allSymptoms = [
+      ...(log.symptoms || []),
+      ...(log.physicalSymptoms || []),
+      ...(log.emotionalSymptoms || []),
+      ...(log.sleepSymptoms || []),
+    ];
+    allSymptoms.forEach((s) => {
       symptomCounts[s] = (symptomCounts[s] || 0) + 1;
     });
   });
