@@ -194,7 +194,7 @@ const DailyLog = () => {
     const summary = generateSummary({
       mood: committedMood,
       mentalMood: committedMentalMood,
-      sleepQuality: sleep,
+      sleepQuality: committedSleep,
       physicalSymptoms,
       emotionalSymptoms,
       sleepSymptoms,
