@@ -6,17 +6,23 @@ const mockInsights = [
   {
     icon: Brain,
     title: "Mood & Sleep Connection",
-    text: "Your anxiety and sleep disruptions seem to spike in a similar 3-day window. This kind of pattern can be consistent with hormonal shifts — it may be worth bringing up with your doctor to explore further.",
+    observation: "Your anxiety and sleep disruptions tend to spike in the same 3-day window.",
+    explanation: "During the menopausal transition, fluctuating estrogen and progesterone levels can disrupt sleep architecture and affect cortisol regulation. When these hormones shift, sleep quality and anxiety often move together — which is why these symptoms frequently cluster.",
+    action: "This pattern is worth mentioning to your doctor. Sharing when these episodes occur can help them assess whether a hormonal factor may be involved and whether targeted support could help.",
   },
   {
     icon: Thermometer,
     title: "Symptom Clustering",
-    text: "Hot flashes, night sweats, and fatigue appear to be showing up together in your logs. Clustering like this is sometimes associated with hormonal changes — sharing this pattern with your doctor could help paint a clearer picture.",
+    observation: "Hot flashes, night sweats, and fatigue appear to be showing up together in your logs.",
+    explanation: "These are vasomotor symptoms — driven by changes in the brain's thermoregulatory center as estrogen levels fluctuate. When the body's internal thermostat becomes less stable, heat episodes and the resulting sleep disruption can compound into daytime fatigue.",
+    action: "Tracking the timing and frequency of these clusters gives your doctor a clearer picture. It can help them distinguish hormonal patterns from other causes and consider whether treatment options may be appropriate.",
   },
   {
     icon: TrendingDown,
     title: "Pre-Cycle Mood Pattern",
-    text: "Your mood ratings appear to dip in the days before your cycle. This is a pattern some people notice during perimenopause — your doctor can help you understand what it might mean for you.",
+    observation: "Your mood ratings appear to dip in the days leading up to your cycle.",
+    explanation: "In the late luteal phase, progesterone drops sharply. During perimenopause, these drops can become more pronounced and less predictable, which may amplify mood sensitivity in the days before a period — even if this wasn't an issue before.",
+    action: "Noting these mood shifts alongside your cycle timing can help your doctor evaluate whether luteal-phase hormonal changes are contributing. This context helps them recommend the right next steps for you.",
   },
 ];
 
@@ -59,8 +65,10 @@ const Insights = () => {
                   <insight.icon className="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <h2 className="font-semibold text-sm text-foreground mb-1">{insight.title}</h2>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{insight.text}</p>
+                  <h2 className="font-semibold text-sm text-foreground mb-1.5">{insight.title}</h2>
+                  <p className="text-sm text-foreground/90 leading-relaxed mb-2">{insight.observation}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-2">{insight.explanation}</p>
+                  <p className="text-sm text-primary/80 leading-relaxed italic">{insight.action}</p>
                 </div>
               </div>
             </CardContent>
