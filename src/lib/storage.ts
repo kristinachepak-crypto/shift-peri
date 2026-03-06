@@ -7,6 +7,7 @@ export interface DailyLog {
   physicalSymptoms: string[];
   emotionalSymptoms: string[];
   sleepSymptoms: string[];
+  newSymptomFlags: string[]; // Symptoms flagged via "I noticed some new symptoms today"
   cycleStatus: "period" | "spotting" | "none";
   notes: string;
   // Confirmation flow fields
