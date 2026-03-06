@@ -121,6 +121,7 @@ const Report = () => {
             </p>
           </CardContent>
         </Card>
+      </header>
 
       {/* Days logged indicator */}
       <p className="text-sm text-muted-foreground mb-3">
