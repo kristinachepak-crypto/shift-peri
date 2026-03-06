@@ -208,7 +208,7 @@ const DailyLog = () => {
       date: todayStr,
       mood: committedMood,
       mentalMood: committedMentalMood,
-      sleepQuality: sleep,
+      sleepQuality: committedSleep,
       symptoms,
       physicalSymptoms,
       emotionalSymptoms,
