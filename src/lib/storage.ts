@@ -145,7 +145,7 @@ export function shouldShowTags(
   rollingMean: number
 ): boolean {
   if (phase === 1) {
-    return currentValue <= 4;
+    return currentValue <= 2;
   }
   return currentValue <= rollingMean - 1;
 }
