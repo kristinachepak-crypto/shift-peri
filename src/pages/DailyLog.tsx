@@ -38,6 +38,10 @@ const DailyLog = () => {
     setPhysicalSymptoms((prev) => prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]);
   };
 
+  const toggleEmotionalSymptom = (s: string) => {
+    setEmotionalSymptoms((prev) => prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]);
+  };
+
   const handleLog = () => {
     const current = getAppState();
     const todayStr = getToday();
