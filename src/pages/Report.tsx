@@ -4,8 +4,32 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { getAppState } from "@/lib/storage";
-import { FileText, Copy, Download, Check } from "lucide-react";
+import { FileText, Copy, Download, Check, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
+
+const clinicalTermMap: Record<string, string> = {
+  "Hot flashes": "Vasomotor symptoms (hot flashes)",
+  "Night sweats": "Vasomotor symptoms (night sweats)",
+  "Mood swings": "Affective lability",
+  "Anxiety": "Generalized anxiety symptoms",
+  "Brain fog": "Cognitive dysfunction (subjective)",
+  "Fatigue": "Fatigue / asthenia",
+  "Insomnia": "Sleep disturbance",
+  "Joint pain": "Arthralgia",
+  "Low libido": "Decreased libido",
+  "Weight gain": "Weight change",
+  "Irritability": "Irritability / affective dysregulation",
+  "Depression": "Depressive symptoms",
+  "Hair thinning": "Alopecia (diffuse)",
+  "Dry skin": "Xerosis",
+  "Heart palpitations": "Palpitations",
+  "Headaches": "Cephalgia",
+  "Bloating": "Abdominal distension",
+  "Irregular periods": "Menstrual irregularity",
+  "Heavy periods": "Menorrhagia",
+};
+
+const mapToClinical = (name: string): string => clinicalTermMap[name] || name;
 
 const Report = () => {
   const [clinical, setClinical] = useState(false);
@@ -39,13 +63,13 @@ const Report = () => {
       : "—"
   } out of 10. These patterns may be worth discussing with your healthcare provider to explore hormonal changes.`;
 
-  const clinicalSummary = `Patient reports ${totalDays}-day symptom log. Primary complaints: ${
-    rows.slice(0, 3).map((r) => r.name).join(", ") || "N/A"
-  }. Mean subjective mood score: ${
+  const clinicalSummary = `Self-reported symptom log over ${totalDays} days. Primary reported symptoms: ${
+    rows.slice(0, 3).map((r) => mapToClinical(r.name)).join(", ") || "N/A"
+  }. Mean subjective well-being score: ${
     totalDays > 0
       ? (state.logs.reduce((a, l) => a + l.mood, 0) / totalDays).toFixed(1)
       : "N/A"
-  }/10. Symptom frequency suggests possible perimenopausal vasomotor and neuropsychiatric manifestations. Recommend hormonal panel (FSH, estradiol, progesterone) and clinical correlation.`;
+  }/10. Symptom pattern may be consistent with the menopausal transition (STRAW+10 stages −2 to +1a). Reported vasomotor symptoms and neuropsychiatric features may warrant evaluation. Consider hormonal panel (FSH, estradiol) and clinical correlation per STRAW+10 staging criteria.`;
 
   const patterns = [
     rows.length > 0 ? `${rows[0].name} was the most frequently reported symptom (${rows[0].days} of ${totalDays} days).` : null,
@@ -86,9 +110,17 @@ const Report = () => {
           <FileText className="w-5 h-5 text-primary" aria-hidden="true" />
           <h1 className="text-2xl font-serif text-foreground">Doctor Report</h1>
         </div>
-        <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
+        <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
           A pre-appointment export you can print or share — so your doctor sees the full picture, not just a snapshot.
         </p>
+        <Card className="border-border/50 bg-muted/50 mb-6">
+          <CardContent className="p-3 flex items-start gap-2.5">
+            <AlertTriangle className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" aria-hidden="true" />
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              This report was generated from self-reported data and is intended to support clinical conversation, not replace clinical assessment.
+            </p>
+          </CardContent>
+        </Card>
       </header>
 
       {/* Days logged indicator */}
@@ -149,17 +181,38 @@ const Report = () => {
         </section>
       )}
 
+      {/* Language Toggle */}
+      <section aria-label="Summary language toggle" className="mb-4">
+        <Card className="border-border shadow-sm">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-foreground">Summary Language</p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  {clinical ? "Using clinical terminology for your provider" : "Using plain language — easy to read and understand"}
+                </p>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <span className={`text-xs font-medium ${!clinical ? "text-foreground" : "text-muted-foreground"}`}>Plain</span>
+                <Switch
+                  id="clinical-toggle"
+                  checked={clinical}
+                  onCheckedChange={setClinical}
+                  aria-label="Toggle between plain language and clinical terminology"
+                  className="min-h-[44px] min-w-[44px]"
+                />
+                <span className={`text-xs font-medium ${clinical ? "text-foreground" : "text-muted-foreground"}`}>Clinical</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </section>
+
       {/* Summary */}
       <section aria-label="Report summary">
         <Card className="border-none shadow-sm mb-6">
           <CardContent className="p-5">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="font-semibold text-sm text-foreground">Summary</h2>
-              <div className="flex items-center gap-2">
-                <label htmlFor="clinical-toggle" className="text-xs text-muted-foreground">Clinical</label>
-                <Switch id="clinical-toggle" checked={clinical} onCheckedChange={setClinical} aria-label="Toggle clinical language" />
-              </div>
-            </div>
+            <h2 className="font-semibold text-sm text-foreground mb-3">Summary</h2>
             <p className="text-sm text-muted-foreground leading-relaxed">
               {clinical ? clinicalSummary : plainSummary}
             </p>
