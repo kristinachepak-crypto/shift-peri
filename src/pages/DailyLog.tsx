@@ -258,13 +258,15 @@ const DailyLog = () => {
   };
 
   const moodLabels: Record<number, string> = {
-    1: "Really rough", 2: "Struggling", 3: "Not great", 4: "Meh", 5: "Okay",
-    6: "Decent", 7: "Pretty good", 8: "Good", 9: "Great", 10: "Amazing"
+    1: "Very poor", 2: "Rough", 3: "Okay", 4: "Good", 5: "Great"
   };
 
   const mentalMoodLabels: Record<number, string> = {
-    1: "Overwhelmed", 2: "Very low", 3: "Struggling", 4: "Foggy", 5: "Neutral",
-    6: "Steady", 7: "Calm", 8: "Positive", 9: "Focused", 10: "Thriving"
+    1: "Very poor", 2: "Struggling", 3: "Okay", 4: "Good", 5: "Great"
+  };
+
+  const sleepLabels: Record<number, string> = {
+    1: "Very poor", 2: "Poor", 3: "Okay", 4: "Good", 5: "Great"
   };
 
   const physicalTagsToShow = showAllPhysical
