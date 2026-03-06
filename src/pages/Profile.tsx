@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -17,6 +17,7 @@ const Profile = () => {
   const [state, setState] = useState(getAppState());
   const [reassessing, setReassessing] = useState(false);
   const [selected, setSelected] = useState<string[]>([...state.selectedSymptoms]);
+  const [expandedAssessments, setExpandedAssessments] = useState<Set<number>>(new Set());
 
   const nextDate = getNextAssessmentDate(state);
   const assessmentDue = isAssessmentDue(state);
@@ -195,30 +196,49 @@ const Profile = () => {
         </div>
         {state.assessments.length > 0 ? (
           <div className="space-y-3">
-            {[...state.assessments].reverse().map((assessment, i) => (
-              <Card key={i} className="border-border/50">
-                <CardContent className="p-4">
-                  <p className="text-sm font-semibold text-foreground mb-1">
-                    {formatDate(assessment.date)}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    {assessment.symptoms.length} symptom{assessment.symptoms.length !== 1 ? "s" : ""} tracked
-                  </p>
-                  <div className="flex flex-wrap gap-1.5 mt-2">
-                    {assessment.symptoms.slice(0, 5).map((s) => (
-                      <span key={s} className="px-2 py-0.5 rounded-full text-xs bg-muted text-muted-foreground">
-                        {s}
-                      </span>
-                    ))}
-                    {assessment.symptoms.length > 5 && (
-                      <span className="px-2 py-0.5 rounded-full text-xs bg-muted text-muted-foreground">
-                        +{assessment.symptoms.length - 5} more
-                      </span>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+            {[...state.assessments].reverse().map((assessment, i) => {
+              const isExpanded = expandedAssessments.has(i);
+              const hasMore = assessment.symptoms.length > 5;
+              const visibleSymptoms = isExpanded ? assessment.symptoms : assessment.symptoms.slice(0, 5);
+
+              return (
+                <Card key={i} className="border-border/50">
+                  <CardContent className="p-4">
+                    <p className="text-sm font-semibold text-foreground mb-1">
+                      {formatDate(assessment.date)}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {assessment.symptoms.length} symptom{assessment.symptoms.length !== 1 ? "s" : ""} tracked
+                    </p>
+                    <div className="flex flex-wrap gap-1.5 mt-2">
+                      {visibleSymptoms.map((s) => (
+                        <span key={s} className="px-2 py-0.5 rounded-full text-xs bg-muted text-muted-foreground">
+                          {s}
+                        </span>
+                      ))}
+                      {hasMore && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setExpandedAssessments((prev) => {
+                              const next = new Set(prev);
+                              if (next.has(i)) next.delete(i);
+                              else next.add(i);
+                              return next;
+                            });
+                          }}
+                          className="px-2 py-0.5 rounded-full text-xs bg-accent text-accent-foreground min-h-[28px] cursor-pointer hover:bg-accent/80 transition-colors"
+                          aria-expanded={isExpanded}
+                          aria-label={isExpanded ? "Show fewer symptoms" : `Show ${assessment.symptoms.length - 5} more symptoms`}
+                        >
+                          {isExpanded ? "Show less" : `+${assessment.symptoms.length - 5} more`}
+                        </button>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         ) : (
           <Card className="border-border/50">
