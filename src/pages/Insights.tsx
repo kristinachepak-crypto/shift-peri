@@ -50,31 +50,31 @@ const Insights = () => {
         </CardContent>
       </Card>
 
-      <section className="space-y-4" aria-label="Insight cards">
-        {mockInsights.map((insight, i) => (
-          <Card
-            key={i}
-            className={`border-none shadow-sm animate-fade-in ${
-              !hasEnoughData ? "opacity-50" : ""
-            }`}
-            style={{ animationDelay: `${i * 100}ms` }}
-          >
-            <CardContent className="p-5">
-              <div className="flex gap-3">
-                <div className="w-11 h-11 rounded-xl bg-secondary flex items-center justify-center shrink-0" aria-hidden="true">
-                  <insight.icon className="w-5 h-5 text-primary" />
+      {hasEnoughData && (
+        <section className="space-y-4" aria-label="Insight cards">
+          {mockInsights.map((insight, i) => (
+            <Card
+              key={i}
+              className="border-none shadow-sm animate-fade-in"
+              style={{ animationDelay: `${i * 100}ms` }}
+            >
+              <CardContent className="p-5">
+                <div className="flex gap-3">
+                  <div className="w-11 h-11 rounded-xl bg-secondary flex items-center justify-center shrink-0" aria-hidden="true">
+                    <insight.icon className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <h2 className="font-semibold text-sm text-foreground mb-1.5">{insight.title}</h2>
+                    <p className="text-sm text-foreground/90 leading-relaxed mb-2">{insight.observation}</p>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-2">{insight.explanation}</p>
+                    <p className="text-sm text-primary/80 leading-relaxed italic">{insight.action}</p>
+                  </div>
                 </div>
-                <div>
-                  <h2 className="font-semibold text-sm text-foreground mb-1.5">{insight.title}</h2>
-                  <p className="text-sm text-foreground/90 leading-relaxed mb-2">{insight.observation}</p>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-2">{insight.explanation}</p>
-                  <p className="text-sm text-primary/80 leading-relaxed italic">{insight.action}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </section>
+              </CardContent>
+            </Card>
+          ))}
+        </section>
+      )}
 
       {!hasEnoughData && (
         <div className="mt-8 text-center" role="status">
