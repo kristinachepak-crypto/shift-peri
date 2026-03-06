@@ -160,6 +160,8 @@ const DailyLog = () => {
             </div>
           </div>
         </div>
+
+        <div>
           <label className="text-sm font-semibold text-foreground block mb-3">
             Sleep quality
           </label>
