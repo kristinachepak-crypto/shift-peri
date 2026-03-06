@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { getAppState } from "@/lib/storage";
-import { FileText, Copy, Download, Check } from "lucide-react";
+import { FileText, Copy, Download, Check, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 
 const Report = () => {
