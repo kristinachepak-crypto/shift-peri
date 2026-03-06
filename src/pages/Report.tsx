@@ -61,7 +61,7 @@ const Report = () => {
     totalDays > 0
       ? (state.logs.reduce((a, l) => a + l.mood, 0) / totalDays).toFixed(1)
       : "—"
-  } out of 10. These patterns may be worth discussing with your healthcare provider to explore hormonal changes.`;
+  } out of 5. These patterns may be worth discussing with your healthcare provider to explore hormonal changes.`;
 
   const clinicalSummary = `Self-reported symptom log over ${totalDays} days. Primary reported symptoms: ${
     rows.slice(0, 3).map((r) => mapToClinical(r.name)).join(", ") || "N/A"
