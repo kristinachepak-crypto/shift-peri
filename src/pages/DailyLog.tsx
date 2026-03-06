@@ -49,8 +49,8 @@ function generateSummary(log: {
   const parts: string[] = [];
 
   // Physical + emotional overall shape
-  const physDesc = log.mood <= 3 ? "physically tough" : log.mood <= 5 ? "physically so-so" : log.mood <= 7 ? "physically manageable" : "physically pretty good";
-  const emotDesc = log.mentalMood <= 3 ? "emotionally heavy" : log.mentalMood <= 5 ? "emotionally mixed" : log.mentalMood <= 7 ? "emotionally steady" : "emotionally bright";
+  const physDesc = log.mood <= 1 ? "physically tough" : log.mood <= 2 ? "physically rough" : log.mood <= 3 ? "physically so-so" : log.mood <= 4 ? "physically manageable" : "physically pretty good";
+  const emotDesc = log.mentalMood <= 1 ? "emotionally heavy" : log.mentalMood <= 2 ? "emotionally low" : log.mentalMood <= 3 ? "emotionally mixed" : log.mentalMood <= 4 ? "emotionally steady" : "emotionally bright";
 
   if (Math.abs(log.mood - log.mentalMood) <= 2) {
     // Similar
