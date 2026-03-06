@@ -30,31 +30,34 @@ const Onboarding = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <main className="min-h-screen bg-background flex flex-col" aria-label="Symptom selection">
       <div className="flex-1 overflow-y-auto px-6 pt-12 pb-44">
-        <div className="flex items-center gap-2 mb-2">
-          <Heart className="w-5 h-5 text-primary" />
-          <span className="text-sm font-medium text-muted-foreground tracking-wide uppercase">Shift</span>
-        </div>
-        <h1 className="text-3xl font-serif text-foreground mb-2">
-          What have you been experiencing?
-        </h1>
-        <p className="text-muted-foreground mb-8 leading-relaxed">
-          Select everything that resonates — including things you may not have connected to hormones yet. There are no wrong answers here.
-        </p>
+        <header className="mb-8">
+          <div className="flex items-center gap-2 mb-2">
+            <Heart className="w-5 h-5 text-primary" aria-hidden="true" />
+            <span className="text-sm font-medium text-muted-foreground tracking-wide uppercase">Shift</span>
+          </div>
+          <h1 className="text-3xl font-serif text-foreground mb-2">
+            What have you been experiencing?
+          </h1>
+          <p className="text-muted-foreground leading-relaxed">
+            Select everything that resonates — including things you may not have connected to hormones yet. There are no wrong answers here.
+          </p>
+        </header>
 
         <div className="space-y-6">
           {Object.entries(SYMPTOM_CATEGORIES).map(([category, symptoms]) => (
-            <div key={category}>
-              <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+            <fieldset key={category}>
+              <legend className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">
                 {category}
-              </h2>
-              <div className="flex flex-wrap gap-2">
+              </legend>
+              <div className="flex flex-wrap gap-2" role="group" aria-label={`${category} symptoms`}>
                 {symptoms.map((symptom) => (
                   <button
                     key={symptom}
                     onClick={() => toggle(symptom)}
-                    className={`px-4 py-2.5 rounded-full text-sm font-medium transition-all ${
+                    aria-pressed={selected.includes(symptom)}
+                    className={`min-h-[44px] px-4 py-2.5 rounded-full text-sm font-medium transition-all ${
                       selected.includes(symptom)
                         ? "bg-primary text-primary-foreground shadow-md"
                         : "bg-secondary text-secondary-foreground hover:bg-accent"
@@ -64,15 +67,15 @@ const Onboarding = () => {
                   </button>
                 ))}
               </div>
-            </div>
+            </fieldset>
           ))}
         </div>
 
         {showAffirmation && (
-          <Card className="mt-8 bg-shift-lavender border-none animate-fade-in">
+          <Card className="mt-8 bg-shift-lavender border-none animate-fade-in" role="status">
             <CardContent className="p-5">
               <div className="flex gap-3">
-                <Sparkles className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                <Sparkles className="w-5 h-5 text-primary mt-0.5 shrink-0" aria-hidden="true" />
                 <div>
                   <p className="text-sm leading-relaxed text-foreground">
                     These symptoms are commonly associated with perimenopause.{" "}
@@ -94,13 +97,14 @@ const Onboarding = () => {
               onClick={handleContinue}
               className="w-full h-14 text-base rounded-2xl font-semibold"
               size="lg"
+              aria-label={`Continue with ${selected.length} symptom${selected.length !== 1 ? "s" : ""} selected`}
             >
               Continue
             </Button>
           </div>
         </div>
       )}
-    </div>
+    </main>
   );
 };
 

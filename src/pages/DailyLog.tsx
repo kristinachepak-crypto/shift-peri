@@ -64,59 +64,59 @@ const DailyLog = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background px-6 pt-8 pb-28">
+    <main className="min-h-screen bg-background px-6 pt-8 pb-28" aria-label="Daily check-in">
       {/* Streak */}
-      <div className="flex items-center gap-2 mb-6">
-        <Flame className="w-5 h-5 text-primary" />
+      <div className="flex items-center gap-2 mb-6" aria-label={streak > 0 ? `${streak}-day logging streak` : "No streak yet"}>
+        <Flame className="w-5 h-5 text-primary" aria-hidden="true" />
         <span className="text-sm font-semibold text-foreground">
           {streak > 0 ? `${streak}-day streak` : "Start your streak today"}
         </span>
       </div>
 
-      <h1 className="text-2xl font-serif text-foreground mb-1">Daily Check-in</h1>
-      <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
-        Under 2 minutes. Consistency matters more than detail.
-      </p>
+      <header>
+        <h1 className="text-2xl font-serif text-foreground mb-1">Daily Check-in</h1>
+        <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
+          Under 2 minutes. Consistency matters more than detail.
+        </p>
+      </header>
 
       {logged &&
-      <Card className="mb-6 bg-shift-lavender border-none">
+      <Card className="mb-6 bg-shift-lavender border-none" role="status">
           <CardContent className="p-4 flex items-center gap-3">
-            <Check className="w-5 h-5 text-primary" />
+            <Check className="w-5 h-5 text-primary" aria-hidden="true" />
             <p className="text-sm text-foreground">You've already logged today. You can update it below.</p>
           </CardContent>
         </Card>
       }
 
       <div className="space-y-8">
-        {/* Mood */}
-        <div>
-          <label className="text-sm font-semibold text-foreground block mb-3">Physically, how are you feeling today?
-
-          </label>
+        {/* Physical Mood */}
+        <fieldset>
+          <legend className="text-sm font-semibold text-foreground block mb-3">Physically, how are you feeling today?</legend>
           <Slider
             value={[mood]}
             onValueChange={(v) => setMood(v[0])}
             min={1}
             max={10}
             step={1}
-            className="mb-2" />
+            className="mb-2"
+            aria-label={`Physical feeling: ${mood} out of 10, ${moodLabels[mood]}`} />
           
-          <div className="flex justify-between text-xs text-muted-foreground">
+          <div className="flex justify-between text-xs text-muted-foreground" aria-hidden="true">
             <span>1</span>
             <span className="font-medium text-foreground">{mood} — {moodLabels[mood]}</span>
             <span>10</span>
           </div>
           {/* Physical Symptoms */}
-          <div className="mt-4">
-            <label className="text-sm font-semibold text-foreground block mb-3">Physical symptoms
-
-            </label>
-            <div className="flex flex-wrap gap-2">
+          <div className="mt-4" role="group" aria-label="Physical symptoms selection">
+            <label className="text-sm font-semibold text-foreground block mb-3" id="physical-symptoms-label">Physical symptoms</label>
+            <div className="flex flex-wrap gap-2" aria-labelledby="physical-symptoms-label">
               {PHYSICAL_SYMPTOMS.map((s) =>
               <button
                 key={s}
                 onClick={() => togglePhysicalSymptom(s)}
-                className={`px-3.5 py-2 rounded-full text-sm font-medium transition-all ${
+                aria-pressed={physicalSymptoms.includes(s)}
+                className={`min-h-[44px] px-4 py-2.5 rounded-full text-sm font-medium transition-all ${
                 physicalSymptoms.includes(s) ?
                 "bg-primary text-primary-foreground shadow-md" :
                 "bg-secondary text-secondary-foreground"}`
@@ -126,33 +126,35 @@ const DailyLog = () => {
               )}
             </div>
           </div>
-        </div>
+        </fieldset>
 
         <Separator className="bg-border/50" />
 
         {/* Mental/Emotional */}
-        <div>
-          <label className="text-sm font-semibold text-foreground block mb-3">Mentally & emotionally, how are you feeling?</label>
+        <fieldset>
+          <legend className="text-sm font-semibold text-foreground block mb-3">Mentally & emotionally, how are you feeling?</legend>
           <Slider
             value={[mentalMood]}
             onValueChange={(v) => setMentalMood(v[0])}
             min={1}
             max={10}
             step={1}
-            className="mb-2" />
-          <div className="flex justify-between text-xs text-muted-foreground">
+            className="mb-2"
+            aria-label={`Mental feeling: ${mentalMood} out of 10, ${mentalMoodLabels[mentalMood]}`} />
+          <div className="flex justify-between text-xs text-muted-foreground" aria-hidden="true">
             <span>1</span>
             <span className="font-medium text-foreground">{mentalMood} — {mentalMoodLabels[mentalMood]}</span>
             <span>10</span>
           </div>
-          <div className="mt-4">
-            <label className="text-sm font-semibold text-foreground block mb-3">Emotional symptoms</label>
-            <div className="flex flex-wrap gap-2">
+          <div className="mt-4" role="group" aria-label="Emotional symptoms selection">
+            <label className="text-sm font-semibold text-foreground block mb-3" id="emotional-symptoms-label">Emotional symptoms</label>
+            <div className="flex flex-wrap gap-2" aria-labelledby="emotional-symptoms-label">
               {EMOTIONAL_SYMPTOMS.map((s) =>
               <button
                 key={s}
                 onClick={() => toggleEmotionalSymptom(s)}
-                className={`px-3.5 py-2 rounded-full text-sm font-medium transition-all ${
+                aria-pressed={emotionalSymptoms.includes(s)}
+                className={`min-h-[44px] px-4 py-2.5 rounded-full text-sm font-medium transition-all ${
                 emotionalSymptoms.includes(s) ?
                 "bg-primary text-primary-foreground shadow-md" :
                 "bg-secondary text-secondary-foreground"}`
@@ -162,97 +164,105 @@ const DailyLog = () => {
               )}
             </div>
           </div>
-        </div>
+        </fieldset>
 
         <Separator className="bg-border/50" />
 
-        <div>
-          <label className="text-sm font-semibold text-foreground block mb-3">
+        {/* Sleep */}
+        <fieldset>
+          <legend className="text-sm font-semibold text-foreground block mb-3">
             Sleep quality
-          </label>
-          <div className="flex gap-2">
+          </legend>
+          <div className="flex gap-2" role="radiogroup" aria-label="Sleep quality rating">
             {[1, 2, 3, 4, 5].map((n) =>
-            <button key={n} onClick={() => setSleep(n)} className="transition-transform hover:scale-110">
+            <button
+              key={n}
+              onClick={() => setSleep(n)}
+              className="min-w-[44px] min-h-[44px] flex items-center justify-center transition-transform hover:scale-110"
+              role="radio"
+              aria-checked={n === sleep}
+              aria-label={`${n} out of 5 stars`}>
                 <Star
-                className={`w-8 h-8 ${n <= sleep ? "text-primary fill-primary" : "text-muted"}`} />
-              
+                className={`w-8 h-8 ${n <= sleep ? "text-primary fill-primary" : "text-muted"}`}
+                aria-hidden="true" />
               </button>
             )}
           </div>
-        </div>
+        </fieldset>
 
         <Separator className="bg-border/50" />
 
         {/* Symptoms */}
-        <div>
-          <label className="text-sm font-semibold text-foreground block mb-3">
+        <fieldset>
+          <legend className="text-sm font-semibold text-foreground block mb-3">
             Today's symptoms
-          </label>
-          <div className="flex flex-wrap gap-2">
+          </legend>
+          <div className="flex flex-wrap gap-2" role="group" aria-label="Symptom selection">
             {state.selectedSymptoms.map((s) =>
             <button
               key={s}
               onClick={() => toggleSymptom(s)}
-              className={`px-3.5 py-2 rounded-full text-sm font-medium transition-all ${
+              aria-pressed={symptoms.includes(s)}
+              className={`min-h-[44px] px-4 py-2.5 rounded-full text-sm font-medium transition-all ${
               symptoms.includes(s) ?
               "bg-primary text-primary-foreground shadow-md" :
               "bg-secondary text-secondary-foreground"}`
               }>
-              
                 {s}
               </button>
             )}
           </div>
-        </div>
+        </fieldset>
 
         <Separator className="bg-border/50" />
 
         {/* Cycle */}
-        <div>
-          <label className="text-sm font-semibold text-foreground block mb-3">
+        <fieldset>
+          <legend className="text-sm font-semibold text-foreground block mb-3">
             Cycle status
-          </label>
-          <div className="flex gap-2">
+          </legend>
+          <div className="flex gap-2" role="radiogroup" aria-label="Cycle status selection">
             {(["none", "spotting", "period"] as const).map((status) =>
             <button
               key={status}
               onClick={() => setCycleStatus(status)}
-              className={`px-4 py-2.5 rounded-full text-sm font-medium capitalize transition-all ${
+              role="radio"
+              aria-checked={cycleStatus === status}
+              className={`min-h-[44px] px-5 py-2.5 rounded-full text-sm font-medium capitalize transition-all ${
               cycleStatus === status ?
               "bg-primary text-primary-foreground shadow-md" :
               "bg-secondary text-secondary-foreground"}`
               }>
-              
                 {status === "none" ? "None" : status}
               </button>
             )}
           </div>
-        </div>
+        </fieldset>
 
         <Separator className="bg-border/50" />
 
         {/* Notes */}
         <div>
-          <label className="text-sm font-semibold text-foreground block mb-3">
+          <label htmlFor="daily-notes" className="text-sm font-semibold text-foreground block mb-3">
             Anything else to note?
           </label>
           <Textarea
+            id="daily-notes"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             placeholder="How you're feeling, what happened today..."
             className="bg-card border-border rounded-2xl min-h-[100px] resize-none" />
-          
         </div>
 
         <Button
           onClick={handleLog}
           className="w-full h-14 text-base rounded-2xl font-semibold"
-          size="lg">
-          
+          size="lg"
+          aria-label={logged ? "Update today's log entry" : "Save today's log entry"}>
           {logged ? "Update Today's Log" : "Log Today"}
         </Button>
       </div>
-    </div>);
+    </main>);
 
 };
 
