@@ -65,8 +65,10 @@ const Insights = () => {
                   <insight.icon className="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <h2 className="font-semibold text-sm text-foreground mb-1">{insight.title}</h2>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{insight.text}</p>
+                  <h2 className="font-semibold text-sm text-foreground mb-1.5">{insight.title}</h2>
+                  <p className="text-sm text-foreground/90 leading-relaxed mb-2">{insight.observation}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-2">{insight.explanation}</p>
+                  <p className="text-sm text-primary/80 leading-relaxed italic">{insight.action}</p>
                 </div>
               </div>
             </CardContent>
