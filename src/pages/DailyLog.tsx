@@ -8,9 +8,9 @@ import { Flame, Star, Check } from "lucide-react";
 import { toast } from "sonner";
 
 const PHYSICAL_SYMPTOMS = [
-  "Hot flashes", "Heart palpitations", "Joint pain", "Fatigue",
-  "Headaches", "Weight changes", "Muscle tension", "Dizziness", "Nausea"
-];
+"Hot flashes", "Heart palpitations", "Joint pain", "Fatigue",
+"Headaches", "Weight changes", "Muscle tension", "Dizziness", "Nausea"];
+
 
 const DailyLog = () => {
   const state = getAppState();
@@ -92,19 +92,19 @@ const DailyLog = () => {
           </div>
           {/* Physical Symptoms */}
           <div className="mt-4">
-            <label className="text-sm font-semibold text-foreground block mb-3">
-              Physical symptoms right now
+            <label className="text-sm font-semibold text-foreground block mb-3">Physical symptoms
+
             </label>
             <div className="flex flex-wrap gap-2">
               {PHYSICAL_SYMPTOMS.map((s) =>
-                <button
-                  key={s}
-                  onClick={() => togglePhysicalSymptom(s)}
-                  className={`px-3.5 py-2 rounded-full text-sm font-medium transition-all ${
-                    physicalSymptoms.includes(s) ?
-                    "bg-primary text-primary-foreground shadow-md" :
-                    "bg-secondary text-secondary-foreground"}`
-                  }>
+              <button
+                key={s}
+                onClick={() => togglePhysicalSymptom(s)}
+                className={`px-3.5 py-2 rounded-full text-sm font-medium transition-all ${
+                physicalSymptoms.includes(s) ?
+                "bg-primary text-primary-foreground shadow-md" :
+                "bg-secondary text-secondary-foreground"}`
+                }>
                   {s}
                 </button>
               )}
