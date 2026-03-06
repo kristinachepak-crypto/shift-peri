@@ -11,13 +11,19 @@ const PHYSICAL_SYMPTOMS = [
 "Hot flashes", "Heart palpitations", "Joint pain", "Fatigue",
 "Headaches", "Weight changes", "Muscle tension", "Dizziness", "Nausea"];
 
+const EMOTIONAL_SYMPTOMS = [
+"Anxiety", "Irritability", "Mood swings", "Brain fog", "Depression",
+"Rage", "Tearfulness", "Low motivation", "Overwhelm"];
+
 
 const DailyLog = () => {
   const state = getAppState();
   const [mood, setMood] = useState(5);
+  const [mentalMood, setMentalMood] = useState(5);
   const [sleep, setSleep] = useState(3);
   const [symptoms, setSymptoms] = useState<string[]>([]);
   const [physicalSymptoms, setPhysicalSymptoms] = useState<string[]>([]);
+  const [emotionalSymptoms, setEmotionalSymptoms] = useState<string[]>([]);
   const [cycleStatus, setCycleStatus] = useState<"period" | "spotting" | "none">("none");
   const [notes, setNotes] = useState("");
   const [logged, setLogged] = useState(todayAlreadyLogged(state.logs));
@@ -30,6 +36,10 @@ const DailyLog = () => {
 
   const togglePhysicalSymptom = (s: string) => {
     setPhysicalSymptoms((prev) => prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]);
+  };
+
+  const toggleEmotionalSymptom = (s: string) => {
+    setEmotionalSymptoms((prev) => prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]);
   };
 
   const handleLog = () => {
@@ -45,6 +55,11 @@ const DailyLog = () => {
   const moodLabels: Record<number, string> = {
     1: "Really rough", 2: "Struggling", 3: "Not great", 4: "Meh", 5: "Okay",
     6: "Decent", 7: "Pretty good", 8: "Good", 9: "Great", 10: "Amazing"
+  };
+
+  const mentalMoodLabels: Record<number, string> = {
+    1: "Overwhelmed", 2: "Very low", 3: "Struggling", 4: "Foggy", 5: "Neutral",
+    6: "Steady", 7: "Calm", 8: "Positive", 9: "Focused", 10: "Thriving"
   };
 
   return (
@@ -102,6 +117,40 @@ const DailyLog = () => {
                 onClick={() => togglePhysicalSymptom(s)}
                 className={`px-3.5 py-2 rounded-full text-sm font-medium transition-all ${
                 physicalSymptoms.includes(s) ?
+                "bg-primary text-primary-foreground shadow-md" :
+                "bg-secondary text-secondary-foreground"}`
+                }>
+                  {s}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Mental/Emotional */}
+        <div>
+          <label className="text-sm font-semibold text-foreground block mb-3">Mentally & emotionally, how are you feeling?</label>
+          <Slider
+            value={[mentalMood]}
+            onValueChange={(v) => setMentalMood(v[0])}
+            min={1}
+            max={10}
+            step={1}
+            className="mb-2" />
+          <div className="flex justify-between text-xs text-muted-foreground">
+            <span>1</span>
+            <span className="font-medium text-foreground">{mentalMood} — {mentalMoodLabels[mentalMood]}</span>
+            <span>10</span>
+          </div>
+          <div className="mt-4">
+            <label className="text-sm font-semibold text-foreground block mb-3">Emotional symptoms</label>
+            <div className="flex flex-wrap gap-2">
+              {EMOTIONAL_SYMPTOMS.map((s) =>
+              <button
+                key={s}
+                onClick={() => toggleEmotionalSymptom(s)}
+                className={`px-3.5 py-2 rounded-full text-sm font-medium transition-all ${
+                emotionalSymptoms.includes(s) ?
                 "bg-primary text-primary-foreground shadow-md" :
                 "bg-secondary text-secondary-foreground"}`
                 }>
