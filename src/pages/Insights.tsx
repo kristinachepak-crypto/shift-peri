@@ -25,15 +25,17 @@ const Insights = () => {
   const hasEnoughData = state.logs.length >= 7;
 
   return (
-    <div className="min-h-screen bg-background px-6 pt-8 pb-28">
-      <h1 className="text-2xl font-serif text-foreground mb-2">Pattern Insights</h1>
-      <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
-        Your body is telling a story. Here's what we're noticing.
-      </p>
+    <main className="min-h-screen bg-background px-6 pt-8 pb-28" aria-label="Pattern insights">
+      <header>
+        <h1 className="text-2xl font-serif text-foreground mb-2">Pattern Insights</h1>
+        <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
+          Your body is telling a story. Here's what we're noticing.
+        </p>
+      </header>
 
-      <Card className="mb-6 bg-shift-lavender border-none">
+      <Card className="mb-6 bg-shift-lavender border-none" role="status">
         <CardContent className="p-4 flex items-start gap-3">
-          <Info className="w-4 h-4 text-primary mt-0.5 shrink-0" />
+          <Info className="w-4 h-4 text-primary mt-0.5 shrink-0" aria-hidden="true" />
           <p className="text-xs text-muted-foreground leading-relaxed">
             {hasEnoughData
               ? "These insights are based on your logged data. They're observations — not diagnoses — and they're designed to help you have better conversations with your doctor."
@@ -42,7 +44,7 @@ const Insights = () => {
         </CardContent>
       </Card>
 
-      <div className="space-y-4">
+      <section className="space-y-4" aria-label="Insight cards">
         {mockInsights.map((insight, i) => (
           <Card
             key={i}
@@ -53,28 +55,28 @@ const Insights = () => {
           >
             <CardContent className="p-5">
               <div className="flex gap-3">
-                <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center shrink-0">
+                <div className="w-11 h-11 rounded-xl bg-secondary flex items-center justify-center shrink-0" aria-hidden="true">
                   <insight.icon className="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-sm text-foreground mb-1">{insight.title}</h3>
+                  <h2 className="font-semibold text-sm text-foreground mb-1">{insight.title}</h2>
                   <p className="text-sm text-muted-foreground leading-relaxed">{insight.text}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
         ))}
-      </div>
+      </section>
 
       {!hasEnoughData && (
-        <div className="mt-8 text-center">
-          <Moon className="w-8 h-8 text-muted mx-auto mb-3" />
+        <div className="mt-8 text-center" role="status">
+          <Moon className="w-8 h-8 text-muted mx-auto mb-3" aria-hidden="true" />
           <p className="text-sm text-muted-foreground">
             Log a few more days and patterns will emerge.
           </p>
         </div>
       )}
-    </div>
+    </main>
   );
 };
 

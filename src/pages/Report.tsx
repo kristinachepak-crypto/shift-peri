@@ -80,14 +80,16 @@ const Report = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background px-6 pt-8 pb-28">
-      <div className="flex items-center gap-2 mb-2">
-        <FileText className="w-5 h-5 text-primary" />
-        <h1 className="text-2xl font-serif text-foreground">Doctor Report</h1>
-      </div>
-      <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
-        A pre-appointment export you can print or share — so your doctor sees the full picture, not just a snapshot.
-      </p>
+    <main className="min-h-screen bg-background px-6 pt-8 pb-28" aria-label="Doctor report">
+      <header>
+        <div className="flex items-center gap-2 mb-2">
+          <FileText className="w-5 h-5 text-primary" aria-hidden="true" />
+          <h1 className="text-2xl font-serif text-foreground">Doctor Report</h1>
+        </div>
+        <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
+          A pre-appointment export you can print or share — so your doctor sees the full picture, not just a snapshot.
+        </p>
+      </header>
 
       {/* Days logged indicator */}
       <p className="text-sm text-muted-foreground mb-3">
@@ -95,90 +97,98 @@ const Report = () => {
       </p>
 
       {/* Symptom Table */}
-      <Card className="border-none shadow-sm mb-6">
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow className="border-border">
-                <TableHead className="text-xs font-semibold">Symptom</TableHead>
-                <TableHead className="text-xs font-semibold text-center">Days</TableHead>
-                <TableHead className="text-xs font-semibold text-right">Frequency</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {rows.length > 0 ? (
-                rows.map((r) => (
-                  <TableRow key={r.name} className="border-border">
-                    <TableCell className="text-sm">{r.name}</TableCell>
-                    <TableCell className="text-sm text-center">{r.days}</TableCell>
-                    <TableCell className="text-sm text-right">{r.severity}%</TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={3} className="text-center text-sm text-muted-foreground py-8">
-                    Start logging to build your report
-                  </TableCell>
+      <section aria-label="Symptom frequency table">
+        <Card className="border-none shadow-sm mb-6">
+          <CardContent className="p-0">
+            <Table>
+              <TableHeader>
+                <TableRow className="border-border">
+                  <TableHead className="text-xs font-semibold">Symptom</TableHead>
+                  <TableHead className="text-xs font-semibold text-center">Days</TableHead>
+                  <TableHead className="text-xs font-semibold text-right">Frequency</TableHead>
                 </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+              </TableHeader>
+              <TableBody>
+                {rows.length > 0 ? (
+                  rows.map((r) => (
+                    <TableRow key={r.name} className="border-border">
+                      <TableCell className="text-sm">{r.name}</TableCell>
+                      <TableCell className="text-sm text-center">{r.days}</TableCell>
+                      <TableCell className="text-sm text-right">{r.severity}%</TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={3} className="text-center text-sm text-muted-foreground py-8">
+                      Start logging to build your report
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      </section>
 
       {/* Key Patterns */}
       {patterns.length > 0 && (
-        <Card className="border-none shadow-sm mb-6">
-          <CardContent className="p-5">
-            <h3 className="font-semibold text-sm text-foreground mb-3">Key Patterns</h3>
-            <ul className="space-y-2">
-              {patterns.map((p, i) => (
-                <li key={i} className="text-sm text-muted-foreground flex gap-2">
-                  <span className="text-primary">•</span>
-                  {p}
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
+        <section aria-label="Key patterns">
+          <Card className="border-none shadow-sm mb-6">
+            <CardContent className="p-5">
+              <h2 className="font-semibold text-sm text-foreground mb-3">Key Patterns</h2>
+              <ul className="space-y-2">
+                {patterns.map((p, i) => (
+                  <li key={i} className="text-sm text-muted-foreground flex gap-2">
+                    <span className="text-primary" aria-hidden="true">•</span>
+                    {p}
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+        </section>
       )}
 
       {/* Summary */}
-      <Card className="border-none shadow-sm mb-6">
-        <CardContent className="p-5">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold text-sm text-foreground">Summary</h3>
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-muted-foreground">Clinical</span>
-              <Switch checked={clinical} onCheckedChange={setClinical} />
+      <section aria-label="Report summary">
+        <Card className="border-none shadow-sm mb-6">
+          <CardContent className="p-5">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="font-semibold text-sm text-foreground">Summary</h2>
+              <div className="flex items-center gap-2">
+                <label htmlFor="clinical-toggle" className="text-xs text-muted-foreground">Clinical</label>
+                <Switch id="clinical-toggle" checked={clinical} onCheckedChange={setClinical} aria-label="Toggle clinical language" />
+              </div>
             </div>
-          </div>
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            {clinical ? clinicalSummary : plainSummary}
-          </p>
-        </CardContent>
-      </Card>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              {clinical ? clinicalSummary : plainSummary}
+            </p>
+          </CardContent>
+        </Card>
+      </section>
 
       {/* Actions */}
-      <div className="flex gap-3">
+      <footer className="flex gap-3">
         <Button
           onClick={handleDownload}
           className="flex-1 h-14 rounded-2xl font-semibold"
           size="lg"
+          aria-label="Download report as text file"
         >
-          <Download className="w-4 h-4 mr-2" />
+          <Download className="w-4 h-4 mr-2" aria-hidden="true" />
           Download Report
         </Button>
         <Button
           onClick={handleCopy}
           variant="secondary"
-          className="h-14 rounded-2xl px-6"
+          className="min-w-[56px] h-14 rounded-2xl px-6"
           size="lg"
+          aria-label={copied ? "Report copied" : "Copy report to clipboard"}
         >
-          {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+          {copied ? <Check className="w-4 h-4" aria-hidden="true" /> : <Copy className="w-4 h-4" aria-hidden="true" />}
         </Button>
-      </div>
-    </div>
+      </footer>
+    </main>
   );
 };
 
