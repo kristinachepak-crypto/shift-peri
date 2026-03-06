@@ -92,9 +92,28 @@ const DailyLog = () => {
             <span className="font-medium text-foreground">{mood} — {moodLabels[mood]}</span>
             <span>10</span>
           </div>
+          {/* Physical Symptoms */}
+          <div className="mt-4">
+            <label className="text-sm font-semibold text-foreground block mb-3">
+              Physical symptoms right now
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {PHYSICAL_SYMPTOMS.map((s) =>
+                <button
+                  key={s}
+                  onClick={() => togglePhysicalSymptom(s)}
+                  className={`px-3.5 py-2 rounded-full text-sm font-medium transition-all ${
+                    physicalSymptoms.includes(s) ?
+                    "bg-primary text-primary-foreground shadow-md" :
+                    "bg-secondary text-secondary-foreground"}`
+                  }>
+                  {s}
+                </button>
+              )}
+            </div>
+          </div>
         </div>
 
-        {/* Sleep */}
         <div>
           <label className="text-sm font-semibold text-foreground block mb-3">
             Sleep quality
