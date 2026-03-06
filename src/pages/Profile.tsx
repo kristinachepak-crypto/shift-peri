@@ -62,9 +62,53 @@ const Profile = () => {
   const [reassessing, setReassessing] = useState(false);
   const [selected, setSelected] = useState<string[]>([...state.selectedSymptoms]);
   const [expandedAssessments, setExpandedAssessments] = useState<Set<number>>(new Set());
+  const [devTapCount, setDevTapCount] = useState(0);
+  const [showDevPanel, setShowDevPanel] = useState(false);
+  const [mockDays, setMockDays] = useState(7);
+  const devTapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const nextDate = getNextAssessmentDate(state);
   const assessmentDue = isAssessmentDue(state);
+
+  const physicalMean = calculateRollingMean(state.logs, "mood");
+  const mentalMean = calculateRollingMean(state.logs, "mentalMood");
+
+  const handleVersionTap = () => {
+    const newCount = devTapCount + 1;
+    setDevTapCount(newCount);
+    if (devTapTimer.current) clearTimeout(devTapTimer.current);
+    devTapTimer.current = setTimeout(() => setDevTapCount(0), 2000);
+    if (newCount >= 7) {
+      setShowDevPanel((prev) => !prev);
+      setDevTapCount(0);
+      if (!showDevPanel) toast("Developer panel unlocked 🔧");
+    }
+  };
+
+  const handlePopulateMockData = () => {
+    const current = getAppState();
+    current.logs = generateMockLogs(mockDays);
+    current.selectedSymptoms = TEST_PROFILE_SYMPTOMS;
+    current.onboardingComplete = true;
+    current.onboardingDate = current.logs[0]?.date || getToday();
+    current.rollingMeans = {
+      physical: calculateRollingMean(current.logs, "mood"),
+      mental: calculateRollingMean(current.logs, "mentalMood"),
+    };
+    if (current.assessments.length === 0) {
+      current.assessments.push({ date: current.onboardingDate, symptoms: [...TEST_PROFILE_SYMPTOMS] });
+    }
+    saveAppState(current);
+    setState(getAppState());
+    toast.success(`Populated ${mockDays} days of mock data`);
+  };
+
+  const handleResetToDay0 = () => {
+    if (window.confirm("This will wipe ALL data and return to onboarding. Continue?")) {
+      localStorage.removeItem("shift-app-data");
+      navigate("/welcome");
+    }
+  };
 
   const toggle = (symptom: string) => {
     setSelected((prev) =>
