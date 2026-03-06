@@ -52,11 +52,10 @@ function generateSummary(log: {
   const physDesc = log.mood <= 1 ? "physically tough" : log.mood <= 2 ? "physically rough" : log.mood <= 3 ? "physically so-so" : log.mood <= 4 ? "physically manageable" : "physically pretty good";
   const emotDesc = log.mentalMood <= 1 ? "emotionally heavy" : log.mentalMood <= 2 ? "emotionally low" : log.mentalMood <= 3 ? "emotionally mixed" : log.mentalMood <= 4 ? "emotionally steady" : "emotionally bright";
 
-  if (Math.abs(log.mood - log.mentalMood) <= 2) {
-    // Similar
-    if (log.mood <= 4 && log.mentalMood <= 4) {
+  if (Math.abs(log.mood - log.mentalMood) <= 1) {
+    if (log.mood <= 2 && log.mentalMood <= 2) {
       parts.push("Today sounds like it was a harder day all around — both physically and emotionally.");
-    } else if (log.mood >= 7 && log.mentalMood >= 7) {
+    } else if (log.mood >= 4 && log.mentalMood >= 4) {
       parts.push("Sounds like today was a solid day — you were feeling good both physically and emotionally.");
     } else {
       parts.push(`Today felt ${physDesc} and ${emotDesc}.`);
