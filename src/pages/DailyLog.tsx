@@ -400,8 +400,8 @@ const DailyLog = () => {
 
         {/* Additional Symptoms — excludes physical & emotional profile symptoms already shown inline */}
         {(() => {
-          const physicalSet = new Set(ALL_PHYSICAL_SYMPTOMS);
-          const emotionalSet = new Set(ALL_EMOTIONAL_SYMPTOMS);
+          const physicalSet = new Set<string>(ALL_PHYSICAL_SYMPTOMS);
+          const emotionalSet = new Set<string>(ALL_EMOTIONAL_SYMPTOMS);
           const additionalSymptoms = state.selectedSymptoms.filter(
             (s) => !physicalSet.has(s) && !emotionalSet.has(s)
           );
