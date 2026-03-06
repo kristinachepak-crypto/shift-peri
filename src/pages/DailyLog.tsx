@@ -398,28 +398,38 @@ const DailyLog = () => {
 
         <Separator className="bg-border/50" />
 
-        {/* Symptoms */}
-        <fieldset>
-          <legend className="text-sm font-semibold text-foreground block mb-3">
-            Today's symptoms
-          </legend>
-          <div className="flex flex-wrap gap-2" role="group" aria-label="Symptom selection">
-            {state.selectedSymptoms.map((s) => (
-              <button
-                key={s}
-                onClick={() => toggleSymptom(s)}
-                aria-pressed={symptoms.includes(s)}
-                className={`min-h-[44px] px-4 py-2.5 rounded-full text-sm font-medium transition-all ${
-                  symptoms.includes(s)
-                    ? "bg-primary text-primary-foreground shadow-md"
-                    : "bg-secondary text-secondary-foreground"
-                }`}
-              >
-                {s}
-              </button>
-            ))}
-          </div>
-        </fieldset>
+        {/* Additional Symptoms — excludes physical & emotional profile symptoms already shown inline */}
+        {(() => {
+          const physicalSet = new Set(ALL_PHYSICAL_SYMPTOMS);
+          const emotionalSet = new Set(ALL_EMOTIONAL_SYMPTOMS);
+          const additionalSymptoms = state.selectedSymptoms.filter(
+            (s) => !physicalSet.has(s) && !emotionalSet.has(s)
+          );
+          if (additionalSymptoms.length === 0) return null;
+          return (
+            <fieldset>
+              <legend className="text-sm font-semibold text-foreground block mb-3">
+                Additional symptoms
+              </legend>
+              <div className="flex flex-wrap gap-2" role="group" aria-label="Additional symptom selection">
+                {additionalSymptoms.map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => toggleSymptom(s)}
+                    aria-pressed={symptoms.includes(s)}
+                    className={`min-h-[44px] px-4 py-2.5 rounded-full text-sm font-medium transition-all ${
+                      symptoms.includes(s)
+                        ? "bg-primary text-primary-foreground shadow-md"
+                        : "bg-secondary text-secondary-foreground"
+                    }`}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            </fieldset>
+          );
+        })()}
 
         <Separator className="bg-border/50" />
 
