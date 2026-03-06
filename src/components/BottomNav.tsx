@@ -27,8 +27,10 @@ const BottomNav = () => {
                 active ? "text-primary" : "text-muted-foreground"
               }`}
             >
-              <tab.icon className="w-5 h-5" aria-hidden="true" />
-              <span className="text-[11px] font-medium">{tab.label}</span>
+              <div className={`flex items-center justify-center w-8 h-8 rounded-full transition-colors ${active ? "bg-primary/15" : ""}`}>
+                <tab.icon className={`w-5 h-5 transition-all ${active ? "stroke-[2.5]" : ""}`} aria-hidden="true" />
+              </div>
+              <span className={`text-[11px] font-medium ${active ? "font-semibold" : ""}`}>{tab.label}</span>
             </button>
           );
         })}
