@@ -205,6 +205,8 @@ const DailyLog = () => {
           </div>
         </div>
 
+        <Separator className="bg-border/50" />
+
         {/* Cycle */}
         <div>
           <label className="text-sm font-semibold text-foreground block mb-3">
