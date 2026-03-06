@@ -7,6 +7,30 @@ import { getAppState } from "@/lib/storage";
 import { FileText, Copy, Download, Check, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 
+const clinicalTermMap: Record<string, string> = {
+  "Hot flashes": "Vasomotor symptoms (hot flashes)",
+  "Night sweats": "Vasomotor symptoms (night sweats)",
+  "Mood swings": "Affective lability",
+  "Anxiety": "Generalized anxiety symptoms",
+  "Brain fog": "Cognitive dysfunction (subjective)",
+  "Fatigue": "Fatigue / asthenia",
+  "Insomnia": "Sleep disturbance",
+  "Joint pain": "Arthralgia",
+  "Low libido": "Decreased libido",
+  "Weight gain": "Weight change",
+  "Irritability": "Irritability / affective dysregulation",
+  "Depression": "Depressive symptoms",
+  "Hair thinning": "Alopecia (diffuse)",
+  "Dry skin": "Xerosis",
+  "Heart palpitations": "Palpitations",
+  "Headaches": "Cephalgia",
+  "Bloating": "Abdominal distension",
+  "Irregular periods": "Menstrual irregularity",
+  "Heavy periods": "Menorrhagia",
+};
+
+const mapToClinical = (name: string): string => clinicalTermMap[name] || name;
+
 const Report = () => {
   const [clinical, setClinical] = useState(false);
   const [copied, setCopied] = useState(false);
