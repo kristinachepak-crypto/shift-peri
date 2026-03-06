@@ -1,11 +1,11 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { Sparkles, CalendarCheck, Brain, FileText } from "lucide-react";
+import { CalendarCheck, Brain, FileText, User } from "lucide-react";
 
 const tabs = [
-  { path: "/onboarding", label: "Symptoms", icon: Sparkles },
   { path: "/log", label: "Log", icon: CalendarCheck },
   { path: "/insights", label: "Insights", icon: Brain },
   { path: "/report", label: "Report", icon: FileText },
+  { path: "/profile", label: "Profile", icon: User },
 ];
 
 const BottomNav = () => {

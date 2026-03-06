@@ -16,11 +16,22 @@ export interface RollingMeans {
   mental: number;
 }
 
+export interface Assessment {
+  date: string; // YYYY-MM-DD
+  symptoms: string[];
+}
+
 export interface AppState {
   onboardingComplete: boolean;
+  onboardingDate: string; // YYYY-MM-DD when onboarding was completed
   selectedSymptoms: string[];
   logs: DailyLog[];
   rollingMeans: RollingMeans;
+  assessments: Assessment[];
+  // Track how many times a non-profile symptom was selected via "add something else"
+  adhocSymptomCounts: Record<string, number>;
+  // Symptoms the user dismissed the promotion prompt for
+  dismissedPromotions: string[];
 }
 
 const STORAGE_KEY = "shift-app-data";
@@ -52,9 +63,13 @@ export function getEmotionalProfileSymptoms(selectedSymptoms: string[]): string[
 
 const defaultState: AppState = {
   onboardingComplete: false,
+  onboardingDate: "",
   selectedSymptoms: [],
   logs: [],
   rollingMeans: { physical: 0, mental: 0 },
+  assessments: [],
+  adhocSymptomCounts: {},
+  dismissedPromotions: [],
 };
 
 export function getAppState(): AppState {
@@ -66,6 +81,9 @@ export function getAppState(): AppState {
       ...defaultState,
       ...parsed,
       rollingMeans: { ...defaultState.rollingMeans, ...(parsed.rollingMeans || {}) },
+      assessments: parsed.assessments || [],
+      adhocSymptomCounts: parsed.adhocSymptomCounts || {},
+      dismissedPromotions: parsed.dismissedPromotions || [],
     };
   } catch {
     return { ...defaultState };
@@ -123,7 +141,63 @@ export function shouldShowTags(
   rollingMean: number
 ): boolean {
   if (phase === 1) {
-    return currentValue <= 4; // ≤2 on 1-5 scale ≈ ≤4 on 1-10
+    return currentValue <= 4;
   }
   return currentValue <= rollingMean - 1;
+}
+
+export function getNextAssessmentDate(state: AppState): string {
+  if (state.assessments.length > 0) {
+    const lastAssessment = [...state.assessments].sort((a, b) => b.date.localeCompare(a.date))[0];
+    const d = new Date(lastAssessment.date);
+    d.setDate(d.getDate() + 30);
+    return d.toISOString().split("T")[0];
+  }
+  if (state.onboardingDate) {
+    const d = new Date(state.onboardingDate);
+    d.setDate(d.getDate() + 30);
+    return d.toISOString().split("T")[0];
+  }
+  return "";
+}
+
+export function isAssessmentDue(state: AppState): boolean {
+  const nextDate = getNextAssessmentDate(state);
+  if (!nextDate) return false;
+  return getToday() >= nextDate;
+}
+
+export function recordAdhocSymptom(state: AppState, symptom: string): AppState {
+  if (state.selectedSymptoms.includes(symptom)) return state;
+  const counts = { ...state.adhocSymptomCounts };
+  counts[symptom] = (counts[symptom] || 0) + 1;
+  return { ...state, adhocSymptomCounts: counts };
+}
+
+export function getSymptomsEligibleForPromotion(state: AppState): string[] {
+  return Object.entries(state.adhocSymptomCounts)
+    .filter(([symptom, count]) =>
+      count >= 3 &&
+      !state.selectedSymptoms.includes(symptom) &&
+      !state.dismissedPromotions.includes(symptom)
+    )
+    .map(([symptom]) => symptom);
+}
+
+export function addSymptomToProfile(state: AppState, symptom: string): AppState {
+  if (state.selectedSymptoms.includes(symptom)) return state;
+  const newCounts = { ...state.adhocSymptomCounts };
+  delete newCounts[symptom];
+  return {
+    ...state,
+    selectedSymptoms: [...state.selectedSymptoms, symptom],
+    adhocSymptomCounts: newCounts,
+  };
+}
+
+export function dismissSymptomPromotion(state: AppState, symptom: string): AppState {
+  return {
+    ...state,
+    dismissedPromotions: [...state.dismissedPromotions, symptom],
+  };
 }
