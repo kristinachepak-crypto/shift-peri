@@ -127,6 +127,11 @@ const DailyLog = () => {
   const [confirmationFeedback, setConfirmationFeedback] = useState("");
   const [confirmationDone, setConfirmationDone] = useState(false);
 
+  // New symptom flag state
+  const [showNewSymptomPanel, setShowNewSymptomPanel] = useState(false);
+  const [newSymptomFlags, setNewSymptomFlags] = useState<string[]>([]);
+  const [newSymptomPrompts, setNewSymptomPrompts] = useState<string[]>([]);
+
   const streak = getStreak(state.logs);
   const phase = getPhase(state.logs);
 
@@ -213,9 +218,19 @@ const DailyLog = () => {
       physicalSymptoms,
       emotionalSymptoms,
       sleepSymptoms,
+      newSymptomFlags,
       cycleStatus,
       notes,
       generatedSummary: summary,
+    });
+
+    // Track adhoc counts for new symptom flags
+    newSymptomFlags.forEach((s) => {
+      if (!current.selectedSymptoms.includes(s)) {
+        const counts = { ...current.adhocSymptomCounts };
+        counts[s] = (counts[s] || 0) + 1;
+        current.adhocSymptomCounts = counts;
+      }
     });
     current.rollingMeans = {
       physical: calculateRollingMean(current.logs, "mood"),
@@ -647,6 +662,123 @@ const DailyLog = () => {
             className="bg-card border-border rounded-2xl min-h-[100px] resize-none"
           />
         </div>
+        {/* New symptom flag button + panel */}
+        <div>
+          <Button
+            variant="outline"
+            onClick={() => setShowNewSymptomPanel((prev) => !prev)}
+            className="w-full h-12 rounded-2xl font-medium text-sm border-border"
+            aria-expanded={showNewSymptomPanel}
+            aria-label="I noticed some new symptoms today"
+          >
+            <Plus className="w-4 h-4 mr-2" aria-hidden="true" />
+            I noticed some new symptoms today
+          </Button>
+
+          {/* Expandable panel */}
+          <div
+            className={`overflow-hidden transition-all duration-300 ease-out ${
+              showNewSymptomPanel ? "max-h-[2000px] opacity-100 mt-4" : "max-h-0 opacity-0"
+            }`}
+          >
+            <Card className="border-border/50">
+              <CardContent className="p-4 space-y-4">
+                {Object.entries(SYMPTOM_CATEGORIES).map(([category, categorySymptoms]) => (
+                  <div key={category}>
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
+                      {category}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {(categorySymptoms as readonly string[]).map((s) => {
+                        const inProfile = state.selectedSymptoms.includes(s);
+                        const selected = newSymptomFlags.includes(s);
+                        return (
+                          <button
+                            key={s}
+                            onClick={() => {
+                              if (inProfile) return;
+                              setNewSymptomFlags((prev) =>
+                                prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]
+                              );
+                            }}
+                            disabled={inProfile}
+                            aria-pressed={selected}
+                            className={`min-h-[44px] px-4 py-2.5 rounded-full text-sm font-medium transition-all ${
+                              inProfile
+                                ? "bg-muted/50 text-muted-foreground/40 cursor-not-allowed"
+                                : selected
+                                ? "bg-primary text-primary-foreground shadow-md"
+                                : "bg-secondary text-secondary-foreground"
+                            }`}
+                          >
+                            {s}
+                            {inProfile && <span className="ml-1 text-xs">(in profile)</span>}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    setShowNewSymptomPanel(false);
+                    // Trigger immediate profile prompts for newly flagged symptoms
+                    if (newSymptomFlags.length > 0) {
+                      setNewSymptomPrompts([...newSymptomFlags]);
+                    }
+                  }}
+                  className="w-full h-11 rounded-2xl font-medium text-sm"
+                >
+                  Done
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* New symptom profile prompts */}
+        {newSymptomPrompts.length > 0 && (
+          <div className="space-y-3 animate-fade-in">
+            {newSymptomPrompts.map((symptom) => (
+              <Card key={symptom} className="bg-shift-lavender border-none">
+                <CardContent className="p-4">
+                  <div className="flex items-start gap-3">
+                    <Sparkles className="w-4 h-4 text-primary mt-0.5 shrink-0" aria-hidden="true" />
+                    <div className="flex-1">
+                      <p className="text-sm text-foreground leading-relaxed mb-3">
+                        It looks like <strong>{symptom}</strong> is something you're noticing. Would you like to add it to your profile so it's easier to track going forward?
+                      </p>
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            handlePromoteSymptom(symptom);
+                            setNewSymptomPrompts((prev) => prev.filter((s) => s !== symptom));
+                          }}
+                          className="rounded-xl min-h-[44px] font-medium"
+                        >
+                          Add to profile
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => {
+                            setNewSymptomPrompts((prev) => prev.filter((s) => s !== symptom));
+                          }}
+                          className="rounded-xl min-h-[44px] font-medium text-muted-foreground"
+                        >
+                          Just for today
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
 
         <Button
           onClick={handleLog}
