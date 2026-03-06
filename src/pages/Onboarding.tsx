@@ -23,8 +23,11 @@ const Onboarding = () => {
 
   const handleContinue = () => {
     const state = getAppState();
+    const todayStr = new Date().toISOString().split("T")[0];
     state.onboardingComplete = true;
+    state.onboardingDate = todayStr;
     state.selectedSymptoms = selected;
+    state.assessments = [{ date: todayStr, symptoms: [...selected] }];
     saveAppState(state);
     navigate("/log");
   };

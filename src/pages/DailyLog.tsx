@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
@@ -8,9 +8,11 @@ import {
   getAppState, saveAppState, getStreak, getToday, todayAlreadyLogged,
   getPhysicalProfileSymptoms, getEmotionalProfileSymptoms,
   calculateRollingMean, getPhase, shouldShowTags,
+  recordAdhocSymptom, getSymptomsEligibleForPromotion,
+  addSymptomToProfile, dismissSymptomPromotion,
   SYMPTOM_CATEGORIES,
 } from "@/lib/storage";
-import { Flame, Star, Check, Plus } from "lucide-react";
+import { Flame, Star, Check, Plus, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
 const ALL_PHYSICAL_SYMPTOMS = [
@@ -32,7 +34,8 @@ const SLEEP_SYMPTOMS = [
 ];
 
 const DailyLog = () => {
-  const state = getAppState();
+  const [appState, setAppState] = useState(getAppState);
+  const state = appState;
   const [mood, setMood] = useState(5);
   const [committedMood, setCommittedMood] = useState(5);
   const [mentalMood, setMentalMood] = useState(5);
@@ -61,20 +64,53 @@ const DailyLog = () => {
   const showEmotionalTags = shouldShowTags(committedMentalMood, phase, mentalMean);
   const showSleepTags = sleep <= 2;
 
+  // Check for symptoms eligible for profile promotion
+  const promotionCandidates = useMemo(() => getSymptomsEligibleForPromotion(state), [state]);
+
   const toggleSymptom = (s: string) => {
     setSymptoms((prev) => prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]);
   };
 
-  const togglePhysicalSymptom = (s: string) => {
-    setPhysicalSymptoms((prev) => prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]);
-  };
+  const togglePhysicalSymptom = useCallback((s: string) => {
+    setPhysicalSymptoms((prev) => {
+      const adding = !prev.includes(s);
+      if (adding && !state.selectedSymptoms.includes(s)) {
+        // Track adhoc usage
+        const updated = recordAdhocSymptom(state, s);
+        saveAppState(updated);
+        setAppState(updated);
+      }
+      return adding ? [...prev, s] : prev.filter((x) => x !== s);
+    });
+  }, [state]);
 
-  const toggleEmotionalSymptom = (s: string) => {
-    setEmotionalSymptoms((prev) => prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]);
-  };
+  const toggleEmotionalSymptom = useCallback((s: string) => {
+    setEmotionalSymptoms((prev) => {
+      const adding = !prev.includes(s);
+      if (adding && !state.selectedSymptoms.includes(s)) {
+        const updated = recordAdhocSymptom(state, s);
+        saveAppState(updated);
+        setAppState(updated);
+      }
+      return adding ? [...prev, s] : prev.filter((x) => x !== s);
+    });
+  }, [state]);
 
   const toggleSleepSymptom = (s: string) => {
     setSleepSymptoms((prev) => prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]);
+  };
+
+  const handlePromoteSymptom = (symptom: string) => {
+    const updated = addSymptomToProfile(state, symptom);
+    saveAppState(updated);
+    setAppState(updated);
+    toast.success(`"${symptom}" added to your profile`);
+  };
+
+  const handleDismissPromotion = (symptom: string) => {
+    const updated = dismissSymptomPromotion(state, symptom);
+    saveAppState(updated);
+    setAppState(updated);
   };
 
   const handleLog = () => {
@@ -93,12 +129,12 @@ const DailyLog = () => {
       cycleStatus,
       notes,
     });
-    // Recalculate rolling means
     current.rollingMeans = {
       physical: calculateRollingMean(current.logs, "mood"),
       mental: calculateRollingMean(current.logs, "mentalMood"),
     };
     saveAppState(current);
+    setAppState(current);
     setLogged(true);
     toast.success("Today's log saved ✨");
   };
@@ -146,6 +182,43 @@ const DailyLog = () => {
           </CardContent>
         </Card>
       }
+
+      {/* Symptom promotion prompts */}
+      {promotionCandidates.length > 0 && (
+        <div className="mb-6 space-y-3">
+          {promotionCandidates.map((symptom) => (
+            <Card key={symptom} className="bg-shift-lavender border-none animate-fade-in">
+              <CardContent className="p-4">
+                <div className="flex items-start gap-3">
+                  <Sparkles className="w-4 h-4 text-primary mt-0.5 shrink-0" aria-hidden="true" />
+                  <div className="flex-1">
+                    <p className="text-sm text-foreground leading-relaxed mb-3">
+                      It looks like <strong>{symptom}</strong> has been coming up regularly — would you like to add it to your profile?
+                    </p>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        onClick={() => handlePromoteSymptom(symptom)}
+                        className="rounded-xl min-h-[44px] font-medium"
+                      >
+                        Add to profile
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => handleDismissPromotion(symptom)}
+                        className="rounded-xl min-h-[44px] font-medium text-muted-foreground"
+                      >
+                        Not now
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
 
       <div className="space-y-8">
         {/* Physical Mood */}

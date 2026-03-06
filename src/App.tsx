@@ -9,6 +9,7 @@ import Onboarding from "./pages/Onboarding";
 import DailyLog from "./pages/DailyLog";
 import Insights from "./pages/Insights";
 import Report from "./pages/Report";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import BottomNav from "./components/BottomNav";
 
@@ -27,6 +28,7 @@ const AppRoutes = () => {
         <Route path="/log" element={<DailyLog />} />
         <Route path="/insights" element={<Insights />} />
         <Route path="/report" element={<Report />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <BottomNav />
