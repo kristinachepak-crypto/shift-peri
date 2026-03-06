@@ -9,6 +9,10 @@ export interface DailyLog {
   sleepSymptoms: string[];
   cycleStatus: "period" | "spotting" | "none";
   notes: string;
+  // Confirmation flow fields
+  generatedSummary?: string;
+  confirmationResponse?: "yes" | "mostly" | "not-quite";
+  confirmationFeedback?: string;
 }
 
 export interface RollingMeans {
