@@ -127,6 +127,11 @@ const DailyLog = () => {
   const [confirmationFeedback, setConfirmationFeedback] = useState("");
   const [confirmationDone, setConfirmationDone] = useState(false);
 
+  // New symptom flag state
+  const [showNewSymptomPanel, setShowNewSymptomPanel] = useState(false);
+  const [newSymptomFlags, setNewSymptomFlags] = useState<string[]>([]);
+  const [newSymptomPrompts, setNewSymptomPrompts] = useState<string[]>([]);
+
   const streak = getStreak(state.logs);
   const phase = getPhase(state.logs);
 
