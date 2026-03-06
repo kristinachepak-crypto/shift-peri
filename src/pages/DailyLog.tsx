@@ -34,7 +34,7 @@ const DailyLog = () => {
 
   const moodLabels: Record<number, string> = {
     1: "Really rough", 2: "Struggling", 3: "Not great", 4: "Meh", 5: "Okay",
-    6: "Decent", 7: "Pretty good", 8: "Good", 9: "Great", 10: "Amazing",
+    6: "Decent", 7: "Pretty good", 8: "Good", 9: "Great", 10: "Amazing"
   };
 
   return (
@@ -52,20 +52,20 @@ const DailyLog = () => {
         Under 2 minutes. Consistency matters more than detail.
       </p>
 
-      {logged && (
-        <Card className="mb-6 bg-shift-lavender border-none">
+      {logged &&
+      <Card className="mb-6 bg-shift-lavender border-none">
           <CardContent className="p-4 flex items-center gap-3">
             <Check className="w-5 h-5 text-primary" />
             <p className="text-sm text-foreground">You've already logged today. You can update it below.</p>
           </CardContent>
         </Card>
-      )}
+      }
 
       <div className="space-y-8">
         {/* Mood */}
         <div>
-          <label className="text-sm font-semibold text-foreground block mb-3">
-            How are you feeling today?
+          <label className="text-sm font-semibold text-foreground block mb-3">Physically, how are you feeling today?
+
           </label>
           <Slider
             value={[mood]}
@@ -73,8 +73,8 @@ const DailyLog = () => {
             min={1}
             max={10}
             step={1}
-            className="mb-2"
-          />
+            className="mb-2" />
+          
           <div className="flex justify-between text-xs text-muted-foreground">
             <span>1</span>
             <span className="font-medium text-foreground">{mood} — {moodLabels[mood]}</span>
@@ -88,13 +88,13 @@ const DailyLog = () => {
             Sleep quality
           </label>
           <div className="flex gap-2">
-            {[1, 2, 3, 4, 5].map((n) => (
-              <button key={n} onClick={() => setSleep(n)} className="transition-transform hover:scale-110">
+            {[1, 2, 3, 4, 5].map((n) =>
+            <button key={n} onClick={() => setSleep(n)} className="transition-transform hover:scale-110">
                 <Star
-                  className={`w-8 h-8 ${n <= sleep ? "text-primary fill-primary" : "text-muted"}`}
-                />
+                className={`w-8 h-8 ${n <= sleep ? "text-primary fill-primary" : "text-muted"}`} />
+              
               </button>
-            ))}
+            )}
           </div>
         </div>
 
@@ -104,19 +104,19 @@ const DailyLog = () => {
             Today's symptoms
           </label>
           <div className="flex flex-wrap gap-2">
-            {state.selectedSymptoms.map((s) => (
-              <button
-                key={s}
-                onClick={() => toggleSymptom(s)}
-                className={`px-3.5 py-2 rounded-full text-sm font-medium transition-all ${
-                  symptoms.includes(s)
-                    ? "bg-primary text-primary-foreground shadow-md"
-                    : "bg-secondary text-secondary-foreground"
-                }`}
-              >
+            {state.selectedSymptoms.map((s) =>
+            <button
+              key={s}
+              onClick={() => toggleSymptom(s)}
+              className={`px-3.5 py-2 rounded-full text-sm font-medium transition-all ${
+              symptoms.includes(s) ?
+              "bg-primary text-primary-foreground shadow-md" :
+              "bg-secondary text-secondary-foreground"}`
+              }>
+              
                 {s}
               </button>
-            ))}
+            )}
           </div>
         </div>
 
@@ -126,19 +126,19 @@ const DailyLog = () => {
             Cycle status
           </label>
           <div className="flex gap-2">
-            {(["none", "spotting", "period"] as const).map((status) => (
-              <button
-                key={status}
-                onClick={() => setCycleStatus(status)}
-                className={`px-4 py-2.5 rounded-full text-sm font-medium capitalize transition-all ${
-                  cycleStatus === status
-                    ? "bg-primary text-primary-foreground shadow-md"
-                    : "bg-secondary text-secondary-foreground"
-                }`}
-              >
+            {(["none", "spotting", "period"] as const).map((status) =>
+            <button
+              key={status}
+              onClick={() => setCycleStatus(status)}
+              className={`px-4 py-2.5 rounded-full text-sm font-medium capitalize transition-all ${
+              cycleStatus === status ?
+              "bg-primary text-primary-foreground shadow-md" :
+              "bg-secondary text-secondary-foreground"}`
+              }>
+              
                 {status === "none" ? "None" : status}
               </button>
-            ))}
+            )}
           </div>
         </div>
 
@@ -151,20 +151,20 @@ const DailyLog = () => {
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             placeholder="How you're feeling, what happened today..."
-            className="bg-card border-border rounded-2xl min-h-[100px] resize-none"
-          />
+            className="bg-card border-border rounded-2xl min-h-[100px] resize-none" />
+          
         </div>
 
         <Button
           onClick={handleLog}
           className="w-full h-14 text-base rounded-2xl font-semibold"
-          size="lg"
-        >
+          size="lg">
+          
           {logged ? "Update Today's Log" : "Log Today"}
         </Button>
       </div>
-    </div>
-  );
+    </div>);
+
 };
 
 export default DailyLog;
