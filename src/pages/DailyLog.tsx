@@ -128,6 +128,8 @@ const DailyLog = () => {
           </div>
         </div>
 
+        <Separator className="bg-border/50" />
+
         {/* Mental/Emotional */}
         <div>
           <label className="text-sm font-semibold text-foreground block mb-3">Mentally & emotionally, how are you feeling?</label>
