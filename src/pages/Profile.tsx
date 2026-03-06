@@ -1,16 +1,60 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Input } from "@/components/ui/input";
 import {
   getAppState, saveAppState, getToday,
   getNextAssessmentDate, isAssessmentDue,
-  SYMPTOM_CATEGORIES,
+  calculateRollingMean,
+  SYMPTOM_CATEGORIES, DailyLog,
 } from "@/lib/storage";
-import { Heart, CalendarClock, ClipboardCheck, Settings, Sparkles, AlertCircle } from "lucide-react";
+import { Heart, CalendarClock, ClipboardCheck, Settings, Sparkles, AlertCircle, Bug } from "lucide-react";
 import { toast } from "sonner";
 import { format, parseISO } from "date-fns";
+
+const APP_VERSION = "0.4.0";
+const IS_DEV = import.meta.env.DEV;
+
+const TEST_PROFILE_SYMPTOMS = ["Anxiety", "Brain fog", "Fatigue", "Night sweats", "Hot flashes", "Insomnia", "Irritability", "Joint pain"];
+
+function generateMockLogs(days: number): DailyLog[] {
+  const logs: DailyLog[] = [];
+  const today = new Date();
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(d.getDate() - i);
+    const dateStr = d.toISOString().split("T")[0];
+    const mood = Math.floor(Math.random() * 5) + 1;
+    const mentalMood = Math.floor(Math.random() * 5) + 1;
+    const sleepQuality = Math.floor(Math.random() * 5) + 1;
+
+    const pickRandom = (arr: string[], count: number) => {
+      const shuffled = [...arr].sort(() => Math.random() - 0.5);
+      return shuffled.slice(0, Math.min(count, arr.length));
+    };
+
+    const physicalSymptoms = mood <= 2 ? pickRandom(["Hot flashes", "Fatigue", "Joint pain", "Night sweats"], 2) : [];
+    const emotionalSymptoms = mentalMood <= 2 ? pickRandom(["Anxiety", "Brain fog", "Irritability"], 2) : [];
+    const sleepSymptoms = sleepQuality <= 2 ? pickRandom(["Trouble falling asleep", "Woke during the night", "Unrefreshing sleep"], 1) : [];
+
+    logs.push({
+      date: dateStr,
+      mood,
+      mentalMood,
+      sleepQuality,
+      symptoms: [],
+      physicalSymptoms,
+      emotionalSymptoms,
+      sleepSymptoms,
+      newSymptomFlags: [],
+      cycleStatus: Math.random() > 0.8 ? "period" : "none",
+      notes: "",
+    });
+  }
+  return logs;
+}
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -18,9 +62,53 @@ const Profile = () => {
   const [reassessing, setReassessing] = useState(false);
   const [selected, setSelected] = useState<string[]>([...state.selectedSymptoms]);
   const [expandedAssessments, setExpandedAssessments] = useState<Set<number>>(new Set());
+  const [devTapCount, setDevTapCount] = useState(0);
+  const [showDevPanel, setShowDevPanel] = useState(false);
+  const [mockDays, setMockDays] = useState(7);
+  const devTapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const nextDate = getNextAssessmentDate(state);
   const assessmentDue = isAssessmentDue(state);
+
+  const physicalMean = calculateRollingMean(state.logs, "mood");
+  const mentalMean = calculateRollingMean(state.logs, "mentalMood");
+
+  const handleVersionTap = () => {
+    const newCount = devTapCount + 1;
+    setDevTapCount(newCount);
+    if (devTapTimer.current) clearTimeout(devTapTimer.current);
+    devTapTimer.current = setTimeout(() => setDevTapCount(0), 2000);
+    if (newCount >= 7) {
+      setShowDevPanel((prev) => !prev);
+      setDevTapCount(0);
+      if (!showDevPanel) toast("Developer panel unlocked 🔧");
+    }
+  };
+
+  const handlePopulateMockData = () => {
+    const current = getAppState();
+    current.logs = generateMockLogs(mockDays);
+    current.selectedSymptoms = TEST_PROFILE_SYMPTOMS;
+    current.onboardingComplete = true;
+    current.onboardingDate = current.logs[0]?.date || getToday();
+    current.rollingMeans = {
+      physical: calculateRollingMean(current.logs, "mood"),
+      mental: calculateRollingMean(current.logs, "mentalMood"),
+    };
+    if (current.assessments.length === 0) {
+      current.assessments.push({ date: current.onboardingDate, symptoms: [...TEST_PROFILE_SYMPTOMS] });
+    }
+    saveAppState(current);
+    setState(getAppState());
+    toast.success(`Populated ${mockDays} days of mock data`);
+  };
+
+  const handleResetToDay0 = () => {
+    if (window.confirm("This will wipe ALL data and return to onboarding. Continue?")) {
+      localStorage.removeItem("shift-app-data");
+      navigate("/welcome");
+    }
+  };
 
   const toggle = (symptom: string) => {
     setSelected((prev) =>
@@ -314,6 +402,93 @@ const Profile = () => {
           </Button>
         </div>
       </section>
+
+      {/* Version number — tap 7 times to reveal dev panel */}
+      <div className="mt-12 text-center">
+        <button
+          onClick={handleVersionTap}
+          className="text-xs text-muted-foreground/40 cursor-default select-none"
+          aria-hidden="true"
+        >
+          Shift v{APP_VERSION}
+        </button>
+      </div>
+
+      {/* Developer Testing Panel */}
+      {IS_DEV && showDevPanel && (
+        <section className="mt-6 animate-fade-in" aria-label="Developer testing panel">
+          <Card className="border-2 border-dashed border-primary/30">
+            <CardContent className="p-5 space-y-5">
+              <div className="flex items-center gap-2 mb-1">
+                <Bug className="w-4 h-4 text-primary" aria-hidden="true" />
+                <h2 className="text-sm font-bold text-foreground">Developer Testing</h2>
+              </div>
+              <p className="text-xs text-destructive font-medium">
+                Not visible in production.
+              </p>
+
+              {/* Rolling Mean Display */}
+              <div className="space-y-1">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Rolling Means (7-day)</p>
+                <div className="grid grid-cols-2 gap-2">
+                  <Card className="border-border/50">
+                    <CardContent className="p-3 text-center">
+                      <p className="text-lg font-bold text-foreground">{physicalMean.toFixed(2)}</p>
+                      <p className="text-xs text-muted-foreground">Physical</p>
+                    </CardContent>
+                  </Card>
+                  <Card className="border-border/50">
+                    <CardContent className="p-3 text-center">
+                      <p className="text-lg font-bold text-foreground">{mentalMean.toFixed(2)}</p>
+                      <p className="text-xs text-muted-foreground">Mental</p>
+                    </CardContent>
+                  </Card>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Days logged: <strong>{state.logs.length}</strong> · Phase: <strong>{state.logs.length >= 7 ? "2" : "1"}</strong>
+                </p>
+              </div>
+
+              <Separator className="bg-border/50" />
+
+              {/* Days logged override + populate */}
+              <div className="space-y-3">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Mock Data</p>
+                <div className="flex items-center gap-3">
+                  <label htmlFor="mock-days" className="text-xs text-muted-foreground whitespace-nowrap">Days:</label>
+                  <Input
+                    id="mock-days"
+                    type="number"
+                    min={0}
+                    max={30}
+                    value={mockDays}
+                    onChange={(e) => setMockDays(Math.min(30, Math.max(0, parseInt(e.target.value) || 0)))}
+                    className="w-20 h-10 text-center rounded-xl"
+                  />
+                  <Button
+                    size="sm"
+                    onClick={handlePopulateMockData}
+                    className="rounded-xl min-h-[44px] flex-1 font-medium"
+                  >
+                    Populate mock data
+                  </Button>
+                </div>
+              </div>
+
+              <Separator className="bg-border/50" />
+
+              {/* Reset */}
+              <Button
+                variant="destructive"
+                onClick={handleResetToDay0}
+                className="w-full h-12 rounded-xl font-semibold"
+              >
+                Reset to Day 0
+              </Button>
+            </CardContent>
+          </Card>
+        </section>
+      )}
     </main>
   );
 };
