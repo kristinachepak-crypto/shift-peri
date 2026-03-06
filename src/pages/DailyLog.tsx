@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Slider } from "@/components/ui/slider";
+import { Separator } from "@/components/ui/separator";
 import { getAppState, saveAppState, getStreak, getToday, todayAlreadyLogged } from "@/lib/storage";
 import { Flame, Star, Check } from "lucide-react";
 import { toast } from "sonner";
@@ -127,6 +128,8 @@ const DailyLog = () => {
           </div>
         </div>
 
+        <Separator className="bg-border/50" />
+
         {/* Mental/Emotional */}
         <div>
           <label className="text-sm font-semibold text-foreground block mb-3">Mentally & emotionally, how are you feeling?</label>
@@ -161,6 +164,8 @@ const DailyLog = () => {
           </div>
         </div>
 
+        <Separator className="bg-border/50" />
+
         <div>
           <label className="text-sm font-semibold text-foreground block mb-3">
             Sleep quality
@@ -175,6 +180,8 @@ const DailyLog = () => {
             )}
           </div>
         </div>
+
+        <Separator className="bg-border/50" />
 
         {/* Symptoms */}
         <div>
@@ -198,6 +205,8 @@ const DailyLog = () => {
           </div>
         </div>
 
+        <Separator className="bg-border/50" />
+
         {/* Cycle */}
         <div>
           <label className="text-sm font-semibold text-foreground block mb-3">
@@ -219,6 +228,8 @@ const DailyLog = () => {
             )}
           </div>
         </div>
+
+        <Separator className="bg-border/50" />
 
         {/* Notes */}
         <div>
