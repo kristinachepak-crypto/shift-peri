@@ -70,7 +70,7 @@ function generateDataReflection(logs: DailyLog[]): string {
   }
 
   const avgMood = logs.reduce((a, l) => a + l.mood, 0) / logs.length;
-  return `You've been rating your physical wellbeing around ${avgMood.toFixed(1)} out of 10 most days. A few more entries and we'll have a better sense of what might be behind that.`;
+  return `You've been rating your physical wellbeing around ${avgMood.toFixed(1)} out of 5 most days. A few more entries and we'll have a better sense of what might be behind that.`;
 }
 
 const Insights = () => {

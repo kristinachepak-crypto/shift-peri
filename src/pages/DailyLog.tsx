@@ -12,7 +12,7 @@ import {
   addSymptomToProfile, dismissSymptomPromotion,
   SYMPTOM_CATEGORIES, DailyLog as DailyLogType,
 } from "@/lib/storage";
-import { Flame, Star, Check, Plus, Sparkles } from "lucide-react";
+import { Flame, Check, Plus, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
 const ALL_PHYSICAL_SYMPTOMS = [
@@ -49,14 +49,13 @@ function generateSummary(log: {
   const parts: string[] = [];
 
   // Physical + emotional overall shape
-  const physDesc = log.mood <= 3 ? "physically tough" : log.mood <= 5 ? "physically so-so" : log.mood <= 7 ? "physically manageable" : "physically pretty good";
-  const emotDesc = log.mentalMood <= 3 ? "emotionally heavy" : log.mentalMood <= 5 ? "emotionally mixed" : log.mentalMood <= 7 ? "emotionally steady" : "emotionally bright";
+  const physDesc = log.mood <= 1 ? "physically tough" : log.mood <= 2 ? "physically rough" : log.mood <= 3 ? "physically so-so" : log.mood <= 4 ? "physically manageable" : "physically pretty good";
+  const emotDesc = log.mentalMood <= 1 ? "emotionally heavy" : log.mentalMood <= 2 ? "emotionally low" : log.mentalMood <= 3 ? "emotionally mixed" : log.mentalMood <= 4 ? "emotionally steady" : "emotionally bright";
 
-  if (Math.abs(log.mood - log.mentalMood) <= 2) {
-    // Similar
-    if (log.mood <= 4 && log.mentalMood <= 4) {
+  if (Math.abs(log.mood - log.mentalMood) <= 1) {
+    if (log.mood <= 2 && log.mentalMood <= 2) {
       parts.push("Today sounds like it was a harder day all around — both physically and emotionally.");
-    } else if (log.mood >= 7 && log.mentalMood >= 7) {
+    } else if (log.mood >= 4 && log.mentalMood >= 4) {
       parts.push("Sounds like today was a solid day — you were feeling good both physically and emotionally.");
     } else {
       parts.push(`Today felt ${physDesc} and ${emotDesc}.`);
@@ -105,11 +104,12 @@ function generateSummary(log: {
 const DailyLog = () => {
   const [appState, setAppState] = useState(getAppState);
   const state = appState;
-  const [mood, setMood] = useState(5);
-  const [committedMood, setCommittedMood] = useState(5);
-  const [mentalMood, setMentalMood] = useState(5);
-  const [committedMentalMood, setCommittedMentalMood] = useState(5);
+  const [mood, setMood] = useState(3);
+  const [committedMood, setCommittedMood] = useState(3);
+  const [mentalMood, setMentalMood] = useState(3);
+  const [committedMentalMood, setCommittedMentalMood] = useState(3);
   const [sleep, setSleep] = useState(3);
+  const [committedSleep, setCommittedSleep] = useState(3);
   const [symptoms, setSymptoms] = useState<string[]>([]);
   const [physicalSymptoms, setPhysicalSymptoms] = useState<string[]>([]);
   const [emotionalSymptoms, setEmotionalSymptoms] = useState<string[]>([]);
@@ -138,7 +138,7 @@ const DailyLog = () => {
 
   const showPhysicalTags = shouldShowTags(committedMood, phase, physicalMean);
   const showEmotionalTags = shouldShowTags(committedMentalMood, phase, mentalMean);
-  const showSleepTags = sleep <= 2;
+  const showSleepTags = committedSleep <= 2;
 
   const promotionCandidates = useMemo(() => getSymptomsEligibleForPromotion(state), [state]);
 
@@ -194,7 +194,7 @@ const DailyLog = () => {
     const summary = generateSummary({
       mood: committedMood,
       mentalMood: committedMentalMood,
-      sleepQuality: sleep,
+      sleepQuality: committedSleep,
       physicalSymptoms,
       emotionalSymptoms,
       sleepSymptoms,
@@ -208,7 +208,7 @@ const DailyLog = () => {
       date: todayStr,
       mood: committedMood,
       mentalMood: committedMentalMood,
-      sleepQuality: sleep,
+      sleepQuality: committedSleep,
       symptoms,
       physicalSymptoms,
       emotionalSymptoms,
@@ -258,13 +258,15 @@ const DailyLog = () => {
   };
 
   const moodLabels: Record<number, string> = {
-    1: "Really rough", 2: "Struggling", 3: "Not great", 4: "Meh", 5: "Okay",
-    6: "Decent", 7: "Pretty good", 8: "Good", 9: "Great", 10: "Amazing"
+    1: "Very poor", 2: "Rough", 3: "Okay", 4: "Good", 5: "Great"
   };
 
   const mentalMoodLabels: Record<number, string> = {
-    1: "Overwhelmed", 2: "Very low", 3: "Struggling", 4: "Foggy", 5: "Neutral",
-    6: "Steady", 7: "Calm", 8: "Positive", 9: "Focused", 10: "Thriving"
+    1: "Very poor", 2: "Struggling", 3: "Okay", 4: "Good", 5: "Great"
+  };
+
+  const sleepLabels: Record<number, string> = {
+    1: "Very poor", 2: "Poor", 3: "Okay", 4: "Good", 5: "Great"
   };
 
   const physicalTagsToShow = showAllPhysical
@@ -439,15 +441,15 @@ const DailyLog = () => {
             onValueChange={(v) => setMood(v[0])}
             onValueCommit={(v) => setCommittedMood(v[0])}
             min={1}
-            max={10}
+            max={5}
             step={1}
             className="mb-2"
-            aria-label={`Physical feeling: ${mood} out of 10, ${moodLabels[mood]}`}
+            aria-label={`Physical feeling: ${mood} out of 5, ${moodLabels[mood]}`}
           />
           <div className="flex justify-between text-xs text-muted-foreground" aria-hidden="true">
-            <span>1</span>
+            <span>Very poor</span>
             <span className="font-medium text-foreground">{mood} — {moodLabels[mood]}</span>
-            <span>10</span>
+            <span>Great</span>
           </div>
 
           {/* Conditional physical symptom tags */}
@@ -500,15 +502,15 @@ const DailyLog = () => {
             onValueChange={(v) => setMentalMood(v[0])}
             onValueCommit={(v) => setCommittedMentalMood(v[0])}
             min={1}
-            max={10}
+            max={5}
             step={1}
             className="mb-2"
-            aria-label={`Mental feeling: ${mentalMood} out of 10, ${mentalMoodLabels[mentalMood]}`}
+            aria-label={`Mental feeling: ${mentalMood} out of 5, ${mentalMoodLabels[mentalMood]}`}
           />
           <div className="flex justify-between text-xs text-muted-foreground" aria-hidden="true">
-            <span>1</span>
+            <span>Very poor</span>
             <span className="font-medium text-foreground">{mentalMood} — {mentalMoodLabels[mentalMood]}</span>
-            <span>10</span>
+            <span>Great</span>
           </div>
 
           {/* Conditional emotional symptom tags */}
@@ -556,24 +558,22 @@ const DailyLog = () => {
         {/* Sleep */}
         <fieldset>
           <legend className="text-sm font-semibold text-foreground block mb-3">
-            Sleep quality
+            How did you sleep?
           </legend>
-          <div className="flex gap-2" role="radiogroup" aria-label="Sleep quality rating">
-            {[1, 2, 3, 4, 5].map((n) => (
-              <button
-                key={n}
-                onClick={() => setSleep(n)}
-                className="min-w-[44px] min-h-[44px] flex items-center justify-center transition-transform hover:scale-110"
-                role="radio"
-                aria-checked={n === sleep}
-                aria-label={`${n} out of 5 stars`}
-              >
-                <Star
-                  className={`w-8 h-8 ${n <= sleep ? "text-primary fill-primary" : "text-muted"}`}
-                  aria-hidden="true"
-                />
-              </button>
-            ))}
+          <Slider
+            value={[sleep]}
+            onValueChange={(v) => setSleep(v[0])}
+            onValueCommit={(v) => setCommittedSleep(v[0])}
+            min={1}
+            max={5}
+            step={1}
+            className="mb-2"
+            aria-label={`Sleep quality: ${sleep} out of 5, ${sleepLabels[sleep]}`}
+          />
+          <div className="flex justify-between text-xs text-muted-foreground" aria-hidden="true">
+            <span>Very poor</span>
+            <span className="font-medium text-foreground">{sleep} — {sleepLabels[sleep]}</span>
+            <span>Good</span>
           </div>
 
           {/* Conditional sleep symptom tags */}
