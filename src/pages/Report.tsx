@@ -69,7 +69,7 @@ const Report = () => {
     totalDays > 0
       ? (state.logs.reduce((a, l) => a + l.mood, 0) / totalDays).toFixed(1)
       : "N/A"
-  }/10. Symptom pattern may be consistent with the menopausal transition (STRAW+10 stages −2 to +1a). Reported vasomotor symptoms and neuropsychiatric features may warrant evaluation. Consider hormonal panel (FSH, estradiol) and clinical correlation per STRAW+10 staging criteria.`;
+  }/5. Symptom pattern may be consistent with the menopausal transition (STRAW+10 stages −2 to +1a). Reported vasomotor symptoms and neuropsychiatric features may warrant evaluation. Consider hormonal panel (FSH, estradiol) and clinical correlation per STRAW+10 staging criteria.`;
 
   const patterns = [
     rows.length > 0 ? `${rows[0].name} was the most frequently reported symptom (${rows[0].days} of ${totalDays} days).` : null,
