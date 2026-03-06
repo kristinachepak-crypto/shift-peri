@@ -110,10 +110,17 @@ const Report = () => {
           <FileText className="w-5 h-5 text-primary" aria-hidden="true" />
           <h1 className="text-2xl font-serif text-foreground">Doctor Report</h1>
         </div>
-        <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
+        <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
           A pre-appointment export you can print or share — so your doctor sees the full picture, not just a snapshot.
         </p>
-      </header>
+        <Card className="border-border/50 bg-muted/50 mb-6">
+          <CardContent className="p-3 flex items-start gap-2.5">
+            <AlertTriangle className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" aria-hidden="true" />
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              This report was generated from self-reported data and is intended to support clinical conversation, not replace clinical assessment.
+            </p>
+          </CardContent>
+        </Card>
 
       {/* Days logged indicator */}
       <p className="text-sm text-muted-foreground mb-3">
