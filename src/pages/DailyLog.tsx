@@ -57,6 +57,11 @@ const DailyLog = () => {
     6: "Decent", 7: "Pretty good", 8: "Good", 9: "Great", 10: "Amazing"
   };
 
+  const mentalMoodLabels: Record<number, string> = {
+    1: "Overwhelmed", 2: "Very low", 3: "Struggling", 4: "Foggy", 5: "Neutral",
+    6: "Steady", 7: "Calm", 8: "Positive", 9: "Focused", 10: "Thriving"
+  };
+
   return (
     <div className="min-h-screen bg-background px-6 pt-8 pb-28">
       {/* Streak */}
