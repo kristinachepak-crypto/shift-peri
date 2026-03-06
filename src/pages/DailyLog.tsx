@@ -10,7 +10,7 @@ import {
   calculateRollingMean, getPhase, shouldShowTags,
   recordAdhocSymptom, getSymptomsEligibleForPromotion,
   addSymptomToProfile, dismissSymptomPromotion,
-  SYMPTOM_CATEGORIES,
+  SYMPTOM_CATEGORIES, DailyLog as DailyLogType,
 } from "@/lib/storage";
 import { Flame, Star, Check, Plus, Sparkles } from "lucide-react";
 import { toast } from "sonner";
@@ -33,6 +33,75 @@ const SLEEP_SYMPTOMS = [
   "Unrefreshing sleep",
 ];
 
+// --- Summary Generation ---
+
+function generateSummary(log: {
+  mood: number;
+  mentalMood: number;
+  sleepQuality: number;
+  physicalSymptoms: string[];
+  emotionalSymptoms: string[];
+  sleepSymptoms: string[];
+  symptoms: string[];
+  cycleStatus: "period" | "spotting" | "none";
+  notes: string;
+}): string {
+  const parts: string[] = [];
+
+  // Physical + emotional overall shape
+  const physDesc = log.mood <= 3 ? "physically tough" : log.mood <= 5 ? "physically so-so" : log.mood <= 7 ? "physically manageable" : "physically pretty good";
+  const emotDesc = log.mentalMood <= 3 ? "emotionally heavy" : log.mentalMood <= 5 ? "emotionally mixed" : log.mentalMood <= 7 ? "emotionally steady" : "emotionally bright";
+
+  if (Math.abs(log.mood - log.mentalMood) <= 2) {
+    // Similar
+    if (log.mood <= 4 && log.mentalMood <= 4) {
+      parts.push("Today sounds like it was a harder day all around — both physically and emotionally.");
+    } else if (log.mood >= 7 && log.mentalMood >= 7) {
+      parts.push("Sounds like today was a solid day — you were feeling good both physically and emotionally.");
+    } else {
+      parts.push(`Today felt ${physDesc} and ${emotDesc}.`);
+    }
+  } else {
+    parts.push(`Today felt ${physDesc} but ${emotDesc}.`);
+  }
+
+  // Sleep
+  if (log.sleepQuality <= 2) {
+    const sleepDetails = log.sleepSymptoms.length > 0
+      ? ` — ${log.sleepSymptoms.map(s => s.toLowerCase()).join(" and ")}`
+      : "";
+    parts.push(`Sleep was rough${sleepDetails}.`);
+  } else if (log.sleepQuality >= 4) {
+    parts.push("Sleep went well.");
+  }
+
+  // Symptoms
+  const allSymptoms = [
+    ...log.physicalSymptoms,
+    ...log.emotionalSymptoms,
+    ...log.symptoms,
+  ];
+  if (allSymptoms.length > 0) {
+    const listed = allSymptoms.slice(0, 3).map(s => s.toLowerCase()).join(", ");
+    const extra = allSymptoms.length > 3 ? ` and ${allSymptoms.length - 3} more` : "";
+    parts.push(`${listed}${extra} showed up today.`);
+  }
+
+  // Cycle
+  if (log.cycleStatus === "period") {
+    parts.push("You noted you're on your period.");
+  } else if (log.cycleStatus === "spotting") {
+    parts.push("You noted some spotting.");
+  }
+
+  // Notes
+  if (log.notes.trim().length > 0) {
+    parts.push("You also left some personal notes.");
+  }
+
+  return parts.join(" ");
+}
+
 const DailyLog = () => {
   const [appState, setAppState] = useState(getAppState);
   const state = appState;
@@ -51,6 +120,13 @@ const DailyLog = () => {
   const [showAllPhysical, setShowAllPhysical] = useState(false);
   const [showAllEmotional, setShowAllEmotional] = useState(false);
 
+  // Confirmation state
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [generatedSummary, setGeneratedSummary] = useState("");
+  const [confirmationResponse, setConfirmationResponse] = useState<"yes" | "mostly" | "not-quite" | null>(null);
+  const [confirmationFeedback, setConfirmationFeedback] = useState("");
+  const [confirmationDone, setConfirmationDone] = useState(false);
+
   const streak = getStreak(state.logs);
   const phase = getPhase(state.logs);
 
@@ -64,7 +140,6 @@ const DailyLog = () => {
   const showEmotionalTags = shouldShowTags(committedMentalMood, phase, mentalMean);
   const showSleepTags = sleep <= 2;
 
-  // Check for symptoms eligible for profile promotion
   const promotionCandidates = useMemo(() => getSymptomsEligibleForPromotion(state), [state]);
 
   const toggleSymptom = (s: string) => {
@@ -75,7 +150,6 @@ const DailyLog = () => {
     setPhysicalSymptoms((prev) => {
       const adding = !prev.includes(s);
       if (adding && !state.selectedSymptoms.includes(s)) {
-        // Track adhoc usage
         const updated = recordAdhocSymptom(state, s);
         saveAppState(updated);
         setAppState(updated);
@@ -116,6 +190,19 @@ const DailyLog = () => {
   const handleLog = () => {
     const current = getAppState();
     const todayStr = getToday();
+
+    const summary = generateSummary({
+      mood: committedMood,
+      mentalMood: committedMentalMood,
+      sleepQuality: sleep,
+      physicalSymptoms,
+      emotionalSymptoms,
+      sleepSymptoms,
+      symptoms,
+      cycleStatus,
+      notes,
+    });
+
     current.logs = current.logs.filter((l) => l.date !== todayStr);
     current.logs.push({
       date: todayStr,
@@ -128,6 +215,7 @@ const DailyLog = () => {
       sleepSymptoms,
       cycleStatus,
       notes,
+      generatedSummary: summary,
     });
     current.rollingMeans = {
       physical: calculateRollingMean(current.logs, "mood"),
@@ -136,7 +224,37 @@ const DailyLog = () => {
     saveAppState(current);
     setAppState(current);
     setLogged(true);
-    toast.success("Today's log saved ✨");
+    setGeneratedSummary(summary);
+    setShowConfirmation(true);
+  };
+
+  const handleConfirmationSelect = (response: "yes" | "mostly" | "not-quite") => {
+    setConfirmationResponse(response);
+    if (response === "yes") {
+      saveConfirmation(response, "");
+      setConfirmationDone(true);
+    }
+  };
+
+  const handleConfirmationDone = () => {
+    if (confirmationResponse) {
+      saveConfirmation(confirmationResponse, confirmationFeedback);
+    }
+    setConfirmationDone(true);
+  };
+
+  const saveConfirmation = (response: "yes" | "mostly" | "not-quite", feedback: string) => {
+    const current = getAppState();
+    const todayStr = getToday();
+    const logIndex = current.logs.findIndex((l) => l.date === todayStr);
+    if (logIndex !== -1) {
+      current.logs[logIndex].confirmationResponse = response;
+      if (feedback.trim()) {
+        current.logs[logIndex].confirmationFeedback = feedback;
+      }
+      saveAppState(current);
+      setAppState(current);
+    }
   };
 
   const moodLabels: Record<number, string> = {
@@ -157,6 +275,98 @@ const DailyLog = () => {
     ? ALL_EMOTIONAL_SYMPTOMS
     : emotionalProfileTags;
 
+  // --- Confirmation State ---
+  if (showConfirmation) {
+    return (
+      <main className="min-h-screen bg-background px-6 pt-8 pb-28" aria-label="Log confirmation">
+        <header>
+          <h1 className="text-2xl font-serif text-foreground mb-1">Check-in Complete</h1>
+          <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
+            Here's how today sounds based on what you shared.
+          </p>
+        </header>
+
+        {/* Generated Summary */}
+        <Card className="border-none shadow-sm mb-6">
+          <CardContent className="p-5">
+            <p className="text-sm text-foreground leading-relaxed">
+              {generatedSummary}
+            </p>
+          </CardContent>
+        </Card>
+
+        {!confirmationDone && (
+          <>
+            {/* Confirmation Prompt */}
+            <p className="text-sm font-semibold text-foreground mb-4">
+              Does this feel like an accurate reflection of your day?
+            </p>
+
+            {/* Response Chips */}
+            <div className="flex flex-wrap gap-2 mb-6" role="group" aria-label="Confirmation response">
+              {([
+                { key: "yes" as const, label: "Yes, that captures it" },
+                { key: "mostly" as const, label: "Mostly" },
+                { key: "not-quite" as const, label: "Not quite" },
+              ]).map(({ key, label }) => (
+                <button
+                  key={key}
+                  onClick={() => handleConfirmationSelect(key)}
+                  aria-pressed={confirmationResponse === key}
+                  className={`min-h-[44px] px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
+                    confirmationResponse === key
+                      ? "bg-primary text-primary-foreground shadow-md"
+                      : "bg-secondary text-secondary-foreground"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            {/* Conditional Follow-up */}
+            {(confirmationResponse === "mostly" || confirmationResponse === "not-quite") && (
+              <div className="space-y-4 animate-fade-in">
+                <div>
+                  <label htmlFor="confirmation-feedback" className="text-sm font-medium text-muted-foreground block mb-2">
+                    What did we miss?
+                  </label>
+                  <Textarea
+                    id="confirmation-feedback"
+                    value={confirmationFeedback}
+                    onChange={(e) => setConfirmationFeedback(e.target.value)}
+                    placeholder="Anything you'd like to add or correct..."
+                    className="bg-card border-border rounded-2xl min-h-[80px] resize-none"
+                  />
+                </div>
+                <Button
+                  onClick={handleConfirmationDone}
+                  className="w-full h-14 text-base rounded-2xl font-semibold"
+                  size="lg"
+                >
+                  Done
+                </Button>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* Affirming Close */}
+        {confirmationDone && (
+          <Card className="border-none bg-shift-lavender animate-fade-in">
+            <CardContent className="p-5 text-center">
+              <Check className="w-6 h-6 text-primary mx-auto mb-2" aria-hidden="true" />
+              <p className="text-sm text-foreground font-medium">
+                Got it. See you tomorrow.
+              </p>
+            </CardContent>
+          </Card>
+        )}
+      </main>
+    );
+  }
+
+  // --- Main Log Form ---
   return (
     <main className="min-h-screen bg-background px-6 pt-8 pb-28" aria-label="Daily check-in">
       {/* Streak */}
@@ -174,7 +384,7 @@ const DailyLog = () => {
         </p>
       </header>
 
-      {logged &&
+      {logged && !showConfirmation &&
         <Card className="mb-6 bg-shift-lavender border-none" role="status">
           <CardContent className="p-4 flex items-center gap-3">
             <Check className="w-5 h-5 text-primary" aria-hidden="true" />
@@ -398,7 +608,7 @@ const DailyLog = () => {
 
         <Separator className="bg-border/50" />
 
-        {/* Additional Symptoms — excludes physical & emotional profile symptoms already shown inline */}
+        {/* Additional Symptoms */}
         {(() => {
           const physicalSet = new Set<string>(ALL_PHYSICAL_SYMPTOMS);
           const emotionalSet = new Set<string>(ALL_EMOTIONAL_SYMPTOMS);
