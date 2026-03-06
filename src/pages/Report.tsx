@@ -39,13 +39,13 @@ const Report = () => {
       : "—"
   } out of 10. These patterns may be worth discussing with your healthcare provider to explore hormonal changes.`;
 
-  const clinicalSummary = `Patient reports ${totalDays}-day symptom log. Primary complaints: ${
-    rows.slice(0, 3).map((r) => r.name).join(", ") || "N/A"
-  }. Mean subjective mood score: ${
+  const clinicalSummary = `Self-reported symptom log over ${totalDays} days. Primary reported symptoms: ${
+    rows.slice(0, 3).map((r) => mapToClinical(r.name)).join(", ") || "N/A"
+  }. Mean subjective well-being score: ${
     totalDays > 0
       ? (state.logs.reduce((a, l) => a + l.mood, 0) / totalDays).toFixed(1)
       : "N/A"
-  }/10. Symptom frequency suggests possible perimenopausal vasomotor and neuropsychiatric manifestations. Recommend hormonal panel (FSH, estradiol, progesterone) and clinical correlation.`;
+  }/10. Symptom pattern may be consistent with the menopausal transition (STRAW+10 stages −2 to +1a). Reported vasomotor symptoms and neuropsychiatric features may warrant evaluation. Consider hormonal panel (FSH, estradiol) and clinical correlation per STRAW+10 staging criteria.`;
 
   const patterns = [
     rows.length > 0 ? `${rows[0].name} was the most frequently reported symptom (${rows[0].days} of ${totalDays} days).` : null,
