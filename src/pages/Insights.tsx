@@ -7,23 +7,23 @@ const mockInsights = [
   {
     icon: Brain,
     title: "Mood & Sleep Connection",
-    observation: "Your anxiety and sleep disruptions tend to spike in the same 3-day window.",
-    explanation: "During the menopausal transition, fluctuating estrogen and progesterone levels can disrupt sleep architecture and affect cortisol regulation. When these hormones shift, sleep quality and anxiety often move together — which is why these symptoms frequently cluster.",
-    action: "This pattern is worth mentioning to your doctor. Sharing when these episodes occur can help them assess whether a hormonal factor may be involved and whether targeted support could help.",
+    observation: "Your anxiety and sleep seem to flare up around the same time — often within the same few days.",
+    explanation: "When estrogen and progesterone shift, they can affect both how you sleep and how you feel emotionally. It's not uncommon for these two things to move together, especially during perimenopause — your body isn't making this up.",
+    action: "This could be a really useful thing to bring to your doctor. If you can show them when these episodes cluster, it helps them figure out whether something hormonal might be at play.",
   },
   {
     icon: Thermometer,
     title: "Symptom Clustering",
-    observation: "Hot flashes, night sweats, and fatigue appear to be showing up together in your logs.",
-    explanation: "These are vasomotor symptoms — driven by changes in the brain's thermoregulatory center as estrogen levels fluctuate. When the body's internal thermostat becomes less stable, heat episodes and the resulting sleep disruption can compound into daytime fatigue.",
-    action: "Tracking the timing and frequency of these clusters gives your doctor a clearer picture. It can help them distinguish hormonal patterns from other causes and consider whether treatment options may be appropriate.",
+    observation: "Hot flashes, night sweats, and fatigue keep showing up together in your logs — that's not a coincidence.",
+    explanation: "These are all connected to how your body regulates temperature. When estrogen fluctuates, your internal thermostat can become less stable — the heat episodes disrupt sleep, and the sleep disruption feeds into daytime exhaustion. It's a cycle a lot of people recognize.",
+    action: "Sharing this cluster with your doctor could be really helpful. It gives them a fuller picture and makes it easier to figure out the right kind of support.",
   },
   {
     icon: TrendingDown,
     title: "Pre-Cycle Mood Pattern",
-    observation: "Your mood ratings appear to dip in the days leading up to your cycle.",
-    explanation: "In the late luteal phase, progesterone drops sharply. During perimenopause, these drops can become more pronounced and less predictable, which may amplify mood sensitivity in the days before a period — even if this wasn't an issue before.",
-    action: "Noting these mood shifts alongside your cycle timing can help your doctor evaluate whether luteal-phase hormonal changes are contributing. This context helps them recommend the right next steps for you.",
+    observation: "Your mood seems to dip in the days just before your cycle — you might already feel this happening.",
+    explanation: "In the days before a period, progesterone drops. During perimenopause, that drop can become steeper and less predictable, which can make mood feel more fragile than it used to — even if this is new for you.",
+    action: "Mentioning these mood shifts alongside your cycle timing gives your doctor something concrete to work with. It can help them understand whether hormonal changes might be part of the picture.",
   },
 ];
 
@@ -42,9 +42,8 @@ function getStreak(logs: DailyLog[]): number {
 }
 
 function generateDataReflection(logs: DailyLog[]): string {
-  if (logs.length === 0) return "Start logging to see your patterns take shape.";
+  if (logs.length === 0) return "Once you start logging, we'll begin picking up on what matters to you.";
 
-  // Check for recurring symptoms
   const symptomCounts: Record<string, number> = {};
   logs.forEach((log) => {
     const allSymptoms = [
@@ -63,16 +62,15 @@ function generateDataReflection(logs: DailyLog[]): string {
 
   if (recurring.length >= 2) {
     const top = recurring.slice(0, 2).map(([name]) => name.toLowerCase());
-    return `You've mentioned ${top[0]} and ${top[1]} on multiple days. Patterns like these start to become clearer around day 7.`;
+    return `${top[0]} and ${top[1]} have come up more than once already. A few more days and we'll start to see if there's a rhythm to it.`;
   }
 
   if (recurring.length === 1) {
-    return `${recurring[0][0]} has shown up in ${recurring[0][1]} of your ${logs.length} logs so far. Keep going — context builds quickly.`;
+    return `${recurring[0][0]} has come up ${recurring[0][1]} times in your first ${logs.length} logs. That's the kind of thing that becomes really useful to track over a week.`;
   }
 
-  // Fall back to slider data
   const avgMood = logs.reduce((a, l) => a + l.mood, 0) / logs.length;
-  return `Your physical well-being ratings have averaged ${avgMood.toFixed(1)} out of 10 so far. A few more days will help us understand what's driving that.`;
+  return `You've been rating your physical wellbeing around ${avgMood.toFixed(1)} out of 10 most days. A few more entries and we'll have a better sense of what might be behind that.`;
 }
 
 const Insights = () => {
@@ -88,8 +86,8 @@ const Insights = () => {
         <h1 className="text-2xl font-serif text-foreground mb-2">Pattern Insights</h1>
         <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
           {hasEnoughData
-            ? "Your body is telling a story. Here's what we're noticing."
-            : "Your insights are building — every log adds detail."}
+            ? "Here's something worth paying attention to."
+            : "Your story is just getting started — every check-in adds a little more."}
         </p>
       </header>
 
@@ -99,7 +97,7 @@ const Insights = () => {
             <CardContent className="p-4 flex items-start gap-3">
               <Info className="w-4 h-4 text-primary mt-0.5 shrink-0" aria-hidden="true" />
               <p className="text-xs text-muted-foreground leading-relaxed">
-                These insights are based on your logged data. They're observations — not diagnoses — and they're designed to help you have better conversations with your doctor.
+                These are things we've picked up from your logs — not diagnoses, just patterns that might be worth exploring with your doctor.
               </p>
             </CardContent>
           </Card>
@@ -132,7 +130,6 @@ const Insights = () => {
 
       {!hasEnoughData && (
         <section className="space-y-6" aria-label="Insights progress">
-          {/* Progress track */}
           <Card className="border-none shadow-sm">
             <CardContent className="p-5">
               <div className="flex items-center gap-1.5 mb-3" role="progressbar" aria-valuenow={daysLogged} aria-valuemin={0} aria-valuemax={7} aria-label={`Day ${daysLogged} of 7`}>
@@ -146,12 +143,11 @@ const Insights = () => {
                 ))}
               </div>
               <p className="text-sm text-foreground font-medium">
-                Day {Math.min(daysLogged, 7)} of 7 — your first insights are on their way.
+                Day {Math.min(daysLogged, 7)} of 7 — your first insights are almost here.
               </p>
             </CardContent>
           </Card>
 
-          {/* Streak */}
           {streak > 0 && (
             <div className="flex flex-col items-center gap-1.5">
               <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary">
@@ -164,7 +160,6 @@ const Insights = () => {
             </div>
           )}
 
-          {/* Data reflection */}
           <Card className="border-none shadow-sm">
             <CardContent className="p-5">
               <p className="text-sm text-muted-foreground leading-relaxed">
@@ -173,7 +168,6 @@ const Insights = () => {
             </CardContent>
           </Card>
 
-          {/* Closing prompt */}
           <p className="text-center text-xs text-muted-foreground/70 italic">
             The more you log, the clearer your picture becomes.
           </p>
