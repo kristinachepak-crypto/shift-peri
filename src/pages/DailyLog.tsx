@@ -19,9 +19,11 @@ const EMOTIONAL_SYMPTOMS = [
 const DailyLog = () => {
   const state = getAppState();
   const [mood, setMood] = useState(5);
+  const [mentalMood, setMentalMood] = useState(5);
   const [sleep, setSleep] = useState(3);
   const [symptoms, setSymptoms] = useState<string[]>([]);
   const [physicalSymptoms, setPhysicalSymptoms] = useState<string[]>([]);
+  const [emotionalSymptoms, setEmotionalSymptoms] = useState<string[]>([]);
   const [cycleStatus, setCycleStatus] = useState<"period" | "spotting" | "none">("none");
   const [notes, setNotes] = useState("");
   const [logged, setLogged] = useState(todayAlreadyLogged(state.logs));
