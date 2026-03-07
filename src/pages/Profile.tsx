@@ -15,7 +15,7 @@ import { toast } from "sonner";
 import { format, parseISO } from "date-fns";
 
 const APP_VERSION = "0.4.0";
-const IS_DEV = import.meta.env.DEV || window.location.hostname.includes("lovable.app");
+const IS_DEV = import.meta.env.DEV;
 
 const TEST_PROFILE_SYMPTOMS = ["Anxiety", "Brain fog", "Fatigue", "Night sweats", "Hot flashes", "Insomnia", "Irritability", "Joint pain"];
 
