@@ -86,7 +86,19 @@ const Profile = () => {
     }
   };
 
-  const handlePopulateMockData = () => {
+
+  const handleLongPressStart = () => {
+    longPressTimer.current = setTimeout(() => {
+      setShowDevPanel((prev) => !prev);
+      if (!showDevPanel) toast("Developer panel unlocked 🔧");
+    }, 2000);
+  };
+
+  const handleLongPressEnd = () => {
+    if (longPressTimer.current) clearTimeout(longPressTimer.current);
+  };
+
+
     const current = getAppState();
     current.logs = generateMockLogs(mockDays);
     current.selectedSymptoms = TEST_PROFILE_SYMPTOMS;
