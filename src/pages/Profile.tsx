@@ -416,10 +416,16 @@ const Profile = () => {
         </div>
       </section>
 
-      {/* Version number — tap 7 times to reveal dev panel */}
+      {/* Version number — tap 7 times or long-press 2s to reveal dev panel */}
       <div className="mt-12 text-center">
         <button
           onClick={handleVersionTap}
+          onTouchStart={handleLongPressStart}
+          onTouchEnd={handleLongPressEnd}
+          onTouchCancel={handleLongPressEnd}
+          onMouseDown={handleLongPressStart}
+          onMouseUp={handleLongPressEnd}
+          onMouseLeave={handleLongPressEnd}
           className="text-xs text-muted-foreground/40 cursor-default select-none"
           aria-hidden="true"
         >
