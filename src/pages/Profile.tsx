@@ -66,6 +66,7 @@ const Profile = () => {
   const [showDevPanel, setShowDevPanel] = useState(false);
   const [mockDays, setMockDays] = useState(7);
   const devTapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const nextDate = getNextAssessmentDate(state);
   const assessmentDue = isAssessmentDue(state);
