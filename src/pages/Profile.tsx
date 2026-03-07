@@ -66,6 +66,7 @@ const Profile = () => {
   const [showDevPanel, setShowDevPanel] = useState(false);
   const [mockDays, setMockDays] = useState(7);
   const devTapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const nextDate = getNextAssessmentDate(state);
   const assessmentDue = isAssessmentDue(state);
@@ -85,7 +86,19 @@ const Profile = () => {
     }
   };
 
-  const handlePopulateMockData = () => {
+
+  const handleLongPressStart = () => {
+    longPressTimer.current = setTimeout(() => {
+      setShowDevPanel((prev) => !prev);
+      if (!showDevPanel) toast("Developer panel unlocked 🔧");
+    }, 2000);
+  };
+
+  const handleLongPressEnd = () => {
+    if (longPressTimer.current) clearTimeout(longPressTimer.current);
+  };
+
+
     const current = getAppState();
     current.logs = generateMockLogs(mockDays);
     current.selectedSymptoms = TEST_PROFILE_SYMPTOMS;
@@ -403,10 +416,16 @@ const Profile = () => {
         </div>
       </section>
 
-      {/* Version number — tap 7 times to reveal dev panel */}
+      {/* Version number — tap 7 times or long-press 2s to reveal dev panel */}
       <div className="mt-12 text-center">
         <button
           onClick={handleVersionTap}
+          onTouchStart={handleLongPressStart}
+          onTouchEnd={handleLongPressEnd}
+          onTouchCancel={handleLongPressEnd}
+          onMouseDown={handleLongPressStart}
+          onMouseUp={handleLongPressEnd}
+          onMouseLeave={handleLongPressEnd}
           className="text-xs text-muted-foreground/40 cursor-default select-none"
           aria-hidden="true"
         >
