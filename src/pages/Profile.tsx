@@ -75,8 +75,14 @@ const Profile = () => {
   const mentalMean = calculateRollingMean(state.logs, "mentalMood");
 
   const handleVersionTap = useCallback((e: React.TouchEvent | React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+    // On touch devices, onTouchEnd fires before onClick — skip the onClick
+    if (e.type === 'touchend') {
+      e.preventDefault();
+      touchHandledRef.current = true;
+      setTimeout(() => { touchHandledRef.current = false; }, 300);
+    } else if (e.type === 'click' && touchHandledRef.current) {
+      return;
+    }
     devTapCountRef.current += 1;
     if (devTapTimer.current) clearTimeout(devTapTimer.current);
     devTapTimer.current = setTimeout(() => { devTapCountRef.current = 0; }, 2000);
