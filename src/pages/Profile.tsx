@@ -74,28 +74,18 @@ const Profile = () => {
   const physicalMean = calculateRollingMean(state.logs, "mood");
   const mentalMean = calculateRollingMean(state.logs, "mentalMood");
 
-  const handleVersionTap = () => {
+  const handleVersionTap = useCallback((e: React.TouchEvent | React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     devTapCountRef.current += 1;
     if (devTapTimer.current) clearTimeout(devTapTimer.current);
-    devTapTimer.current = setTimeout(() => { devTapCountRef.current = 0; }, 3000);
+    devTapTimer.current = setTimeout(() => { devTapCountRef.current = 0; }, 2000);
     if (devTapCountRef.current >= 7) {
       setShowDevPanel((prev) => !prev);
       devTapCountRef.current = 0;
       if (!showDevPanel) toast("Developer panel unlocked 🔧");
     }
-  };
-
-
-  const handleLongPressStart = () => {
-    longPressTimer.current = setTimeout(() => {
-      setShowDevPanel((prev) => !prev);
-      if (!showDevPanel) toast("Developer panel unlocked 🔧");
-    }, 2000);
-  };
-
-  const handleLongPressEnd = () => {
-    if (longPressTimer.current) clearTimeout(longPressTimer.current);
-  };
+  }, [showDevPanel]);
 
   const handlePopulateMockData = () => {
     const current = getAppState();
