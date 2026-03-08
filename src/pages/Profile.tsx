@@ -434,7 +434,7 @@ const Profile = () => {
       </div>
 
       {/* Developer Testing Panel */}
-      {IS_DEV && showDevPanel && (
+      {showDevPanel && (
         <section className="mt-6 animate-fade-in" aria-label="Developer testing panel">
           <Card className="border-2 border-dashed border-primary/30">
             <CardContent className="p-5 space-y-5">
