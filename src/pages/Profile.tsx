@@ -427,7 +427,7 @@ const Profile = () => {
           onMouseUp={handleLongPressEnd}
           onMouseLeave={handleLongPressEnd}
           className="text-xs text-muted-foreground/40 cursor-default select-none"
-          aria-hidden="true"
+          data-testid="version-tap"
         >
           Shift v{APP_VERSION}
         </button>
