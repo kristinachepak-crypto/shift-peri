@@ -78,7 +78,7 @@ const Profile = () => {
     devTapCountRef.current += 1;
     if (devTapTimer.current) clearTimeout(devTapTimer.current);
     devTapTimer.current = setTimeout(() => { devTapCountRef.current = 0; }, 3000);
-    if (devTapCountRef.current >= 3) {
+    if (devTapCountRef.current >= 7) {
       setShowDevPanel((prev) => !prev);
       devTapCountRef.current = 0;
       if (!showDevPanel) toast("Developer panel unlocked 🔧");
