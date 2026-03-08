@@ -66,7 +66,7 @@ const Profile = () => {
   const [mockDays, setMockDays] = useState(7);
   const devTapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const devTapCountRef = useRef(0);
-  const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const touchHandledRef = useRef(false);
 
   const nextDate = getNextAssessmentDate(state);
   const assessmentDue = isAssessmentDue(state);
@@ -74,28 +74,24 @@ const Profile = () => {
   const physicalMean = calculateRollingMean(state.logs, "mood");
   const mentalMean = calculateRollingMean(state.logs, "mentalMood");
 
-  const handleVersionTap = () => {
+  const handleVersionTap = useCallback((e: React.TouchEvent | React.MouseEvent) => {
+    // On touch devices, onTouchEnd fires before onClick — skip the onClick
+    if (e.type === 'touchend') {
+      e.preventDefault();
+      touchHandledRef.current = true;
+      setTimeout(() => { touchHandledRef.current = false; }, 300);
+    } else if (e.type === 'click' && touchHandledRef.current) {
+      return;
+    }
     devTapCountRef.current += 1;
     if (devTapTimer.current) clearTimeout(devTapTimer.current);
-    devTapTimer.current = setTimeout(() => { devTapCountRef.current = 0; }, 3000);
+    devTapTimer.current = setTimeout(() => { devTapCountRef.current = 0; }, 2000);
     if (devTapCountRef.current >= 7) {
       setShowDevPanel((prev) => !prev);
       devTapCountRef.current = 0;
       if (!showDevPanel) toast("Developer panel unlocked 🔧");
     }
-  };
-
-
-  const handleLongPressStart = () => {
-    longPressTimer.current = setTimeout(() => {
-      setShowDevPanel((prev) => !prev);
-      if (!showDevPanel) toast("Developer panel unlocked 🔧");
-    }, 2000);
-  };
-
-  const handleLongPressEnd = () => {
-    if (longPressTimer.current) clearTimeout(longPressTimer.current);
-  };
+  }, [showDevPanel]);
 
   const handlePopulateMockData = () => {
     const current = getAppState();
@@ -418,14 +414,10 @@ const Profile = () => {
       {/* Version number — tap 7 times or long-press 2s to reveal dev panel */}
       <div className="mt-12 text-center">
         <button
+          onTouchEnd={handleVersionTap}
           onClick={handleVersionTap}
-          onTouchStart={handleLongPressStart}
-          onTouchEnd={handleLongPressEnd}
-          onTouchCancel={handleLongPressEnd}
-          onMouseDown={handleLongPressStart}
-          onMouseUp={handleLongPressEnd}
-          onMouseLeave={handleLongPressEnd}
           className="text-xs text-muted-foreground/40 cursor-default select-none"
+          style={{ touchAction: 'manipulation', WebkitUserSelect: 'none', userSelect: 'none' }}
           data-testid="version-tap"
         >
           Shift v{APP_VERSION}
