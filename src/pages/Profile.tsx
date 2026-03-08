@@ -98,7 +98,7 @@ const Profile = () => {
     if (longPressTimer.current) clearTimeout(longPressTimer.current);
   };
 
-
+  const handlePopulateMockData = () => {
     const current = getAppState();
     current.logs = generateMockLogs(mockDays);
     current.selectedSymptoms = TEST_PROFILE_SYMPTOMS;
