@@ -62,10 +62,10 @@ const Profile = () => {
   const [reassessing, setReassessing] = useState(false);
   const [selected, setSelected] = useState<string[]>([...state.selectedSymptoms]);
   const [expandedAssessments, setExpandedAssessments] = useState<Set<number>>(new Set());
-  const [devTapCount, setDevTapCount] = useState(0);
   const [showDevPanel, setShowDevPanel] = useState(false);
   const [mockDays, setMockDays] = useState(7);
   const devTapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const devTapCountRef = useRef(0);
   const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const nextDate = getNextAssessmentDate(state);
@@ -75,13 +75,12 @@ const Profile = () => {
   const mentalMean = calculateRollingMean(state.logs, "mentalMood");
 
   const handleVersionTap = () => {
-    const newCount = devTapCount + 1;
-    setDevTapCount(newCount);
+    devTapCountRef.current += 1;
     if (devTapTimer.current) clearTimeout(devTapTimer.current);
-    devTapTimer.current = setTimeout(() => setDevTapCount(0), 2000);
-    if (newCount >= 7) {
+    devTapTimer.current = setTimeout(() => { devTapCountRef.current = 0; }, 3000);
+    if (devTapCountRef.current >= 7) {
       setShowDevPanel((prev) => !prev);
-      setDevTapCount(0);
+      devTapCountRef.current = 0;
       if (!showDevPanel) toast("Developer panel unlocked 🔧");
     }
   };
@@ -427,7 +426,7 @@ const Profile = () => {
           onMouseUp={handleLongPressEnd}
           onMouseLeave={handleLongPressEnd}
           className="text-xs text-muted-foreground/40 cursor-default select-none"
-          aria-hidden="true"
+          data-testid="version-tap"
         >
           Shift v{APP_VERSION}
         </button>
