@@ -66,7 +66,7 @@ const Profile = () => {
   const [mockDays, setMockDays] = useState(7);
   const devTapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const devTapCountRef = useRef(0);
-  const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const touchHandledRef = useRef(false);
 
   const nextDate = getNextAssessmentDate(state);
   const assessmentDue = isAssessmentDue(state);
