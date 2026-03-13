@@ -13,8 +13,16 @@ const topSymptoms = [
   { name: "Fatigue", pct: 71 },
   { name: "Night sweats", pct: 64 },
 ];
+const otherSymptoms = [
+  { name: "Joint pain", pct: 46 },
+  { name: "Hot flashes", pct: 39 },
+  { name: "Headaches", pct: 32 },
+  { name: "Hair thinning", pct: 25 },
+  { name: "Dry skin", pct: 21 },
+  { name: "Heart palpitations", pct: 18 },
+  { name: "Irritability", pct: 14 },
+];
 
-const plainInsights = [
   {
     badge: "Apple Health + Self-reported",
     stat: "78% co-occurrence rate",
