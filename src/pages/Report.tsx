@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import { Share2, Calendar, Activity, TrendingUp, Lightbulb, MessageCircle } from "lucide-react";
+import { Download, Share2, Calendar, Activity, TrendingUp, Lightbulb, MessageCircle } from "lucide-react";
+import { toast } from "sonner";
 
 const topSymptoms = [
   { name: "Sleep disruption", pct: 89 },
@@ -14,23 +15,26 @@ const topSymptoms = [
 
 const plainInsights = [
   {
-    pattern: "Sleep disruption and mood changes co-occur 78% of nights.",
+    stat: "78% co-occurrence rate",
+    pattern: "Sleep disruption and mood changes co-occur on 78% of nights logged",
     explanation:
-      "This pattern is consistent with estrogen-related disruption of serotonin and cortisol regulation.",
+      "This pattern is consistent with estrogen-related disruption of serotonin and cortisol regulation — the same hormonal shift affects both sleep architecture and mood stability.",
     prompt:
-      "Could my sleep and mood symptoms have a common hormonal driver?",
+      "Could my sleep and mood symptoms have a common hormonal driver worth treating together?",
   },
   {
-    pattern: "Brain fog peaks mid-week and correlates with poor sleep the prior night.",
+    stat: "23% below your monthly average",
+    pattern:
+      "Your sleep quality this week is 23% below your monthly baseline, and brain fog scores follow within 24 hours",
     explanation:
-      "Cognitive symptoms in perimenopause are often linked to sleep architecture disruption rather than cognitive decline.",
+      "Cognitive symptoms in perimenopause are frequently linked to sleep architecture disruption rather than cognitive decline — poor sleep precedes brain fog in your data.",
     prompt:
       "Is this the kind of brain fog that responds to sleep intervention or hormone therapy?",
   },
 ];
 
 const clinicalInsightText =
-  "Neuropsychiatric and vasomotor symptom clustering consistent with STRAW+10 stages -2 to +1a. Recommend FSH and estradiol panel. Consider referral to menopause specialist.";
+  "Neuropsychiatric and vasomotor symptom clustering consistent with STRAW+10 stages -2 to +1a. Sleep-mood co-occurrence rate 78% suggests HPA axis dysregulation. Recommend FSH and estradiol panel. Consider referral to menopause specialist.";
 
 const Report = () => {
   const [clinical, setClinical] = useState(false);
@@ -40,10 +44,28 @@ const Report = () => {
     day: "numeric",
   });
 
+  const handleShare = async () => {
+    const shareData = {
+      title: "Shift — Symptom Report",
+      text: "My Shift symptom report, prepared for my appointment.",
+      url: window.location.href,
+    };
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch {
+        // user cancelled
+      }
+    } else {
+      await navigator.clipboard.writeText(window.location.href);
+      toast.success("Link copied to clipboard");
+    }
+  };
+
   return (
     <main className="min-h-screen bg-background px-5 pt-8 pb-28" aria-label="Symptom report">
       {/* Toggle */}
-      <div className="flex items-center justify-end gap-2 mb-6">
+      <div className="flex items-center justify-end gap-2 mb-6 print:hidden">
         <span className={`text-xs font-medium ${!clinical ? "text-foreground" : "text-muted-foreground"}`}>
           Plain Language
         </span>
@@ -119,16 +141,15 @@ const Report = () => {
             {plainInsights.map((insight, i) => (
               <Card key={i} className="border-none shadow-sm">
                 <CardContent className="p-5 space-y-3">
+                  <p className="text-lg font-bold text-primary leading-snug">{insight.stat}</p>
                   <div className="flex items-start gap-2">
                     <Lightbulb className="w-4 h-4 text-primary mt-0.5 shrink-0" aria-hidden="true" />
-                    <p className="text-sm font-semibold text-foreground leading-snug">
-                      {insight.pattern}
-                    </p>
+                    <p className="text-sm font-medium text-foreground leading-snug">{insight.pattern}</p>
                   </div>
                   <p className="text-sm text-muted-foreground leading-relaxed pl-6">
                     {insight.explanation}
                   </p>
-                  <div className="flex items-start gap-2 pl-6 pt-1 border-t border-border/50">
+                  <div className="flex items-start gap-2 pl-6 pt-2 border-t border-border/50">
                     <MessageCircle className="w-3.5 h-3.5 text-primary mt-0.5 shrink-0" aria-hidden="true" />
                     <p className="text-xs text-primary font-medium italic leading-relaxed">
                       Ask your doctor: {insight.prompt}
@@ -147,11 +168,17 @@ const Report = () => {
         conversation, not replace clinical assessment.
       </p>
 
-      {/* Share Button */}
-      <Button className="w-full h-14 rounded-2xl font-semibold text-base print:hidden" size="lg" onClick={() => window.print()}>
-        <Share2 className="w-4 h-4 mr-2" aria-hidden="true" />
-        Share Report
-      </Button>
+      {/* Action Buttons */}
+      <div className="flex gap-3 print:hidden">
+        <Button className="flex-1 h-14 rounded-2xl font-semibold" size="lg" onClick={() => window.print()}>
+          <Download className="w-4 h-4 mr-2" aria-hidden="true" />
+          Download Report
+        </Button>
+        <Button variant="secondary" className="flex-1 h-14 rounded-2xl font-semibold" size="lg" onClick={handleShare}>
+          <Share2 className="w-4 h-4 mr-2" aria-hidden="true" />
+          Share Report
+        </Button>
+      </div>
     </main>
   );
 };
