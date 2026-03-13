@@ -217,8 +217,21 @@ const Profile = () => {
           <Heart className="w-4 h-4 text-primary" aria-hidden="true" />
           <span className="text-xs font-medium text-muted-foreground tracking-wide uppercase">Shift</span>
         </div>
-        <h1 className="text-xl font-serif text-foreground">Your Profile</h1>
+        <h1 className="text-xl font-serif text-foreground">Maya Chen</h1>
+        <p className="text-xs text-muted-foreground mt-0.5">Member since February 2026</p>
       </header>
+
+      {/* Quick Stats */}
+      <div className="flex gap-3 mb-5">
+        <div className="flex-1 bg-secondary/60 rounded-xl p-3 text-center">
+          <p className="text-lg font-bold text-foreground">{state.logs.length}</p>
+          <p className="text-[10px] text-muted-foreground">Days Logged</p>
+        </div>
+        <div className="flex-1 bg-secondary/60 rounded-xl p-3 text-center">
+          <p className="text-lg font-bold text-foreground">18</p>
+          <p className="text-[10px] text-muted-foreground">Day Streak</p>
+        </div>
+      </div>
 
       {/* Assessment due banner */}
       {assessmentDue && (

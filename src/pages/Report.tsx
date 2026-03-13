@@ -7,46 +7,53 @@ import { Download, Share2, Calendar, Activity, TrendingUp, Lightbulb, MessageCir
 import { toast } from "sonner";
 
 const topSymptoms = [
-  { name: "Sleep disruption", pct: 89 },
-  { name: "Mood changes", pct: 82 },
-  { name: "Brain fog", pct: 75 },
+  { name: "Sleep disruption", pct: 91 },
+  { name: "Mood changes", pct: 86 },
+  { name: "Brain fog", pct: 79 },
+  { name: "Hair thinning", pct: 76 },
   { name: "Fatigue", pct: 71 },
-  { name: "Night sweats", pct: 64 },
 ];
 const otherSymptoms = [
-  { name: "Joint pain", pct: 46 },
-  { name: "Hot flashes", pct: 39 },
-  { name: "Headaches", pct: 32 },
-  { name: "Hair thinning", pct: 25 },
-  { name: "Dry skin", pct: 21 },
-  { name: "Heart palpitations", pct: 18 },
-  { name: "Irritability", pct: 14 },
+  { name: "Night sweats", pct: 67 },
+  { name: "Anxiety", pct: 57 },
+  { name: "Brittle nails", pct: 48 },
+  { name: "Joint pain", pct: 43 },
+  { name: "Heart palpitations", pct: 38 },
 ];
-const plainInsights = [
+
+const insightCards = [
   {
     badge: "Apple Health + Self-reported",
     stat: "78% co-occurrence rate",
-    pattern:
-      "Sleep disruption and mood changes co-occur on 78% of nights logged. Your Apple Health data shows average HRV drops to 28ms on these nights, compared to your 45ms baseline.",
-    explanation:
-      "HRV suppression and mood instability share a common driver — estrogen fluctuation disrupts both autonomic nervous system regulation and serotonin production simultaneously.",
-    prompt:
-      "My wearable data shows HRV drops significantly on my worst nights — could this be hormonally driven rather than stress-related?",
+    pattern: "Sleep disruption and mood changes co-occur on 78% of nights logged",
+    explanation: "This pattern is consistent with estrogen-related disruption of serotonin and cortisol regulation — the same hormonal shift affects both sleep architecture and mood stability.",
+    prompt: "Could my sleep and mood symptoms have a common hormonal driver worth treating together?",
   },
   {
     badge: "Apple Health + Self-reported",
     stat: "23% below your monthly average",
-    pattern:
-      "Your Apple Health sleep data shows you're averaging 5.2 hours this week versus your 6.8 hour monthly baseline — a 23% drop that precedes brain fog scores within 24 hours.",
-    explanation:
-      "Cognitive symptoms in perimenopause are frequently linked to sleep architecture disruption rather than cognitive decline. Your data shows the lag consistently.",
-    prompt:
-      "My sleep tracker and symptom log show a consistent pattern — is this the kind of brain fog that responds to sleep intervention or hormone therapy?",
+    pattern: "Your sleep quality this week is 23% below your monthly baseline, and brain fog scores follow within 24 hours",
+    explanation: "Cognitive symptoms in perimenopause are frequently linked to sleep architecture disruption rather than cognitive decline — poor sleep precedes brain fog consistently in your data.",
+    prompt: "Is this the kind of brain fog that responds to sleep intervention or hormone therapy?",
+  },
+  {
+    badge: "Self-reported",
+    stat: "4 of the last 7 evenings",
+    pattern: "Anxiety and heart palpitations are clustering in the evening, appearing together on 4 of the last 7 evenings",
+    explanation: "Evening surges in anxiety and palpitations are a recognised but frequently overlooked perimenopause symptom, driven by declining estrogen's effect on the autonomic nervous system.",
+    prompt: "Could my evening anxiety and heart palpitations be hormonal rather than stress or cardiac-related?",
+  },
+  {
+    badge: "Self-reported",
+    stat: "Logged 19 of 21 days",
+    pattern: "Hair thinning and brittle nails have been logged on 19 of your 21 tracked days — one of your most consistent symptom patterns",
+    explanation: "Estrogen drives keratin and collagen production. As estrogen declines during perimenopause, hair texture, volume, and nail integrity are among the earliest affected — and the most frequently attributed to stress or aging instead.",
+    prompt: "Could my hair and nail changes be hormonal? These symptoms started around the same time as my other symptoms.",
   },
 ];
 
 const clinicalInsightText =
-  "Neuropsychiatric and vasomotor symptom clustering consistent with STRAW+10 stages -2 to +1a. Sleep-mood co-occurrence rate 78% suggests HPA axis dysregulation. Recommend FSH and estradiol panel. Consider referral to menopause specialist.";
+  "Neuropsychiatric, vasomotor, and androgen-sensitive symptom clustering across 21 days of self-reported data, consistent with STRAW+10 stages -2 to +1a. Sleep-mood co-occurrence rate 78% suggests HPA axis dysregulation. Hair and nail changes consistent with estrogen-mediated keratin decline. Recommend FSH, estradiol, and thyroid panel. Consider referral to menopause specialist.";
 
 const Report = () => {
   const [clinical, setClinical] = useState(false);
@@ -102,9 +109,9 @@ const Report = () => {
       {/* Summary Stats */}
       <div className="grid grid-cols-3 gap-3 mb-8">
         {[
-          { label: "Days Tracked", value: "28", icon: Calendar },
-          { label: "Symptoms Logged", value: "12", icon: Activity },
-          { label: "Avg Wellbeing", value: "2.8/5", icon: TrendingUp },
+          { label: "Days Tracked", value: "21", icon: Calendar },
+          { label: "Symptoms Logged", value: "10", icon: Activity },
+          { label: "Avg Wellbeing", value: "2.4/5", icon: TrendingUp },
         ].map((stat) => (
           <Card key={stat.label} className="border-none shadow-sm bg-secondary/60">
             <CardContent className="p-4 text-center">
@@ -220,7 +227,7 @@ const Report = () => {
           </Card>
         ) : (
           <div className="space-y-4">
-            {plainInsights.map((insight, i) => (
+            {insightCards.map((insight, i) => (
               <Card key={i} className="border-none shadow-sm">
                 <CardContent className="p-5 space-y-3">
                   <div className="flex flex-wrap items-start gap-2 mb-1">
