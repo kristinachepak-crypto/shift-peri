@@ -143,7 +143,7 @@ const DailyLog = () => {
 
   const showPhysicalTags = shouldShowTags(committedMood, phase, physicalMean);
   const showEmotionalTags = shouldShowTags(committedMentalMood, phase, mentalMean);
-  const showSleepTags = committedSleep <= 2;
+  const showSleepTags = committedSleep <= 3;
 
   const promotionCandidates = useMemo(() => getSymptomsEligibleForPromotion(state), [state]);
 
