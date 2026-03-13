@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import { Download, Share2, Calendar, Activity, TrendingUp, Lightbulb, MessageCircle } from "lucide-react";
+import { Download, Share2, Calendar, Activity, TrendingUp, Lightbulb, MessageCircle, Check, Watch, Heart } from "lucide-react";
 import { toast } from "sonner";
 
 const topSymptoms = [
