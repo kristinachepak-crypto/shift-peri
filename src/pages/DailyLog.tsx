@@ -104,16 +104,16 @@ function generateSummary(log: {
 const DailyLog = () => {
   const [appState, setAppState] = useState(getAppState);
   const state = appState;
-  const [mood, setMood] = useState(3);
-  const [committedMood, setCommittedMood] = useState(3);
+  const [mood, setMood] = useState(2);
+  const [committedMood, setCommittedMood] = useState(2);
   const [mentalMood, setMentalMood] = useState(3);
   const [committedMentalMood, setCommittedMentalMood] = useState(3);
-  const [sleep, setSleep] = useState(3);
-  const [committedSleep, setCommittedSleep] = useState(3);
+  const [sleep, setSleep] = useState(2);
+  const [committedSleep, setCommittedSleep] = useState(2);
   const [symptoms, setSymptoms] = useState<string[]>([]);
   const [physicalSymptoms, setPhysicalSymptoms] = useState<string[]>([]);
   const [emotionalSymptoms, setEmotionalSymptoms] = useState<string[]>([]);
-  const [sleepSymptoms, setSleepSymptoms] = useState<string[]>([]);
+  const [sleepSymptoms, setSleepSymptoms] = useState<string[]>(["Night sweats", "Sleep disruption"]);
   const [cycleStatus, setCycleStatus] = useState<"period" | "spotting" | "none">("none");
   const [notes, setNotes] = useState("");
   const [logged, setLogged] = useState(todayAlreadyLogged(state.logs));
@@ -453,7 +453,7 @@ const DailyLog = () => {
           <legend className="text-sm font-semibold text-foreground block mb-3">Physically, how are you feeling today?</legend>
           <div className="flex items-center gap-1.5 mb-3 w-fit px-2.5 py-1 rounded-full bg-primary/10">
             <Heart className="w-3 h-3 text-primary" aria-hidden="true" />
-            <span className="text-[11px] text-primary/80 font-medium">Apple Health: 6,240 steps yesterday</span>
+            <span className="text-[11px] text-primary/80 font-medium">Apple Health: 4,102 steps yesterday</span>
           </div>
           <div className="flex gap-2 mb-2" role="radiogroup" aria-label={`Physical feeling: ${mood} out of 5, ${moodLabels[mood]}`}>
             {[1, 2, 3, 4, 5].map((n) =>
@@ -597,7 +597,7 @@ const DailyLog = () => {
           </legend>
           <div className="flex items-center gap-1.5 mb-3 w-fit px-2.5 py-1 rounded-full bg-primary/10">
             <Heart className="w-3 h-3 text-primary" aria-hidden="true" />
-            <span className="text-[11px] text-primary/80 font-medium">Apple Health: 5.2 hrs last night</span>
+            <span className="text-[11px] text-primary/80 font-medium">Apple Health: 4.8 hrs last night</span>
           </div>
           <div className="flex gap-2 mb-2" role="radiogroup" aria-label={`Sleep quality: ${sleep} out of 5, ${sleepLabels[sleep]}`}>
             {[1, 2, 3, 4, 5].map((n) =>
