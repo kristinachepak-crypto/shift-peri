@@ -10,7 +10,7 @@ import {
   calculateRollingMean,
   SYMPTOM_CATEGORIES, DailyLog,
 } from "@/lib/storage";
-import { Heart, CalendarClock, ClipboardCheck, Settings, Sparkles, AlertCircle, Bug } from "lucide-react";
+import { Heart, CalendarClock, ClipboardCheck, Settings, Sparkles, AlertCircle, Bug, Check, Watch, Radio } from "lucide-react";
 import { toast } from "sonner";
 import { format, parseISO } from "date-fns";
 
@@ -379,6 +379,57 @@ const Profile = () => {
             </CardContent>
           </Card>
         )}
+      </section>
+
+      <Separator className="bg-border/50 mb-5" />
+
+      {/* Data Sources */}
+      <section aria-labelledby="data-sources-heading" className="mb-5">
+        <div className="flex items-center gap-2 mb-1">
+          <Radio className="w-4 h-4 text-primary" aria-hidden="true" />
+          <h2 id="data-sources-heading" className="text-base font-serif text-foreground">
+            Data Sources
+          </h2>
+        </div>
+        <p className="text-xs text-muted-foreground mb-3 ml-6">
+          Shift uses connected data to enrich your insights automatically.
+        </p>
+        <Card className="border-border/50">
+          <CardContent className="p-3 space-y-3">
+            {/* Apple Health */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <Heart className="w-4 h-4 text-primary" aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-foreground">Apple Health</p>
+                  <p className="text-xs text-muted-foreground">Sleep · HRV · Activity</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-1 text-xs font-medium" style={{ color: 'hsl(150, 50%, 40%)' }}>
+                <Check className="w-3.5 h-3.5" aria-hidden="true" />
+                Connected
+              </div>
+            </div>
+            <div className="border-t border-border/50" />
+            {/* Oura Ring */}
+            <div className="flex items-center justify-between opacity-50">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center">
+                  <Watch className="w-4 h-4 text-muted-foreground" aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-foreground">Oura Ring</p>
+                  <p className="text-xs text-muted-foreground">Skin Temperature · Sleep Stages · Readiness</p>
+                </div>
+              </div>
+              <span className="text-[10px] font-medium text-muted-foreground bg-muted px-2 py-0.5 rounded-full whitespace-nowrap">
+                Coming soon
+              </span>
+            </div>
+          </CardContent>
+        </Card>
       </section>
 
       <Separator className="bg-border/50 mb-5" />
