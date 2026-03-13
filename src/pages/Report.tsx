@@ -66,7 +66,7 @@ const Report = () => {
   };
 
   return (
-    <main className="min-h-screen bg-background px-5 pt-8 pb-28 overflow-x-hidden" aria-label="Symptom report">
+    <main className="min-h-screen bg-background px-4 pt-8 pb-32 overflow-x-hidden" aria-label="Symptom report">
       {/* Toggle */}
       <div className="flex items-center justify-end gap-2 mb-6 print:hidden">
         <span className={`text-xs font-medium ${!clinical ? "text-foreground" : "text-muted-foreground"}`}>
