@@ -467,10 +467,12 @@ const DailyLog = () => {
               </button>
             ))}
           </div>
-          <div className="flex justify-between text-xs text-muted-foreground" aria-hidden="true">
+          <div className="grid grid-cols-5 gap-2 text-xs text-muted-foreground" aria-hidden="true">
             <span>Very poor</span>
-            <span className="font-medium text-foreground">{moodLabels[mood]}</span>
-            <span>Great</span>
+            <span />
+            <span className="font-medium text-foreground text-center">{moodLabels[mood]}</span>
+            <span />
+            <span className="text-right">Great</span>
           </div>
 
           {/* Conditional physical symptom tags */}
@@ -534,10 +536,12 @@ const DailyLog = () => {
               </button>
             ))}
           </div>
-          <div className="flex justify-between text-xs text-muted-foreground" aria-hidden="true">
+          <div className="grid grid-cols-5 gap-2 text-xs text-muted-foreground" aria-hidden="true">
             <span>Very poor</span>
-            <span className="font-medium text-foreground">{mentalMoodLabels[mentalMood]}</span>
-            <span>Great</span>
+            <span />
+            <span className="font-medium text-foreground text-center">{mentalMoodLabels[mentalMood]}</span>
+            <span />
+            <span className="text-right">Great</span>
           </div>
 
           {/* Conditional emotional symptom tags */}
@@ -603,10 +607,12 @@ const DailyLog = () => {
               </button>
             ))}
           </div>
-          <div className="flex justify-between text-xs text-muted-foreground" aria-hidden="true">
+          <div className="grid grid-cols-5 gap-2 text-xs text-muted-foreground" aria-hidden="true">
             <span>Very poor</span>
-            <span className="font-medium text-foreground">{sleepLabels[sleep]}</span>
-            <span>Good</span>
+            <span />
+            <span className="font-medium text-foreground text-center">{sleepLabels[sleep]}</span>
+            <span />
+            <span className="text-right">Good</span>
           </div>
 
           {/* Conditional sleep symptom tags */}
