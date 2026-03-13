@@ -587,19 +587,25 @@ const DailyLog = () => {
           <legend className="text-sm font-semibold text-foreground block mb-3">
             How did you sleep?
           </legend>
-          <Slider
-            value={[sleep]}
-            onValueChange={(v) => setSleep(v[0])}
-            onValueCommit={(v) => setCommittedSleep(v[0])}
-            min={1}
-            max={5}
-            step={1}
-            className="mb-2"
-            aria-label={`Sleep quality: ${sleep} out of 5, ${sleepLabels[sleep]}`}
-          />
+          <div className="flex gap-2 mb-2" role="radiogroup" aria-label={`Sleep quality: ${sleep} out of 5, ${sleepLabels[sleep]}`}>
+            {[1, 2, 3, 4, 5].map((n) => (
+              <button
+                key={n}
+                onClick={() => { setSleep(n); setCommittedSleep(n); }}
+                aria-pressed={sleep === n}
+                className={`flex-1 min-h-[44px] rounded-xl text-sm font-semibold transition-all ${
+                  sleep === n
+                    ? "bg-primary text-primary-foreground shadow-md scale-105"
+                    : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                }`}
+              >
+                {n}
+              </button>
+            ))}
+          </div>
           <div className="flex justify-between text-xs text-muted-foreground" aria-hidden="true">
             <span>Very poor</span>
-            <span className="font-medium text-foreground">{sleep} — {sleepLabels[sleep]}</span>
+            <span className="font-medium text-foreground">{sleepLabels[sleep]}</span>
             <span>Good</span>
           </div>
 
