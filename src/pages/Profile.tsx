@@ -10,7 +10,7 @@ import {
   calculateRollingMean,
   SYMPTOM_CATEGORIES, DailyLog,
 } from "@/lib/storage";
-import { Heart, CalendarClock, ClipboardCheck, Settings, Sparkles, AlertCircle, Bug } from "lucide-react";
+import { Heart, CalendarClock, ClipboardCheck, Settings, Sparkles, AlertCircle, Bug, Check, Watch, Radio } from "lucide-react";
 import { toast } from "sonner";
 import { format, parseISO } from "date-fns";
 
