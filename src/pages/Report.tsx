@@ -22,7 +22,7 @@ const otherSymptoms = [
   { name: "Heart palpitations", pct: 18 },
   { name: "Irritability", pct: 14 },
 ];
-
+const plainInsights = [
   {
     badge: "Apple Health + Self-reported",
     stat: "78% co-occurrence rate",
