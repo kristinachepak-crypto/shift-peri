@@ -183,9 +183,9 @@ const Report = () => {
             {plainInsights.map((insight, i) => (
               <Card key={i} className="border-none shadow-sm">
                 <CardContent className="p-5 space-y-3">
-                  <div className="flex items-center justify-between mb-1">
+                  <div className="flex flex-wrap items-center gap-2 mb-1">
                     <p className="text-lg font-bold text-primary leading-snug">{insight.stat}</p>
-                    <span className="text-[10px] font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full whitespace-nowrap">
+                    <span className="text-[10px] font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full whitespace-nowrap shrink-0">
                       {insight.badge}
                     </span>
                   </div>
