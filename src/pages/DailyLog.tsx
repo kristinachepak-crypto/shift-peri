@@ -12,7 +12,7 @@ import {
   addSymptomToProfile, dismissSymptomPromotion,
   SYMPTOM_CATEGORIES, DailyLog as DailyLogType } from
 "@/lib/storage";
-import { Flame, Check, Plus, Sparkles } from "lucide-react";
+import { Flame, Check, Plus, Sparkles, Heart } from "lucide-react";
 import { toast } from "sonner";
 
 const ALL_PHYSICAL_SYMPTOMS = [
