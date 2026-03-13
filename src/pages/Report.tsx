@@ -66,7 +66,7 @@ const Report = () => {
   };
 
   return (
-    <main className="min-h-screen bg-background px-5 pt-8 pb-28 overflow-x-hidden" aria-label="Symptom report">
+    <main className="min-h-screen bg-background px-4 pt-8 pb-32 overflow-x-hidden" aria-label="Symptom report">
       {/* Toggle */}
       <div className="flex items-center justify-end gap-2 mb-6 print:hidden">
         <span className={`text-xs font-medium ${!clinical ? "text-foreground" : "text-muted-foreground"}`}>
@@ -183,8 +183,8 @@ const Report = () => {
             {plainInsights.map((insight, i) => (
               <Card key={i} className="border-none shadow-sm">
                 <CardContent className="p-5 space-y-3">
-                  <div className="flex flex-wrap items-center gap-2 mb-1">
-                    <p className="text-lg font-bold text-primary leading-snug">{insight.stat}</p>
+                  <div className="flex flex-wrap items-start gap-2 mb-1">
+                    <p className="text-base font-bold text-primary leading-snug break-words">{insight.stat}</p>
                     <span className="text-[10px] font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full whitespace-nowrap shrink-0">
                       {insight.badge}
                     </span>
@@ -217,13 +217,13 @@ const Report = () => {
 
       {/* Action Buttons */}
       <div className="flex gap-3 print:hidden">
-        <Button className="flex-1 h-14 rounded-2xl font-semibold" size="lg" onClick={() => window.print()}>
-          <Download className="w-4 h-4 mr-2" aria-hidden="true" />
-          Download Report
+        <Button className="flex-1 h-12 rounded-2xl font-semibold text-sm" size="lg" onClick={() => window.print()}>
+          <Download className="w-4 h-4 mr-1.5" aria-hidden="true" />
+          Download
         </Button>
-        <Button variant="secondary" className="flex-1 h-14 rounded-2xl font-semibold" size="lg" onClick={handleShare}>
-          <Share2 className="w-4 h-4 mr-2" aria-hidden="true" />
-          Share Report
+        <Button variant="secondary" className="flex-1 h-12 rounded-2xl font-semibold text-sm" size="lg" onClick={handleShare}>
+          <Share2 className="w-4 h-4 mr-1.5" aria-hidden="true" />
+          Share
         </Button>
       </div>
     </main>
