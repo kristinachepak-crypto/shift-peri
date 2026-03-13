@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { Slider } from "@/components/ui/slider";
+
 import { Separator } from "@/components/ui/separator";
 import {
   getAppState, saveAppState, getStreak, getToday, todayAlreadyLogged,
@@ -451,19 +451,25 @@ const DailyLog = () => {
         {/* Physical Mood */}
         <fieldset>
           <legend className="text-sm font-semibold text-foreground block mb-3">Physically, how are you feeling today?</legend>
-          <Slider
-            value={[mood]}
-            onValueChange={(v) => setMood(v[0])}
-            onValueCommit={(v) => setCommittedMood(v[0])}
-            min={1}
-            max={5}
-            step={1}
-            className="mb-2"
-            aria-label={`Physical feeling: ${mood} out of 5, ${moodLabels[mood]}`}
-          />
+          <div className="flex gap-2 mb-2" role="radiogroup" aria-label={`Physical feeling: ${mood} out of 5, ${moodLabels[mood]}`}>
+            {[1, 2, 3, 4, 5].map((n) => (
+              <button
+                key={n}
+                onClick={() => { setMood(n); setCommittedMood(n); }}
+                aria-pressed={mood === n}
+                className={`flex-1 min-h-[44px] rounded-xl text-sm font-semibold transition-all ${
+                  mood === n
+                    ? "bg-primary text-primary-foreground shadow-md scale-105"
+                    : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                }`}
+              >
+                {n}
+              </button>
+            ))}
+          </div>
           <div className="flex justify-between text-xs text-muted-foreground" aria-hidden="true">
             <span>Very poor</span>
-            <span className="font-medium text-foreground">{mood} — {moodLabels[mood]}</span>
+            <span className="font-medium text-foreground">{moodLabels[mood]}</span>
             <span>Great</span>
           </div>
 
@@ -512,19 +518,25 @@ const DailyLog = () => {
         {/* Mental/Emotional */}
         <fieldset>
           <legend className="text-sm font-semibold text-foreground block mb-3">Mentally & emotionally, how are you feeling?</legend>
-          <Slider
-            value={[mentalMood]}
-            onValueChange={(v) => setMentalMood(v[0])}
-            onValueCommit={(v) => setCommittedMentalMood(v[0])}
-            min={1}
-            max={5}
-            step={1}
-            className="mb-2"
-            aria-label={`Mental feeling: ${mentalMood} out of 5, ${mentalMoodLabels[mentalMood]}`}
-          />
+          <div className="flex gap-2 mb-2" role="radiogroup" aria-label={`Mental feeling: ${mentalMood} out of 5, ${mentalMoodLabels[mentalMood]}`}>
+            {[1, 2, 3, 4, 5].map((n) => (
+              <button
+                key={n}
+                onClick={() => { setMentalMood(n); setCommittedMentalMood(n); }}
+                aria-pressed={mentalMood === n}
+                className={`flex-1 min-h-[44px] rounded-xl text-sm font-semibold transition-all ${
+                  mentalMood === n
+                    ? "bg-primary text-primary-foreground shadow-md scale-105"
+                    : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                }`}
+              >
+                {n}
+              </button>
+            ))}
+          </div>
           <div className="flex justify-between text-xs text-muted-foreground" aria-hidden="true">
             <span>Very poor</span>
-            <span className="font-medium text-foreground">{mentalMood} — {mentalMoodLabels[mentalMood]}</span>
+            <span className="font-medium text-foreground">{mentalMoodLabels[mentalMood]}</span>
             <span>Great</span>
           </div>
 
@@ -575,19 +587,25 @@ const DailyLog = () => {
           <legend className="text-sm font-semibold text-foreground block mb-3">
             How did you sleep?
           </legend>
-          <Slider
-            value={[sleep]}
-            onValueChange={(v) => setSleep(v[0])}
-            onValueCommit={(v) => setCommittedSleep(v[0])}
-            min={1}
-            max={5}
-            step={1}
-            className="mb-2"
-            aria-label={`Sleep quality: ${sleep} out of 5, ${sleepLabels[sleep]}`}
-          />
+          <div className="flex gap-2 mb-2" role="radiogroup" aria-label={`Sleep quality: ${sleep} out of 5, ${sleepLabels[sleep]}`}>
+            {[1, 2, 3, 4, 5].map((n) => (
+              <button
+                key={n}
+                onClick={() => { setSleep(n); setCommittedSleep(n); }}
+                aria-pressed={sleep === n}
+                className={`flex-1 min-h-[44px] rounded-xl text-sm font-semibold transition-all ${
+                  sleep === n
+                    ? "bg-primary text-primary-foreground shadow-md scale-105"
+                    : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                }`}
+              >
+                {n}
+              </button>
+            ))}
+          </div>
           <div className="flex justify-between text-xs text-muted-foreground" aria-hidden="true">
             <span>Very poor</span>
-            <span className="font-medium text-foreground">{sleep} — {sleepLabels[sleep]}</span>
+            <span className="font-medium text-foreground">{sleepLabels[sleep]}</span>
             <span>Good</span>
           </div>
 
