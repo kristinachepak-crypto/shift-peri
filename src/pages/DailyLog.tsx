@@ -455,6 +455,7 @@ const DailyLog = () => {
             <Heart className="w-3 h-3 text-primary" aria-hidden="true" />
             <span className="text-[11px] text-primary/80 font-medium">Apple Health: 6,240 steps yesterday</span>
           </div>
+          <div className="flex gap-2 mb-2" role="radiogroup" aria-label={`Physical feeling: ${mood} out of 5, ${moodLabels[mood]}`}>
             {[1, 2, 3, 4, 5].map((n) =>
             <button
               key={n}
