@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import { Download, Share2, Calendar, Activity, TrendingUp, Lightbulb, MessageCircle, Check, Watch, Heart } from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Download, Share2, Calendar, Activity, TrendingUp, Lightbulb, MessageCircle, Check, Watch, Heart, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 
 const topSymptoms = [
@@ -12,7 +13,15 @@ const topSymptoms = [
   { name: "Fatigue", pct: 71 },
   { name: "Night sweats", pct: 64 },
 ];
-
+const otherSymptoms = [
+  { name: "Joint pain", pct: 46 },
+  { name: "Hot flashes", pct: 39 },
+  { name: "Headaches", pct: 32 },
+  { name: "Hair thinning", pct: 25 },
+  { name: "Dry skin", pct: 21 },
+  { name: "Heart palpitations", pct: 18 },
+  { name: "Irritability", pct: 14 },
+];
 const plainInsights = [
   {
     badge: "Apple Health + Self-reported",
@@ -130,7 +139,38 @@ const Report = () => {
         </Card>
       </section>
 
-      {/* Connected Data Sources */}
+      {/* Other Symptoms (collapsible) */}
+      <section className="mb-8">
+        <Collapsible>
+          <Card className="border-none shadow-sm">
+            <CollapsibleTrigger className="w-full">
+              <div className="flex items-center justify-between p-5 pb-3">
+                <h3 className="text-base font-serif text-foreground">Other Symptoms</h3>
+                <ChevronDown className="w-4 h-4 text-muted-foreground transition-transform duration-200 [[data-state=open]>&]:rotate-180" />
+              </div>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <CardContent className="px-5 pb-5 pt-0 space-y-4">
+                {otherSymptoms.map((s) => (
+                  <div key={s.name}>
+                    <div className="flex justify-between items-baseline mb-1.5">
+                      <span className="text-sm text-foreground font-medium">{s.name}</span>
+                      <span className="text-xs text-muted-foreground font-semibold">{s.pct}%</span>
+                    </div>
+                    <div className="h-2 rounded-full bg-secondary overflow-hidden">
+                      <div
+                        className="h-full rounded-full bg-primary/60 transition-all duration-500"
+                        style={{ width: `${s.pct}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </CollapsibleContent>
+          </Card>
+        </Collapsible>
+      </section>
+
       <section className="mb-8">
         <h3 className="text-base font-serif text-foreground mb-4">Connected Data Sources</h3>
         <Card className="border-none shadow-sm">
