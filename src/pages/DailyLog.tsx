@@ -597,7 +597,7 @@ const DailyLog = () => {
           </legend>
           <div className="flex items-center gap-1.5 mb-3 w-fit px-2.5 py-1 rounded-full bg-primary/10">
             <Heart className="w-3 h-3 text-primary" aria-hidden="true" />
-            <span className="text-[11px] text-primary/80 font-medium">Apple Health: 5.2 hrs last night</span>
+            <span className="text-[11px] text-primary/80 font-medium">Apple Health: 4.8 hrs last night</span>
           </div>
           <div className="flex gap-2 mb-2" role="radiogroup" aria-label={`Sleep quality: ${sleep} out of 5, ${sleepLabels[sleep]}`}>
             {[1, 2, 3, 4, 5].map((n) =>
