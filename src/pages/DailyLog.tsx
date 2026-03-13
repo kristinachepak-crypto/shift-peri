@@ -10,28 +10,28 @@ import {
   calculateRollingMean, getPhase, shouldShowTags,
   recordAdhocSymptom, getSymptomsEligibleForPromotion,
   addSymptomToProfile, dismissSymptomPromotion,
-  SYMPTOM_CATEGORIES, DailyLog as DailyLogType,
-} from "@/lib/storage";
+  SYMPTOM_CATEGORIES, DailyLog as DailyLogType } from
+"@/lib/storage";
 import { Flame, Check, Plus, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
 const ALL_PHYSICAL_SYMPTOMS = [
-  ...SYMPTOM_CATEGORIES["Body"],
-  ...SYMPTOM_CATEGORIES["Cycle"],
-  ...SYMPTOM_CATEGORIES["Hair, Skin & Nails"],
-  ...SYMPTOM_CATEGORIES["Sleep"],
-];
+...SYMPTOM_CATEGORIES["Body"],
+...SYMPTOM_CATEGORIES["Cycle"],
+...SYMPTOM_CATEGORIES["Hair, Skin & Nails"],
+...SYMPTOM_CATEGORIES["Sleep"]];
+
 
 const ALL_EMOTIONAL_SYMPTOMS = [
-  ...SYMPTOM_CATEGORIES["Mood & Mind"],
-];
+...SYMPTOM_CATEGORIES["Mood & Mind"]];
+
 
 const SLEEP_SYMPTOMS = [
-  "Trouble falling asleep",
-  "Woke during the night",
-  "Woke too early",
-  "Unrefreshing sleep",
-];
+"Trouble falling asleep",
+"Woke during the night",
+"Woke too early",
+"Unrefreshing sleep"];
+
 
 // --- Summary Generation ---
 
@@ -66,9 +66,9 @@ function generateSummary(log: {
 
   // Sleep
   if (log.sleepQuality <= 2) {
-    const sleepDetails = log.sleepSymptoms.length > 0
-      ? ` — ${log.sleepSymptoms.map(s => s.toLowerCase()).join(" and ")}`
-      : "";
+    const sleepDetails = log.sleepSymptoms.length > 0 ?
+    ` — ${log.sleepSymptoms.map((s) => s.toLowerCase()).join(" and ")}` :
+    "";
     parts.push(`Sleep was rough${sleepDetails}.`);
   } else if (log.sleepQuality >= 4) {
     parts.push("Sleep went well.");
@@ -76,12 +76,12 @@ function generateSummary(log: {
 
   // Symptoms
   const allSymptoms = [
-    ...log.physicalSymptoms,
-    ...log.emotionalSymptoms,
-    ...log.symptoms,
-  ];
+  ...log.physicalSymptoms,
+  ...log.emotionalSymptoms,
+  ...log.symptoms];
+
   if (allSymptoms.length > 0) {
-    const listed = allSymptoms.slice(0, 3).map(s => s.toLowerCase()).join(", ");
+    const listed = allSymptoms.slice(0, 3).map((s) => s.toLowerCase()).join(", ");
     const extra = allSymptoms.length > 3 ? ` and ${allSymptoms.length - 3} more` : "";
     parts.push(`${listed}${extra} showed up today.`);
   }
@@ -205,7 +205,7 @@ const DailyLog = () => {
       sleepSymptoms,
       symptoms,
       cycleStatus,
-      notes,
+      notes
     });
 
     current.logs = current.logs.filter((l) => l.date !== todayStr);
@@ -221,7 +221,7 @@ const DailyLog = () => {
       newSymptomFlags,
       cycleStatus,
       notes,
-      generatedSummary: summary,
+      generatedSummary: summary
     });
 
     // Track adhoc counts for new symptom flags
@@ -234,7 +234,7 @@ const DailyLog = () => {
     });
     current.rollingMeans = {
       physical: calculateRollingMean(current.logs, "mood"),
-      mental: calculateRollingMean(current.logs, "mentalMood"),
+      mental: calculateRollingMean(current.logs, "mentalMood")
     };
     saveAppState(current);
     setAppState(current);
@@ -284,13 +284,13 @@ const DailyLog = () => {
     1: "Very poor", 2: "Poor", 3: "Okay", 4: "Good", 5: "Great"
   };
 
-  const physicalTagsToShow = showAllPhysical
-    ? ALL_PHYSICAL_SYMPTOMS
-    : physicalProfileTags;
+  const physicalTagsToShow = showAllPhysical ?
+  ALL_PHYSICAL_SYMPTOMS :
+  physicalProfileTags;
 
-  const emotionalTagsToShow = showAllEmotional
-    ? ALL_EMOTIONAL_SYMPTOMS
-    : emotionalProfileTags;
+  const emotionalTagsToShow = showAllEmotional ?
+  ALL_EMOTIONAL_SYMPTOMS :
+  emotionalProfileTags;
 
   // --- Confirmation State ---
   if (showConfirmation) {
@@ -312,8 +312,8 @@ const DailyLog = () => {
           </CardContent>
         </Card>
 
-        {!confirmationDone && (
-          <>
+        {!confirmationDone &&
+        <>
             {/* Confirmation Prompt */}
             <p className="text-sm font-semibold text-foreground mb-4">
               Does this feel like an accurate reflection of your day?
@@ -321,56 +321,56 @@ const DailyLog = () => {
 
             {/* Response Chips */}
             <div className="flex flex-wrap gap-2 mb-6" role="group" aria-label="Confirmation response">
-              {([
-                { key: "yes" as const, label: "Yes, that captures it" },
-                { key: "mostly" as const, label: "Mostly" },
-                { key: "not-quite" as const, label: "Not quite" },
-              ]).map(({ key, label }) => (
-                <button
-                  key={key}
-                  onClick={() => handleConfirmationSelect(key)}
-                  aria-pressed={confirmationResponse === key}
-                  className={`min-h-[44px] px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
-                    confirmationResponse === key
-                      ? "bg-primary text-primary-foreground shadow-md"
-                      : "bg-secondary text-secondary-foreground"
-                  }`}
-                >
+              {[
+            { key: "yes" as const, label: "Yes, that captures it" },
+            { key: "mostly" as const, label: "Mostly" },
+            { key: "not-quite" as const, label: "Not quite" }].
+            map(({ key, label }) =>
+            <button
+              key={key}
+              onClick={() => handleConfirmationSelect(key)}
+              aria-pressed={confirmationResponse === key}
+              className={`min-h-[44px] px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
+              confirmationResponse === key ?
+              "bg-primary text-primary-foreground shadow-md" :
+              "bg-secondary text-secondary-foreground"}`
+              }>
+              
                   {label}
                 </button>
-              ))}
+            )}
             </div>
 
             {/* Conditional Follow-up */}
-            {(confirmationResponse === "mostly" || confirmationResponse === "not-quite") && (
-              <div className="space-y-4 animate-fade-in">
+            {(confirmationResponse === "mostly" || confirmationResponse === "not-quite") &&
+          <div className="space-y-4 animate-fade-in">
                 <div>
                   <label htmlFor="confirmation-feedback" className="text-sm font-medium text-muted-foreground block mb-2">
                     What did we miss?
                   </label>
                   <Textarea
-                    id="confirmation-feedback"
-                    value={confirmationFeedback}
-                    onChange={(e) => setConfirmationFeedback(e.target.value)}
-                    placeholder="Anything you'd like to add or correct..."
-                    className="bg-card border-border rounded-2xl min-h-[80px] resize-none"
-                  />
+                id="confirmation-feedback"
+                value={confirmationFeedback}
+                onChange={(e) => setConfirmationFeedback(e.target.value)}
+                placeholder="Anything you'd like to add or correct..."
+                className="bg-card border-border rounded-2xl min-h-[80px] resize-none" />
+              
                 </div>
                 <Button
-                  onClick={handleConfirmationDone}
-                  className="w-full h-14 text-base rounded-2xl font-semibold"
-                  size="lg"
-                >
+              onClick={handleConfirmationDone}
+              className="w-full h-14 text-base rounded-2xl font-semibold"
+              size="lg">
+              
                   Done
                 </Button>
               </div>
-            )}
+          }
           </>
-        )}
+        }
 
         {/* Affirming Close */}
-        {confirmationDone && (
-          <Card className="border-none bg-shift-lavender animate-fade-in">
+        {confirmationDone &&
+        <Card className="border-none bg-shift-lavender animate-fade-in">
             <CardContent className="p-5 text-center">
               <Check className="w-6 h-6 text-primary mx-auto mb-2" aria-hidden="true" />
               <p className="text-sm text-foreground font-medium">
@@ -378,9 +378,9 @@ const DailyLog = () => {
               </p>
             </CardContent>
           </Card>
-        )}
-      </main>
-    );
+        }
+      </main>);
+
   }
 
   // --- Main Log Form ---
@@ -402,7 +402,7 @@ const DailyLog = () => {
       </header>
 
       {logged && !showConfirmation &&
-        <Card className="mb-6 bg-shift-lavender border-none" role="status">
+      <Card className="mb-6 bg-shift-lavender border-none" role="status">
           <CardContent className="p-4 flex items-center gap-3">
             <Check className="w-5 h-5 text-primary" aria-hidden="true" />
             <p className="text-sm text-foreground">You've already logged today. You can update it below.</p>
@@ -411,10 +411,10 @@ const DailyLog = () => {
       }
 
       {/* Symptom promotion prompts */}
-      {promotionCandidates.length > 0 && (
-        <div className="mb-6 space-y-3">
-          {promotionCandidates.map((symptom) => (
-            <Card key={symptom} className="bg-shift-lavender border-none animate-fade-in">
+      {promotionCandidates.length > 0 &&
+      <div className="mb-6 space-y-3">
+          {promotionCandidates.map((symptom) =>
+        <Card key={symptom} className="bg-shift-lavender border-none animate-fade-in">
               <CardContent className="p-4">
                 <div className="flex items-start gap-3">
                   <Sparkles className="w-4 h-4 text-primary mt-0.5 shrink-0" aria-hidden="true" />
@@ -424,18 +424,18 @@ const DailyLog = () => {
                     </p>
                     <div className="flex gap-2">
                       <Button
-                        size="sm"
-                        onClick={() => handlePromoteSymptom(symptom)}
-                        className="rounded-xl min-h-[44px] font-medium"
-                      >
+                    size="sm"
+                    onClick={() => handlePromoteSymptom(symptom)}
+                    className="rounded-xl min-h-[44px] font-medium">
+                    
                         Add to profile
                       </Button>
                       <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => handleDismissPromotion(symptom)}
-                        className="rounded-xl min-h-[44px] font-medium text-muted-foreground"
-                      >
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => handleDismissPromotion(symptom)}
+                    className="rounded-xl min-h-[44px] font-medium text-muted-foreground">
+                    
                         Not now
                       </Button>
                     </div>
@@ -443,29 +443,29 @@ const DailyLog = () => {
                 </div>
               </CardContent>
             </Card>
-          ))}
+        )}
         </div>
-      )}
+      }
 
       <div className="space-y-8">
         {/* Physical Mood */}
         <fieldset>
           <legend className="text-sm font-semibold text-foreground block mb-3">Physically, how are you feeling today?</legend>
           <div className="flex gap-2 mb-2" role="radiogroup" aria-label={`Physical feeling: ${mood} out of 5, ${moodLabels[mood]}`}>
-            {[1, 2, 3, 4, 5].map((n) => (
-              <button
-                key={n}
-                onClick={() => { setMood(n); setCommittedMood(n); }}
-                aria-pressed={mood === n}
-                className={`flex-1 min-h-[44px] rounded-xl text-sm font-semibold transition-all ${
-                  mood === n
-                    ? "bg-primary text-primary-foreground shadow-md scale-105"
-                    : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-                }`}
-              >
+            {[1, 2, 3, 4, 5].map((n) =>
+            <button
+              key={n}
+              onClick={() => {setMood(n);setCommittedMood(n);}}
+              aria-pressed={mood === n}
+              className={`flex-1 min-h-[44px] rounded-xl text-sm font-semibold transition-all ${
+              mood === n ?
+              "bg-primary text-primary-foreground shadow-md scale-105" :
+              "bg-secondary text-secondary-foreground hover:bg-secondary/80"}`
+              }>
+              
                 {n}
               </button>
-            ))}
+            )}
           </div>
           <div className="grid grid-cols-5 gap-2 text-xs text-muted-foreground" aria-hidden="true">
             <span>Very poor</span>
@@ -478,39 +478,39 @@ const DailyLog = () => {
           {/* Conditional physical symptom tags */}
           <div
             className={`overflow-hidden transition-all duration-300 ease-out ${
-              showPhysicalTags ? "max-h-[500px] opacity-100 mt-4" : "max-h-0 opacity-0"
-            }`}
+            showPhysicalTags ? "max-h-[500px] opacity-100 mt-4" : "max-h-0 opacity-0"}`
+            }
             role="group"
-            aria-label="Physical symptoms flaring today"
-          >
+            aria-label="Physical symptoms flaring today">
+            
             <label className="text-sm font-medium text-muted-foreground block mb-3" id="physical-flare-label">
               Anything flaring today?
             </label>
             <div className="flex flex-wrap gap-2" aria-labelledby="physical-flare-label">
-              {physicalTagsToShow.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => togglePhysicalSymptom(s)}
-                  aria-pressed={physicalSymptoms.includes(s)}
-                  className={`min-h-[44px] px-4 py-2.5 rounded-full text-sm font-medium transition-all ${
-                    physicalSymptoms.includes(s)
-                      ? "bg-primary text-primary-foreground shadow-md"
-                      : "bg-secondary text-secondary-foreground"
-                  }`}
-                >
+              {physicalTagsToShow.map((s) =>
+              <button
+                key={s}
+                onClick={() => togglePhysicalSymptom(s)}
+                aria-pressed={physicalSymptoms.includes(s)}
+                className={`min-h-[44px] px-4 py-2.5 rounded-full text-sm font-medium transition-all ${
+                physicalSymptoms.includes(s) ?
+                "bg-primary text-primary-foreground shadow-md" :
+                "bg-secondary text-secondary-foreground"}`
+                }>
+                
                   {s}
                 </button>
-              ))}
-              {!showAllPhysical && (
-                <button
-                  onClick={() => setShowAllPhysical(true)}
-                  className="min-h-[44px] px-4 py-2.5 rounded-full text-sm font-medium bg-accent text-accent-foreground flex items-center gap-1.5 transition-all hover:bg-accent/80"
-                  aria-label="Show all physical symptoms"
-                >
+              )}
+              {!showAllPhysical &&
+              <button
+                onClick={() => setShowAllPhysical(true)}
+                className="min-h-[44px] px-4 py-2.5 rounded-full text-sm font-medium bg-accent text-accent-foreground flex items-center gap-1.5 transition-all hover:bg-accent/80"
+                aria-label="Show all physical symptoms">
+                
                   <Plus className="w-4 h-4" aria-hidden="true" />
                   Add something else
                 </button>
-              )}
+              }
             </div>
           </div>
         </fieldset>
@@ -521,20 +521,20 @@ const DailyLog = () => {
         <fieldset>
           <legend className="text-sm font-semibold text-foreground block mb-3">Mentally & emotionally, how are you feeling?</legend>
           <div className="flex gap-2 mb-2" role="radiogroup" aria-label={`Mental feeling: ${mentalMood} out of 5, ${mentalMoodLabels[mentalMood]}`}>
-            {[1, 2, 3, 4, 5].map((n) => (
-              <button
-                key={n}
-                onClick={() => { setMentalMood(n); setCommittedMentalMood(n); }}
-                aria-pressed={mentalMood === n}
-                className={`flex-1 min-h-[44px] rounded-xl text-sm font-semibold transition-all ${
-                  mentalMood === n
-                    ? "bg-primary text-primary-foreground shadow-md scale-105"
-                    : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-                }`}
-              >
+            {[1, 2, 3, 4, 5].map((n) =>
+            <button
+              key={n}
+              onClick={() => {setMentalMood(n);setCommittedMentalMood(n);}}
+              aria-pressed={mentalMood === n}
+              className={`flex-1 min-h-[44px] rounded-xl text-sm font-semibold transition-all ${
+              mentalMood === n ?
+              "bg-primary text-primary-foreground shadow-md scale-105" :
+              "bg-secondary text-secondary-foreground hover:bg-secondary/80"}`
+              }>
+              
                 {n}
               </button>
-            ))}
+            )}
           </div>
           <div className="grid grid-cols-5 gap-2 text-xs text-muted-foreground" aria-hidden="true">
             <span>Very poor</span>
@@ -547,39 +547,39 @@ const DailyLog = () => {
           {/* Conditional emotional symptom tags */}
           <div
             className={`overflow-hidden transition-all duration-300 ease-out ${
-              showEmotionalTags ? "max-h-[500px] opacity-100 mt-4" : "max-h-0 opacity-0"
-            }`}
+            showEmotionalTags ? "max-h-[500px] opacity-100 mt-4" : "max-h-0 opacity-0"}`
+            }
             role="group"
-            aria-label="Emotional symptoms flaring today"
-          >
+            aria-label="Emotional symptoms flaring today">
+            
             <label className="text-sm font-medium text-muted-foreground block mb-3" id="emotional-flare-label">
               Anything flaring today?
             </label>
             <div className="flex flex-wrap gap-2" aria-labelledby="emotional-flare-label">
-              {emotionalTagsToShow.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => toggleEmotionalSymptom(s)}
-                  aria-pressed={emotionalSymptoms.includes(s)}
-                  className={`min-h-[44px] px-4 py-2.5 rounded-full text-sm font-medium transition-all ${
-                    emotionalSymptoms.includes(s)
-                      ? "bg-primary text-primary-foreground shadow-md"
-                      : "bg-secondary text-secondary-foreground"
-                  }`}
-                >
+              {emotionalTagsToShow.map((s) =>
+              <button
+                key={s}
+                onClick={() => toggleEmotionalSymptom(s)}
+                aria-pressed={emotionalSymptoms.includes(s)}
+                className={`min-h-[44px] px-4 py-2.5 rounded-full text-sm font-medium transition-all ${
+                emotionalSymptoms.includes(s) ?
+                "bg-primary text-primary-foreground shadow-md" :
+                "bg-secondary text-secondary-foreground"}`
+                }>
+                
                   {s}
                 </button>
-              ))}
-              {!showAllEmotional && (
-                <button
-                  onClick={() => setShowAllEmotional(true)}
-                  className="min-h-[44px] px-4 py-2.5 rounded-full text-sm font-medium bg-accent text-accent-foreground flex items-center gap-1.5 transition-all hover:bg-accent/80"
-                  aria-label="Show all emotional symptoms"
-                >
+              )}
+              {!showAllEmotional &&
+              <button
+                onClick={() => setShowAllEmotional(true)}
+                className="min-h-[44px] px-4 py-2.5 rounded-full text-sm font-medium bg-accent text-accent-foreground flex items-center gap-1.5 transition-all hover:bg-accent/80"
+                aria-label="Show all emotional symptoms">
+                
                   <Plus className="w-4 h-4" aria-hidden="true" />
                   Add something else
                 </button>
-              )}
+              }
             </div>
           </div>
         </fieldset>
@@ -592,55 +592,55 @@ const DailyLog = () => {
             How did you sleep?
           </legend>
           <div className="flex gap-2 mb-2" role="radiogroup" aria-label={`Sleep quality: ${sleep} out of 5, ${sleepLabels[sleep]}`}>
-            {[1, 2, 3, 4, 5].map((n) => (
-              <button
-                key={n}
-                onClick={() => { setSleep(n); setCommittedSleep(n); }}
-                aria-pressed={sleep === n}
-                className={`flex-1 min-h-[44px] rounded-xl text-sm font-semibold transition-all ${
-                  sleep === n
-                    ? "bg-primary text-primary-foreground shadow-md scale-105"
-                    : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-                }`}
-              >
+            {[1, 2, 3, 4, 5].map((n) =>
+            <button
+              key={n}
+              onClick={() => {setSleep(n);setCommittedSleep(n);}}
+              aria-pressed={sleep === n}
+              className={`flex-1 min-h-[44px] rounded-xl text-sm font-semibold transition-all ${
+              sleep === n ?
+              "bg-primary text-primary-foreground shadow-md scale-105" :
+              "bg-secondary text-secondary-foreground hover:bg-secondary/80"}`
+              }>
+              
                 {n}
               </button>
-            ))}
+            )}
           </div>
           <div className="grid grid-cols-5 gap-2 text-xs text-muted-foreground" aria-hidden="true">
             <span>Very poor</span>
             <span />
             <span className="font-medium text-foreground text-center">{sleepLabels[sleep]}</span>
             <span />
-            <span className="text-right">Good</span>
+            <span className="text-right">Great
+
+            </span>
           </div>
 
           {/* Conditional sleep symptom tags */}
-          <div
-            className={`overflow-hidden transition-all duration-300 ease-out ${
-              showSleepTags ? "max-h-[300px] opacity-100 mt-4" : "max-h-0 opacity-0"
-            }`}
-            role="group"
-            aria-label="Sleep issues"
-          >
+          <div className={`overflow-hidden transition-all duration-300 ease-out ${showSleepTags ? "max-h-[300px] opacity-100 mt-4" : "max-h-0 opacity-0"}`
+          }
+          role="group"
+          aria-label="Sleep issues">
+            
             <label className="text-sm font-medium text-muted-foreground block mb-3" id="sleep-flare-label">
               What was off about your sleep?
             </label>
             <div className="flex flex-wrap gap-2" aria-labelledby="sleep-flare-label">
-              {SLEEP_SYMPTOMS.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => toggleSleepSymptom(s)}
-                  aria-pressed={sleepSymptoms.includes(s)}
-                  className={`min-h-[44px] px-4 py-2.5 rounded-full text-sm font-medium transition-all ${
-                    sleepSymptoms.includes(s)
-                      ? "bg-primary text-primary-foreground shadow-md"
-                      : "bg-secondary text-secondary-foreground"
-                  }`}
-                >
+              {SLEEP_SYMPTOMS.map((s) =>
+              <button
+                key={s}
+                onClick={() => toggleSleepSymptom(s)}
+                aria-pressed={sleepSymptoms.includes(s)}
+                className={`min-h-[44px] px-4 py-2.5 rounded-full text-sm font-medium transition-all ${
+                sleepSymptoms.includes(s) ?
+                "bg-primary text-primary-foreground shadow-md" :
+                "bg-secondary text-secondary-foreground"}`
+                }>
+                
                   {s}
                 </button>
-              ))}
+              )}
             </div>
           </div>
         </fieldset>
@@ -653,21 +653,21 @@ const DailyLog = () => {
             Cycle status
           </legend>
           <div className="flex gap-2" role="radiogroup" aria-label="Cycle status selection">
-            {(["none", "spotting", "period"] as const).map((status) => (
-              <button
-                key={status}
-                onClick={() => setCycleStatus(status)}
-                role="radio"
-                aria-checked={cycleStatus === status}
-                className={`min-h-[44px] px-5 py-2.5 rounded-full text-sm font-medium capitalize transition-all ${
-                  cycleStatus === status
-                    ? "bg-primary text-primary-foreground shadow-md"
-                    : "bg-secondary text-secondary-foreground"
-                }`}
-              >
+            {(["none", "spotting", "period"] as const).map((status) =>
+            <button
+              key={status}
+              onClick={() => setCycleStatus(status)}
+              role="radio"
+              aria-checked={cycleStatus === status}
+              className={`min-h-[44px] px-5 py-2.5 rounded-full text-sm font-medium capitalize transition-all ${
+              cycleStatus === status ?
+              "bg-primary text-primary-foreground shadow-md" :
+              "bg-secondary text-secondary-foreground"}`
+              }>
+              
                 {status === "none" ? "None" : status}
               </button>
-            ))}
+            )}
           </div>
         </fieldset>
 
@@ -683,8 +683,8 @@ const DailyLog = () => {
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             placeholder="How you're feeling, what happened today..."
-            className="bg-card border-border rounded-2xl min-h-[100px] resize-none"
-          />
+            className="bg-card border-border rounded-2xl min-h-[100px] resize-none" />
+          
         </div>
         {/* New symptom flag button + panel */}
         <div>
@@ -693,8 +693,8 @@ const DailyLog = () => {
             onClick={() => setShowNewSymptomPanel((prev) => !prev)}
             className="w-full h-12 rounded-2xl font-medium text-sm border-border"
             aria-expanded={showNewSymptomPanel}
-            aria-label="I noticed some new symptoms today"
-          >
+            aria-label="I noticed some new symptoms today">
+            
             <Plus className="w-4 h-4 mr-2" aria-hidden="true" />
             I noticed some new symptoms today
           </Button>
@@ -702,47 +702,47 @@ const DailyLog = () => {
           {/* Expandable panel */}
           <div
             className={`overflow-hidden transition-all duration-300 ease-out ${
-              showNewSymptomPanel ? "max-h-[2000px] opacity-100 mt-4" : "max-h-0 opacity-0"
-            }`}
-          >
+            showNewSymptomPanel ? "max-h-[2000px] opacity-100 mt-4" : "max-h-0 opacity-0"}`
+            }>
+            
             <Card className="border-border/50">
               <CardContent className="p-4 space-y-4">
-                {Object.entries(SYMPTOM_CATEGORIES).map(([category, categorySymptoms]) => (
-                  <div key={category}>
+                {Object.entries(SYMPTOM_CATEGORIES).map(([category, categorySymptoms]) =>
+                <div key={category}>
                     <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
                       {category}
                     </p>
                     <div className="flex flex-wrap gap-2">
                       {(categorySymptoms as readonly string[]).map((s) => {
-                        const inProfile = state.selectedSymptoms.includes(s);
-                        const selected = newSymptomFlags.includes(s);
-                        return (
-                          <button
-                            key={s}
-                            onClick={() => {
-                              if (inProfile) return;
-                              setNewSymptomFlags((prev) =>
-                                prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]
-                              );
-                            }}
-                            disabled={inProfile}
-                            aria-pressed={selected}
-                            className={`min-h-[44px] px-4 py-2.5 rounded-full text-sm font-medium transition-all ${
-                              inProfile
-                                ? "bg-muted/50 text-muted-foreground/40 cursor-not-allowed"
-                                : selected
-                                ? "bg-primary text-primary-foreground shadow-md"
-                                : "bg-secondary text-secondary-foreground"
-                            }`}
-                          >
+                      const inProfile = state.selectedSymptoms.includes(s);
+                      const selected = newSymptomFlags.includes(s);
+                      return (
+                        <button
+                          key={s}
+                          onClick={() => {
+                            if (inProfile) return;
+                            setNewSymptomFlags((prev) =>
+                            prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]
+                            );
+                          }}
+                          disabled={inProfile}
+                          aria-pressed={selected}
+                          className={`min-h-[44px] px-4 py-2.5 rounded-full text-sm font-medium transition-all ${
+                          inProfile ?
+                          "bg-muted/50 text-muted-foreground/40 cursor-not-allowed" :
+                          selected ?
+                          "bg-primary text-primary-foreground shadow-md" :
+                          "bg-secondary text-secondary-foreground"}`
+                          }>
+                          
                             {s}
                             {inProfile && <span className="ml-1 text-xs">(in profile)</span>}
-                          </button>
-                        );
-                      })}
+                          </button>);
+
+                    })}
                     </div>
                   </div>
-                ))}
+                )}
 
                 <Button
                   variant="secondary"
@@ -753,8 +753,8 @@ const DailyLog = () => {
                       setNewSymptomPrompts([...newSymptomFlags]);
                     }
                   }}
-                  className="w-full h-11 rounded-2xl font-medium text-sm"
-                >
+                  className="w-full h-11 rounded-2xl font-medium text-sm">
+                  
                   Done
                 </Button>
               </CardContent>
@@ -763,10 +763,10 @@ const DailyLog = () => {
         </div>
 
         {/* New symptom profile prompts */}
-        {newSymptomPrompts.length > 0 && (
-          <div className="space-y-3 animate-fade-in">
-            {newSymptomPrompts.map((symptom) => (
-              <Card key={symptom} className="bg-shift-lavender border-none">
+        {newSymptomPrompts.length > 0 &&
+        <div className="space-y-3 animate-fade-in">
+            {newSymptomPrompts.map((symptom) =>
+          <Card key={symptom} className="bg-shift-lavender border-none">
                 <CardContent className="p-4">
                   <div className="flex items-start gap-3">
                     <Sparkles className="w-4 h-4 text-primary mt-0.5 shrink-0" aria-hidden="true" />
@@ -776,23 +776,23 @@ const DailyLog = () => {
                       </p>
                       <div className="flex gap-2">
                         <Button
-                          size="sm"
-                          onClick={() => {
-                            handlePromoteSymptom(symptom);
-                            setNewSymptomPrompts((prev) => prev.filter((s) => s !== symptom));
-                          }}
-                          className="rounded-xl min-h-[44px] font-medium"
-                        >
+                      size="sm"
+                      onClick={() => {
+                        handlePromoteSymptom(symptom);
+                        setNewSymptomPrompts((prev) => prev.filter((s) => s !== symptom));
+                      }}
+                      className="rounded-xl min-h-[44px] font-medium">
+                      
                           Add to profile
                         </Button>
                         <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => {
-                            setNewSymptomPrompts((prev) => prev.filter((s) => s !== symptom));
-                          }}
-                          className="rounded-xl min-h-[44px] font-medium text-muted-foreground"
-                        >
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => {
+                        setNewSymptomPrompts((prev) => prev.filter((s) => s !== symptom));
+                      }}
+                      className="rounded-xl min-h-[44px] font-medium text-muted-foreground">
+                      
                           Just for today
                         </Button>
                       </div>
@@ -800,21 +800,21 @@ const DailyLog = () => {
                   </div>
                 </CardContent>
               </Card>
-            ))}
+          )}
           </div>
-        )}
+        }
 
         <Button
           onClick={handleLog}
           className="w-full h-14 text-base rounded-2xl font-semibold"
           size="lg"
-          aria-label={logged ? "Update today's log entry" : "Save today's log entry"}
-        >
+          aria-label={logged ? "Update today's log entry" : "Save today's log entry"}>
+          
           {logged ? "Update Today's Log" : "Log Today"}
         </Button>
       </div>
-    </main>
-  );
+    </main>);
+
 };
 
 export default DailyLog;
