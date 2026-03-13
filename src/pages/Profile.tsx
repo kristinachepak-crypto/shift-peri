@@ -222,19 +222,19 @@ const Profile = () => {
 
       {/* Assessment due banner */}
       {assessmentDue && (
-        <Card className="mb-6 bg-shift-lavender border-none animate-fade-in" role="status">
-          <CardContent className="p-4">
-            <div className="flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-primary mt-0.5 shrink-0" aria-hidden="true" />
+        <Card className="mb-5 bg-shift-lavender border-none animate-fade-in" role="status">
+          <CardContent className="p-3">
+            <div className="flex items-start gap-2.5">
+              <AlertCircle className="w-4 h-4 text-primary mt-0.5 shrink-0" aria-hidden="true" />
               <div>
-                <p className="text-sm font-semibold text-foreground mb-1">Time to reassess</p>
-                <p className="text-sm text-muted-foreground leading-relaxed mb-3">
-                  Your patterns may have shifted — update your symptom profile to keep your daily log relevant.
+                <p className="text-sm font-semibold text-foreground mb-0.5">Time to reassess</p>
+                <p className="text-xs text-muted-foreground leading-relaxed mb-2">
+                  Your patterns may have shifted — update your symptom profile.
                 </p>
                 <Button
                   onClick={() => setReassessing(true)}
                   size="sm"
-                  className="rounded-xl font-semibold min-h-[44px]"
+                  className="rounded-xl font-semibold min-h-[40px] h-10"
                   aria-label="Start symptom reassessment"
                 >
                   Update Profile
