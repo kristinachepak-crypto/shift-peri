@@ -518,19 +518,25 @@ const DailyLog = () => {
         {/* Mental/Emotional */}
         <fieldset>
           <legend className="text-sm font-semibold text-foreground block mb-3">Mentally & emotionally, how are you feeling?</legend>
-          <Slider
-            value={[mentalMood]}
-            onValueChange={(v) => setMentalMood(v[0])}
-            onValueCommit={(v) => setCommittedMentalMood(v[0])}
-            min={1}
-            max={5}
-            step={1}
-            className="mb-2"
-            aria-label={`Mental feeling: ${mentalMood} out of 5, ${mentalMoodLabels[mentalMood]}`}
-          />
+          <div className="flex gap-2 mb-2" role="radiogroup" aria-label={`Mental feeling: ${mentalMood} out of 5, ${mentalMoodLabels[mentalMood]}`}>
+            {[1, 2, 3, 4, 5].map((n) => (
+              <button
+                key={n}
+                onClick={() => { setMentalMood(n); setCommittedMentalMood(n); }}
+                aria-pressed={mentalMood === n}
+                className={`flex-1 min-h-[44px] rounded-xl text-sm font-semibold transition-all ${
+                  mentalMood === n
+                    ? "bg-primary text-primary-foreground shadow-md scale-105"
+                    : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                }`}
+              >
+                {n}
+              </button>
+            ))}
+          </div>
           <div className="flex justify-between text-xs text-muted-foreground" aria-hidden="true">
             <span>Very poor</span>
-            <span className="font-medium text-foreground">{mentalMood} — {mentalMoodLabels[mentalMood]}</span>
+            <span className="font-medium text-foreground">{mentalMoodLabels[mentalMood]}</span>
             <span>Great</span>
           </div>
 
