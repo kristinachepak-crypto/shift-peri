@@ -104,16 +104,16 @@ function generateSummary(log: {
 const DailyLog = () => {
   const [appState, setAppState] = useState(getAppState);
   const state = appState;
-  const [mood, setMood] = useState(3);
-  const [committedMood, setCommittedMood] = useState(3);
+  const [mood, setMood] = useState(2);
+  const [committedMood, setCommittedMood] = useState(2);
   const [mentalMood, setMentalMood] = useState(3);
   const [committedMentalMood, setCommittedMentalMood] = useState(3);
-  const [sleep, setSleep] = useState(3);
-  const [committedSleep, setCommittedSleep] = useState(3);
+  const [sleep, setSleep] = useState(2);
+  const [committedSleep, setCommittedSleep] = useState(2);
   const [symptoms, setSymptoms] = useState<string[]>([]);
   const [physicalSymptoms, setPhysicalSymptoms] = useState<string[]>([]);
   const [emotionalSymptoms, setEmotionalSymptoms] = useState<string[]>([]);
-  const [sleepSymptoms, setSleepSymptoms] = useState<string[]>([]);
+  const [sleepSymptoms, setSleepSymptoms] = useState<string[]>(["Night sweats", "Sleep disruption"]);
   const [cycleStatus, setCycleStatus] = useState<"period" | "spotting" | "none">("none");
   const [notes, setNotes] = useState("");
   const [logged, setLogged] = useState(todayAlreadyLogged(state.logs));
