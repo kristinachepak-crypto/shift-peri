@@ -211,30 +211,30 @@ const Profile = () => {
   }
 
   return (
-    <main className="min-h-screen bg-background px-6 pt-8 pb-28" aria-label="Profile">
-      <header className="mb-8">
-        <div className="flex items-center gap-2 mb-2">
-          <Heart className="w-5 h-5 text-primary" aria-hidden="true" />
-          <span className="text-sm font-medium text-muted-foreground tracking-wide uppercase">Shift</span>
+    <main className="min-h-screen bg-background px-5 pt-6 pb-24" aria-label="Profile">
+      <header className="mb-5">
+        <div className="flex items-center gap-2 mb-1">
+          <Heart className="w-4 h-4 text-primary" aria-hidden="true" />
+          <span className="text-xs font-medium text-muted-foreground tracking-wide uppercase">Shift</span>
         </div>
-        <h1 className="text-2xl font-serif text-foreground">Your Profile</h1>
+        <h1 className="text-xl font-serif text-foreground">Your Profile</h1>
       </header>
 
       {/* Assessment due banner */}
       {assessmentDue && (
-        <Card className="mb-6 bg-shift-lavender border-none animate-fade-in" role="status">
-          <CardContent className="p-4">
-            <div className="flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-primary mt-0.5 shrink-0" aria-hidden="true" />
+        <Card className="mb-5 bg-shift-lavender border-none animate-fade-in" role="status">
+          <CardContent className="p-3">
+            <div className="flex items-start gap-2.5">
+              <AlertCircle className="w-4 h-4 text-primary mt-0.5 shrink-0" aria-hidden="true" />
               <div>
-                <p className="text-sm font-semibold text-foreground mb-1">Time to reassess</p>
-                <p className="text-sm text-muted-foreground leading-relaxed mb-3">
-                  Your patterns may have shifted — update your symptom profile to keep your daily log relevant.
+                <p className="text-sm font-semibold text-foreground mb-0.5">Time to reassess</p>
+                <p className="text-xs text-muted-foreground leading-relaxed mb-2">
+                  Your patterns may have shifted — update your symptom profile.
                 </p>
                 <Button
                   onClick={() => setReassessing(true)}
                   size="sm"
-                  className="rounded-xl font-semibold min-h-[44px]"
+                  className="rounded-xl font-semibold min-h-[40px] h-10"
                   aria-label="Start symptom reassessment"
                 >
                   Update Profile
@@ -246,11 +246,11 @@ const Profile = () => {
       )}
 
       {/* Current Symptom Profile */}
-      <section aria-labelledby="symptom-profile-heading" className="mb-8">
-        <div className="flex items-center justify-between mb-4">
+      <section aria-labelledby="symptom-profile-heading" className="mb-5">
+        <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-primary" aria-hidden="true" />
-            <h2 id="symptom-profile-heading" className="text-lg font-serif text-foreground">
+            <h2 id="symptom-profile-heading" className="text-base font-serif text-foreground">
               Symptom Profile
             </h2>
           </div>
@@ -258,18 +258,18 @@ const Profile = () => {
             variant="ghost"
             size="sm"
             onClick={() => setReassessing(true)}
-            className="text-primary text-sm font-medium min-h-[44px]"
+            className="text-primary text-xs font-medium min-h-[36px] h-9 px-2"
             aria-label="Edit symptom profile"
           >
             Edit
           </Button>
         </div>
         {state.selectedSymptoms.length > 0 ? (
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5">
             {state.selectedSymptoms.map((s) => (
               <span
                 key={s}
-                className="px-3 py-1.5 rounded-full text-sm font-medium bg-secondary text-secondary-foreground"
+                className="px-2.5 py-1 rounded-full text-xs font-medium bg-secondary text-secondary-foreground"
               >
                 {s}
               </span>
@@ -280,18 +280,18 @@ const Profile = () => {
         )}
       </section>
 
-      <Separator className="bg-border/50 mb-8" />
+      <Separator className="bg-border/50 mb-5" />
 
       {/* Assessment History */}
-      <section aria-labelledby="assessment-history-heading" className="mb-8">
-        <div className="flex items-center gap-2 mb-4">
+      <section aria-labelledby="assessment-history-heading" className="mb-5">
+        <div className="flex items-center gap-2 mb-3">
           <ClipboardCheck className="w-4 h-4 text-primary" aria-hidden="true" />
-          <h2 id="assessment-history-heading" className="text-lg font-serif text-foreground">
+          <h2 id="assessment-history-heading" className="text-base font-serif text-foreground">
             Assessment History
           </h2>
         </div>
         {state.assessments.length > 0 ? (
-          <div className="space-y-3">
+          <div className="space-y-2">
             {[...state.assessments].reverse().map((assessment, i) => {
               const isExpanded = expandedAssessments.has(i);
               const hasMore = assessment.symptoms.length > 5;
@@ -299,8 +299,8 @@ const Profile = () => {
 
               return (
                 <Card key={i} className="border-border/50">
-                  <CardContent className="p-4">
-                    <p className="text-sm font-semibold text-foreground mb-1">
+                  <CardContent className="p-3">
+                    <p className="text-sm font-semibold text-foreground mb-0.5">
                       {formatDate(assessment.date)}
                     </p>
                     <p className="text-xs text-muted-foreground">
@@ -338,7 +338,7 @@ const Profile = () => {
           </div>
         ) : (
           <Card className="border-border/50">
-            <CardContent className="p-4">
+            <CardContent className="p-3">
               <p className="text-sm text-muted-foreground">
                 Your onboarding assessment is your first record. Future reassessments will appear here.
               </p>
@@ -347,32 +347,32 @@ const Profile = () => {
         )}
       </section>
 
-      <Separator className="bg-border/50 mb-8" />
+      <Separator className="bg-border/50 mb-5" />
 
       {/* Upcoming Assessment */}
-      <section aria-labelledby="upcoming-assessment-heading" className="mb-8">
-        <div className="flex items-center gap-2 mb-4">
+      <section aria-labelledby="upcoming-assessment-heading" className="mb-5">
+        <div className="flex items-center gap-2 mb-3">
           <CalendarClock className="w-4 h-4 text-primary" aria-hidden="true" />
-          <h2 id="upcoming-assessment-heading" className="text-lg font-serif text-foreground">
+          <h2 id="upcoming-assessment-heading" className="text-base font-serif text-foreground">
             Upcoming Assessment
           </h2>
         </div>
         {nextDate ? (
           <Card className="border-border/50">
-            <CardContent className="p-4">
-              <p className="text-sm text-foreground font-semibold mb-1">
+            <CardContent className="p-3">
+              <p className="text-sm text-foreground font-semibold mb-0.5">
                 {assessmentDue ? "Due now" : formatDate(nextDate)}
               </p>
               <p className="text-xs text-muted-foreground leading-relaxed">
                 {assessmentDue
-                  ? "Your monthly reassessment is ready. Tap \"Update Profile\" above to review your symptoms."
-                  : "We'll remind you to review your symptom profile. Your patterns may shift over time — this helps keep your daily log relevant."}
+                  ? "Your monthly reassessment is ready. Tap \"Update Profile\" above."
+                  : "We'll remind you to review your symptom profile as patterns shift over time."}
               </p>
             </CardContent>
           </Card>
         ) : (
           <Card className="border-border/50">
-            <CardContent className="p-4">
+            <CardContent className="p-3">
               <p className="text-sm text-muted-foreground">
                 Complete onboarding to schedule your first reassessment.
               </p>
@@ -381,21 +381,21 @@ const Profile = () => {
         )}
       </section>
 
-      <Separator className="bg-border/50 mb-8" />
+      <Separator className="bg-border/50 mb-5" />
 
       {/* Account Settings */}
       <section aria-labelledby="settings-heading">
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-3">
           <Settings className="w-4 h-4 text-primary" aria-hidden="true" />
-          <h2 id="settings-heading" className="text-lg font-serif text-foreground">
+          <h2 id="settings-heading" className="text-base font-serif text-foreground">
             Settings
           </h2>
         </div>
-        <div className="space-y-3">
+        <div className="space-y-2">
           <Button
             variant="outline"
             onClick={() => setReassessing(true)}
-            className="w-full justify-start h-12 rounded-xl text-sm font-medium"
+            className="w-full justify-start h-11 rounded-xl text-sm font-medium"
             aria-label="Reassess symptoms now"
           >
             Reassess symptoms now
@@ -403,7 +403,7 @@ const Profile = () => {
           <Button
             variant="outline"
             onClick={handleClearData}
-            className="w-full justify-start h-12 rounded-xl text-sm font-medium text-destructive hover:text-destructive"
+            className="w-full justify-start h-11 rounded-xl text-sm font-medium text-destructive hover:text-destructive"
             aria-label="Clear all data"
           >
             Clear all data
@@ -411,8 +411,8 @@ const Profile = () => {
         </div>
       </section>
 
-      {/* Version number — tap 7 times or long-press 2s to reveal dev panel */}
-      <div className="mt-12 text-center">
+      {/* Version number */}
+      <div className="mt-8 text-center">
         <button
           onTouchEnd={handleVersionTap}
           onClick={handleVersionTap}
