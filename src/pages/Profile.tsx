@@ -211,13 +211,13 @@ const Profile = () => {
   }
 
   return (
-    <main className="min-h-screen bg-background px-6 pt-8 pb-28" aria-label="Profile">
-      <header className="mb-8">
-        <div className="flex items-center gap-2 mb-2">
-          <Heart className="w-5 h-5 text-primary" aria-hidden="true" />
-          <span className="text-sm font-medium text-muted-foreground tracking-wide uppercase">Shift</span>
+    <main className="min-h-screen bg-background px-5 pt-6 pb-24" aria-label="Profile">
+      <header className="mb-5">
+        <div className="flex items-center gap-2 mb-1">
+          <Heart className="w-4 h-4 text-primary" aria-hidden="true" />
+          <span className="text-xs font-medium text-muted-foreground tracking-wide uppercase">Shift</span>
         </div>
-        <h1 className="text-2xl font-serif text-foreground">Your Profile</h1>
+        <h1 className="text-xl font-serif text-foreground">Your Profile</h1>
       </header>
 
       {/* Assessment due banner */}
