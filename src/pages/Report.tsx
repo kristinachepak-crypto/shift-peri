@@ -148,7 +148,7 @@ const Report = () => {
       </p>
 
       {/* Share Button */}
-      <Button className="w-full h-14 rounded-2xl font-semibold text-base" size="lg">
+      <Button className="w-full h-14 rounded-2xl font-semibold text-base print:hidden" size="lg" onClick={() => window.print()}>
         <Share2 className="w-4 h-4 mr-2" aria-hidden="true" />
         Share Report
       </Button>
