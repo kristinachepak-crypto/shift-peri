@@ -15,21 +15,24 @@ const topSymptoms = [
 
 const plainInsights = [
   {
+    badge: "Apple Health + Self-reported",
     stat: "78% co-occurrence rate",
-    pattern: "Sleep disruption and mood changes co-occur on 78% of nights logged",
+    pattern:
+      "Sleep disruption and mood changes co-occur on 78% of nights logged. Your Apple Health data shows average HRV drops to 28ms on these nights, compared to your 45ms baseline.",
     explanation:
-      "This pattern is consistent with estrogen-related disruption of serotonin and cortisol regulation — the same hormonal shift affects both sleep architecture and mood stability.",
+      "HRV suppression and mood instability share a common driver — estrogen fluctuation disrupts both autonomic nervous system regulation and serotonin production simultaneously.",
     prompt:
-      "Could my sleep and mood symptoms have a common hormonal driver worth treating together?",
+      "My wearable data shows HRV drops significantly on my worst nights — could this be hormonally driven rather than stress-related?",
   },
   {
+    badge: "Apple Health + Self-reported",
     stat: "23% below your monthly average",
     pattern:
-      "Your sleep quality this week is 23% below your monthly baseline, and brain fog scores follow within 24 hours",
+      "Your Apple Health sleep data shows you're averaging 5.2 hours this week versus your 6.8 hour monthly baseline — a 23% drop that precedes brain fog scores within 24 hours.",
     explanation:
-      "Cognitive symptoms in perimenopause are frequently linked to sleep architecture disruption rather than cognitive decline — poor sleep precedes brain fog in your data.",
+      "Cognitive symptoms in perimenopause are frequently linked to sleep architecture disruption rather than cognitive decline. Your data shows the lag consistently.",
     prompt:
-      "Is this the kind of brain fog that responds to sleep intervention or hormone therapy?",
+      "My sleep tracker and symptom log show a consistent pattern — is this the kind of brain fog that responds to sleep intervention or hormone therapy?",
   },
 ];
 
