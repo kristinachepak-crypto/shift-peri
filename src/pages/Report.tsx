@@ -66,7 +66,7 @@ const Report = () => {
   };
 
   return (
-    <main className="min-h-screen bg-background px-5 pt-8 pb-28" aria-label="Symptom report">
+    <main className="min-h-screen bg-background px-5 pt-8 pb-28 overflow-x-hidden" aria-label="Symptom report">
       {/* Toggle */}
       <div className="flex items-center justify-end gap-2 mb-6 print:hidden">
         <span className={`text-xs font-medium ${!clinical ? "text-foreground" : "text-muted-foreground"}`}>
@@ -183,9 +183,9 @@ const Report = () => {
             {plainInsights.map((insight, i) => (
               <Card key={i} className="border-none shadow-sm">
                 <CardContent className="p-5 space-y-3">
-                  <div className="flex items-center justify-between mb-1">
+                  <div className="flex flex-wrap items-center gap-2 mb-1">
                     <p className="text-lg font-bold text-primary leading-snug">{insight.stat}</p>
-                    <span className="text-[10px] font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full whitespace-nowrap">
+                    <span className="text-[10px] font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full whitespace-nowrap shrink-0">
                       {insight.badge}
                     </span>
                   </div>
