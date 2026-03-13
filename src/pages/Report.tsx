@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import { Download, Share2, Calendar, Activity, TrendingUp, Lightbulb, MessageCircle } from "lucide-react";
+import { Download, Share2, Calendar, Activity, TrendingUp, Lightbulb, MessageCircle, Check, Watch, Heart } from "lucide-react";
 import { toast } from "sonner";
 
 const topSymptoms = [
@@ -15,21 +15,24 @@ const topSymptoms = [
 
 const plainInsights = [
   {
+    badge: "Apple Health + Self-reported",
     stat: "78% co-occurrence rate",
-    pattern: "Sleep disruption and mood changes co-occur on 78% of nights logged",
+    pattern:
+      "Sleep disruption and mood changes co-occur on 78% of nights logged. Your Apple Health data shows average HRV drops to 28ms on these nights, compared to your 45ms baseline.",
     explanation:
-      "This pattern is consistent with estrogen-related disruption of serotonin and cortisol regulation — the same hormonal shift affects both sleep architecture and mood stability.",
+      "HRV suppression and mood instability share a common driver — estrogen fluctuation disrupts both autonomic nervous system regulation and serotonin production simultaneously.",
     prompt:
-      "Could my sleep and mood symptoms have a common hormonal driver worth treating together?",
+      "My wearable data shows HRV drops significantly on my worst nights — could this be hormonally driven rather than stress-related?",
   },
   {
+    badge: "Apple Health + Self-reported",
     stat: "23% below your monthly average",
     pattern:
-      "Your sleep quality this week is 23% below your monthly baseline, and brain fog scores follow within 24 hours",
+      "Your Apple Health sleep data shows you're averaging 5.2 hours this week versus your 6.8 hour monthly baseline — a 23% drop that precedes brain fog scores within 24 hours.",
     explanation:
-      "Cognitive symptoms in perimenopause are frequently linked to sleep architecture disruption rather than cognitive decline — poor sleep precedes brain fog in your data.",
+      "Cognitive symptoms in perimenopause are frequently linked to sleep architecture disruption rather than cognitive decline. Your data shows the lag consistently.",
     prompt:
-      "Is this the kind of brain fog that responds to sleep intervention or hormone therapy?",
+      "My sleep tracker and symptom log show a consistent pattern — is this the kind of brain fog that responds to sleep intervention or hormone therapy?",
   },
 ];
 
@@ -127,6 +130,45 @@ const Report = () => {
         </Card>
       </section>
 
+      {/* Connected Data Sources */}
+      <section className="mb-8">
+        <h3 className="text-base font-serif text-foreground mb-4">Connected Data Sources</h3>
+        <Card className="border-none shadow-sm">
+          <CardContent className="p-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <Heart className="w-4 h-4 text-primary" aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-foreground">Apple Health</p>
+                  <p className="text-xs text-muted-foreground">Sleep, HRV, Activity</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-1.5 text-xs font-medium" style={{ color: 'hsl(150, 50%, 40%)' }}>
+                <Check className="w-3.5 h-3.5" aria-hidden="true" />
+                Connected
+              </div>
+            </div>
+            <div className="border-t border-border/50" />
+            <div className="flex items-center justify-between opacity-50">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center">
+                  <Watch className="w-4 h-4 text-muted-foreground" aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-foreground">Oura Ring</p>
+                  <p className="text-xs text-muted-foreground">Skin Temperature, Sleep Stages</p>
+                </div>
+              </div>
+              <span className="text-[10px] font-medium text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
+                Coming soon
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+      </section>
+
       {/* Pattern Insights */}
       <section className="mb-8">
         <h3 className="text-base font-serif text-foreground mb-4">Pattern Insights</h3>
@@ -141,7 +183,12 @@ const Report = () => {
             {plainInsights.map((insight, i) => (
               <Card key={i} className="border-none shadow-sm">
                 <CardContent className="p-5 space-y-3">
-                  <p className="text-lg font-bold text-primary leading-snug">{insight.stat}</p>
+                  <div className="flex items-center justify-between mb-1">
+                    <p className="text-lg font-bold text-primary leading-snug">{insight.stat}</p>
+                    <span className="text-[10px] font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full whitespace-nowrap">
+                      {insight.badge}
+                    </span>
+                  </div>
                   <div className="flex items-start gap-2">
                     <Lightbulb className="w-4 h-4 text-primary mt-0.5 shrink-0" aria-hidden="true" />
                     <p className="text-sm font-medium text-foreground leading-snug">{insight.pattern}</p>
