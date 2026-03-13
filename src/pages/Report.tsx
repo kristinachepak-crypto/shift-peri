@@ -217,13 +217,13 @@ const Report = () => {
 
       {/* Action Buttons */}
       <div className="flex gap-3 print:hidden">
-        <Button className="flex-1 h-14 rounded-2xl font-semibold" size="lg" onClick={() => window.print()}>
-          <Download className="w-4 h-4 mr-2" aria-hidden="true" />
-          Download Report
+        <Button className="flex-1 h-12 rounded-2xl font-semibold text-sm" size="lg" onClick={() => window.print()}>
+          <Download className="w-4 h-4 mr-1.5" aria-hidden="true" />
+          Download
         </Button>
-        <Button variant="secondary" className="flex-1 h-14 rounded-2xl font-semibold" size="lg" onClick={handleShare}>
-          <Share2 className="w-4 h-4 mr-2" aria-hidden="true" />
-          Share Report
+        <Button variant="secondary" className="flex-1 h-12 rounded-2xl font-semibold text-sm" size="lg" onClick={handleShare}>
+          <Share2 className="w-4 h-4 mr-1.5" aria-hidden="true" />
+          Share
         </Button>
       </div>
     </main>
