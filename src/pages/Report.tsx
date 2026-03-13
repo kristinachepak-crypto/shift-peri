@@ -130,6 +130,45 @@ const Report = () => {
         </Card>
       </section>
 
+      {/* Connected Data Sources */}
+      <section className="mb-8">
+        <h3 className="text-base font-serif text-foreground mb-4">Connected Data Sources</h3>
+        <Card className="border-none shadow-sm">
+          <CardContent className="p-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <Heart className="w-4 h-4 text-primary" aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-foreground">Apple Health</p>
+                  <p className="text-xs text-muted-foreground">Sleep, HRV, Activity</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-1.5 text-xs font-medium" style={{ color: 'hsl(150, 50%, 40%)' }}>
+                <Check className="w-3.5 h-3.5" aria-hidden="true" />
+                Connected
+              </div>
+            </div>
+            <div className="border-t border-border/50" />
+            <div className="flex items-center justify-between opacity-50">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center">
+                  <Watch className="w-4 h-4 text-muted-foreground" aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-foreground">Oura Ring</p>
+                  <p className="text-xs text-muted-foreground">Skin Temperature, Sleep Stages</p>
+                </div>
+              </div>
+              <span className="text-[10px] font-medium text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
+                Coming soon
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+      </section>
+
       {/* Pattern Insights */}
       <section className="mb-8">
         <h3 className="text-base font-serif text-foreground mb-4">Pattern Insights</h3>
@@ -144,7 +183,12 @@ const Report = () => {
             {plainInsights.map((insight, i) => (
               <Card key={i} className="border-none shadow-sm">
                 <CardContent className="p-5 space-y-3">
-                  <p className="text-lg font-bold text-primary leading-snug">{insight.stat}</p>
+                  <div className="flex items-center justify-between mb-1">
+                    <p className="text-lg font-bold text-primary leading-snug">{insight.stat}</p>
+                    <span className="text-[10px] font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full whitespace-nowrap">
+                      {insight.badge}
+                    </span>
+                  </div>
                   <div className="flex items-start gap-2">
                     <Lightbulb className="w-4 h-4 text-primary mt-0.5 shrink-0" aria-hidden="true" />
                     <p className="text-sm font-medium text-foreground leading-snug">{insight.pattern}</p>
